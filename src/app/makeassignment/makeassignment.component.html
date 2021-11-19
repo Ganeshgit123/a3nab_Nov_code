@@ -121,11 +121,11 @@ Show Off Duty Drivers &nbsp;&nbsp;
 *ngFor="let mn of markers1; let i = index"
 (markerClick)="clickedMarker1(infowindow1)"
 [iconUrl]="StoreiconUrl"
-[latitude]="stoLat"
-[longitude]="stoLng"
+[latitude]="mn.latitude"
+[longitude]="mn.longitude"
 >
 <agm-info-window #infowindow1>
-<p><strong>Store: </strong> {{stoName}} {{stoId}}</p>
+<p><strong>Store: </strong> {{mn.storeName}} {{mn.storeID}}</p>
 </agm-info-window>
 </agm-marker>
 <agm-marker *ngIf = "isDriverSelect == true"

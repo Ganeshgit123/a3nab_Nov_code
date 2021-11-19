@@ -215,7 +215,8 @@ export class OrderDetailsComponent implements OnInit {
           this.otherTotal = response.body.data.orderInfo.otherTotal
           this.offType = response.body.data.orderInfo.off_types
           // console.log("oth",this.offType)
-          // console.log("tot",this.otherTotal)
+          // console.log("tot",this.totalAmount)
+          // console.log("othtot",this.otherTotal)
 
 
         this.subtot= ((this.totalAmount +  this.otherTotal) - this.discountAmount) 

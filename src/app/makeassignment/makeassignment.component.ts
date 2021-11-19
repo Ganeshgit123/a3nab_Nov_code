@@ -52,6 +52,7 @@ export class MakeassignmentComponent implements OnInit {
   markerDriver : marker[] = []
   editMarkerUser:  marker[] = []
   editMarkerStore:  marker[] = []
+  contentLan: any = {};
 
   zoom: number = 5;
   public StoreiconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
@@ -69,10 +70,7 @@ export class MakeassignmentComponent implements OnInit {
   searchDriv;
   searchStore;
   overallroute: any;
-  stoLat :any;
-  stoLng:any;
-  stoName:any;
-  stoId:any;
+
   constructor(
     private apiCall: ApiCallService,
     private router: Router,
@@ -329,11 +327,8 @@ export class MakeassignmentComponent implements OnInit {
           this.pickup = response.body.data.pickup
           this.total = response.body.data.total
           this.distance = response.body.data.distance
-          this.stoLat = response.body.data.distance[0].latitude
-          this.stoLng = response.body.data.distance[0].longitude
-          this.stoName = response.body.data.distance[0].storeName
-          this.stoId = response.body.data.distance[0].storeID
-          // console.log("mar",this.distance)
+          this.markers1 = response.body.data.store
+          // console.log("mar",this.markers1)
         } else {
           this.apiCall.showToast(response.body.message, 'Error', 'errorToastr')
         }

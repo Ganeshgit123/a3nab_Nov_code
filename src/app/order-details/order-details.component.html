@@ -423,8 +423,7 @@ My Super Mart<br>
 <td>SAR {{prod.price + prod.cuttingStylePrice + prod.boxStylePrice}}</td>
 <td>{{prod.discount}} %</td>
 <td>
-   
-    SAR {{prod.quantity * (prod.price + prod.cuttingStylePrice + prod.boxStylePrice - (prod.price * prod.discount /100)) | number : '1.2-2'}}</td>
+   SAR {{prod.quantity * (prod.price + prod.cuttingStylePrice + prod.boxStylePrice - (prod.price * prod.discount /100)) | number : '1.2-2'}}</td>
 <td *ngIf = "showAccept == 'true'"> 
     <!-- <a style="cursor: pointer;" ng-really-message="Are you sure?" ng-really-click="removeOrderItems(prod)"> <img src="assets/img/delete_icon.svg" style="width: 18px;height: 18px;"> </a> -->
     <a
