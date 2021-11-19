@@ -1,0 +1,139 @@
+.modal-content{
+    max-height: 600px;
+    overflow-y: scroll;
+}
+
+.image-upload>input {
+    display: none;
+  }
+  .upload-img{
+    width: 100px;
+    height: 100px;
+    cursor: pointer
+  } 
+
+  .driv_img img {
+    width: 60px !important;
+    height:60px ! important;
+  }
+  p{
+    margin-bottom: 0;
+  }
+  .modal.right .modal-content{
+    height: 670px;
+}
+@media only screen and (max-width: 1399px) and (min-width: 1000px){
+    .modal.right .modal-content{
+        height: 530px ! important;
+    }
+    #float_cash_btn .modal-dialog{
+      width: 70%;
+  }
+  }
+@media only screen and (max-width: 1024px) and (min-width: 767px){
+    .modal.right .modal-content{
+        height: 670px ! important;
+    }
+    #float_cash_btn .modal-dialog{
+      width: 60%;
+  }
+  }
+  @media only screen and (max-width: 1200px) and (min-width: 1024px){
+    .modal.right .modal-content{
+        height: 430px ! important;
+    }
+    #float_cash_btn .modal-dialog{
+      width: 60%;
+  }
+  }
+
+#float_cash_btn .modal-dialog{
+      width: 60%;
+  }
+  @media only screen and (max-width: 1399px) and (min-width: 1000px){
+  .float_p p{
+    font-size: 12px;
+  }
+  .right_cont p{
+    font-size: 12px;
+  }
+}
+.float_p p{
+  color: #12303C40;
+}
+.right_cont p{
+  text-align: right;
+}
+.bot_row{
+  margin-top: 10px;
+  padding: 5px 0;
+}
+.driv_id{
+  color: #C1003A;
+}
+.modal .modal-header {
+  padding: 23px 16px 0 16px;
+}
+#float_cash_btn .modal-body{
+  position: unset;
+}
+.search-bar {
+  display: grid;
+  grid-template-columns: 1fr 3rem;
+  grid-gap: 10px;
+  border: 2px solid #0000001f;
+border-radius: 10px;
+padding: 5px;
+margin-bottom: 30px;
+}
+.search-bar:hover{
+  border: none;
+  background: #fff;
+  box-shadow: 0px 6px 40px #0000000a;
+}
+
+.search-bar form {
+  display: grid;
+  grid-template-columns: 1rem 1fr;
+  grid-gap: 10px;
+  padding-left:0.5rem;
+}
+
+.search-bar form input[type="search"] {
+  border:0;  
+  padding-left: 0.5rem;
+  padding-right: 0.5rem; 
+  outline: none;
+  letter-spacing: 1px;
+  background: transparent;
+}
+.search-bar form input:focus{
+  background: #fff;
+  border: none;
+}
+
+.search-bar button {
+  border:0;
+  background-color:transparent;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  opacity: 0.5;
+}
+.rating-star-point{
+  font-size: 20px;
+  color: #e8b227;
+}
+.spot_btn{
+  background: transparent;
+  border: none;
+}
+.spot_btn:hover{
+  color: #C1003A;
+}
+
+.vari-del img{
+  width: 25px;
+  height: 25px;
+}

@@ -1,0 +1,457 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-10">
+<ul>
+<!-- <li style="padding-left: 10px;">
+Show Off Duty Drivers &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
+</li> -->
+<!-- <li>
+<select>
+<option>Driver Status</option>
+</select>
+</li>
+<li>
+<select>
+<option>Time Slot</option>
+</select>
+</li> -->
+</ul>
+</div>
+<div class="col-md-2 right_cont">
+<!-- <ul>
+<li>
+<a (click)="pageReload()" > <i class="fa fa-refresh"></i> </a>
+</li>
+</ul> -->
+</div>
+</div>
+</div>
+</section>
+<section class="custom_head">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-9">
+<div class="card">
+<div class="card-content">
+<div class="row">
+<div class="col-md-12">
+<agm-map *ngIf = "isEdit"
+[latitude]="lat"
+[longitude]="lng"
+[zoom]="zoom"
+[disableDefaultUI]="false"
+[zoomControl]="false">
+<agm-marker 
+*ngFor="let m of editMarkerUser; let i = index"
+(markerClick)="clickedMarker(infowindow)"
+[iconUrl]="UsericonUrl"
+[latitude]="m.latitude"
+[longitude]="m.longitude"
+>
+<agm-info-window #infowindow>
+<p><strong>User Address: </strong> </p>
+    <p class="text-center">{{m.addressPinDetails}}</p>
+    <p class="text-center">Name : {{m.firstName}} {{m.lastName}}</p>
+    <p class="text-center">Id : {{m.customerID}}</p>
+    <p class="text-center">order Id : {{m.orderIDs}}</p>
+</agm-info-window>
+</agm-marker>
+<div *ngFor="let mn of orderedList"> 
+<agm-marker 
+*ngFor="let st of mn.storeList"
+(markerClick)="clickedMarker1(infowindow1)"
+[iconUrl]="StoreiconUrl"
+[latitude]="st.storeLatitude"
+[longitude]="st.storeLongitude"
+[label]="st.storeName"
+>
+<agm-info-window #infowindow1>
+<p><strong>Store: </strong> {{st.storeName}} {{st.storeID}}</p>
+</agm-info-window>
+</agm-marker>
+</div>
+
+<agm-marker 
+*ngFor="let dll of driverList; let i = index"
+(markerClick)="clickedDriverMark(infowindowDiver)"
+[iconUrl]="DrivericonUrl"
+[latitude]="dll.latitude"
+[longitude]="dll.longitude"
+[label]="dll.firstName"
+>
+<agm-info-window #infowindowDiver>
+<p><strong>Driver: </strong> {{dll.firstName}} {{dll.drId}}</p>
+</agm-info-window>
+</agm-marker>
+</agm-map>
+
+<agm-map *ngIf = "!isEdit"
+[latitude]="lat"
+[longitude]="lng"
+[zoom]="zoom"
+[disableDefaultUI]="false"
+[zoomControl]="false">
+<agm-marker 
+*ngFor="let m of markers; let i = index"
+(markerClick)="clickedMarker(infowindow)"
+[iconUrl]="UsericonUrl"
+[latitude]="m.latitude"
+[longitude]="m.longitude"
+>
+<agm-info-window #infowindow>
+<p><strong>User Address: </strong> </p>
+    <p class="text-center">{{m.addressPinDetails}}</p>
+    <p class="text-center">Name : {{m.firstName}} {{m.lastName}}</p>
+    <p class="text-center">Id : {{m.customerID}}</p>
+    <p class="text-center">Order Id : {{m.orderIDs}}</p>
+    
+</agm-info-window>
+</agm-marker>
+<agm-marker 
+*ngFor="let mn of markers1; let i = index"
+(markerClick)="clickedMarker1(infowindow1)"
+[iconUrl]="StoreiconUrl"
+[latitude]="stoLat"
+[longitude]="stoLng"
+>
+<agm-info-window #infowindow1>
+<p><strong>Store: </strong> {{stoName}} {{stoId}}</p>
+</agm-info-window>
+</agm-marker>
+<agm-marker *ngIf = "isDriverSelect == true"
+(markerClick)="clickedMarker2(infowindow2)"
+[iconUrl]="DrivericonUrl"
+[latitude]="latitude"
+[longitude]="longitude"
+>
+<agm-info-window #infowindow2>
+<p><strong>Driver:</strong> {{driverName}} {{driverID}}</p>
+</agm-info-window>
+</agm-marker>
+
+<agm-marker 
+*ngFor="let dll of driverList; let i = index"
+(markerClick)="clickedDriverMark(infowindowDiver)"
+[iconUrl]="DrivericonUrl"
+[latitude]="dll.latitude"
+[longitude]="dll.longitude"
+[label]="dll.firstName"
+>
+<agm-info-window #infowindowDiver>
+<p><strong>Driver: </strong> {{dll.firstName}} {{dll.drId}}</p>
+</agm-info-window>
+</agm-marker>
+</agm-map>
+<!-- <div id="map"></div> -->
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+
+
+
+
+<div class="col-md-4 dri_sec" *ngIf = "!isEdit" >
+
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Order</h4>
+</div>
+<div class="two_col1">
+<form class="search-form">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="search" [(ngModel)]="searchord" [ngModelOptions]="{standalone: true}" class="form-control search-control topSearch">
+<!-- <input type="text" (input)="searchOrders($event.target.value)" class="form-control search-control topSearch"> -->
+</div>
+<!-- /.input-group -->  
+</form>
+</div>
+<div class="ord_tab">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr *ngFor="let item of orderList | filter:searchord;let i = index">
+<td><span class="red_color">{{item.orderIDs}}</span><br>
+    <span class="red_color">{{item.customerID}}</span><br>
+<span *ngFor="let store of item.storeList" class="light_color">{{store.storeName}},</span><br>
+<span class="ligi_li_color">Delivery : {{item.fromTime}} - {{item.toTime}}</span>
+<!-- <span class="ligi_li_color">Latitude : {{item.latitude}} Longitude : {{item.longitude}}</span> -->
+</td>
+<td>
+<div class="mycheckbox">
+<input type="checkbox" name="{{item.orderIDs}}" id="{{item.orderIDs}}" [checked]="getSelection(item)" (change)="changeHandler(item, $event)"/>
+<label for="{{item.orderIDs}}"></label>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="col-md-4 dri_sec" *ngIf = "isEdit" >
+
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Order</h4>
+</div>
+<div class="two_col1">
+<form class="search-form">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" [(ngModel)]="mergeOrder" [ngModelOptions]="{standalone: true}" class="form-control search-control topSearch">
+
+<!-- <input type="text" (input)="searchOrders($event.target.value)" class="form-control search-control topSearch"> -->
+</div>
+<!-- /.input-group -->
+</form>
+</div>
+<div class="ord_tab">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr *ngFor="let item of merged_order | filter:mergeOrder;let i = index">
+<td><span class="red_color">{{item.orderIDs}}</span><br>
+    <span class="red_color">{{item.customerID}}</span><br>
+<span *ngFor="let store of item.storeList" class="light_color">{{store.storeName}},</span><br>
+<span class="ligi_li_color">Delivery : {{item.fromTime}} - {{item.toTime}}</span>
+<!-- <span class="ligi_li_color">Latitude : {{item.latitude}} Longitude : {{item.longitude}}</span> -->
+</td>
+<td>
+<div class="mycheckbox">
+<!-- <input type="text" value="{{checkorder(item)}}"> 
+[checked]="checkorder(item)"
+-->
+<input type="checkbox" name="{{item.orderIDs}}" id="{{item.orderIDs}}" [checked]="checkorder(item)" [disabled]="checkorder(item)"  (change)="changeHandler(item, $event)"/>
+
+<label for="{{item.orderIDs}}"></label>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- <div class="col-md-4 dri_sec" *ngIf="isEdit" >
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Order</h4>
+</div>
+<div class="two_col1">
+<form class="search-form">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" (input)="searchOrders($event.target.value)" class="form-control search-control topSearch">
+</div>
+</form>
+</div>
+<div class="ord_tab">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+
+<tr >
+<td><span class="red_color">{{orderedList?.orderIDs}}</span><br>
+<span class="light_color">{{storeedList?.storeName}}</span><br>
+<span class="ligi_li_color">Delivery : {{orderedList?.fromTime}} - {{orderedList?.toTime}}</span>
+</td>
+<td>
+<div class="mycheckbox">
+<input type="checkbox" [checked]="isEdit"/>
+<label for=""></label>
+</div>
+</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+</div> -->
+
+
+<div class="col-md-4 dri_sec" *ngIf = "isShowDriver || isEdit">
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Driver</h4>
+</div>
+<div class="two_col1">
+<form class="search-form">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+
+<input [(ngModel)]="searchDriv" [ngModelOptions]="{standalone: true}" type="text" class="form-control search-control">
+<!-- <input (input)="searchDrivers($event.target.value)" type="text" class="form-control search-control"> -->
+</div>
+<!-- /.input-group -->
+</form>
+</div>
+<div class="ord_tab">
+
+
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr *ngFor="let item of driverList | filter:searchDriv;let i = index">
+<td style="width:30%"><img src="{{item.profilePic}}"></td>
+<td style="width:40%"><span>{{item.firstName}}</span><br>
+<span class="red_color">{{item.drId}}</span><br>
+<span class="light_color">Orders : {{item.totalOrderDelivered}}</span>
+</td>
+<td style="width:30%;text-align: right;">
+<div class="mycheckbox">
+<input type="radio" name="optradio" class="form-check-input" [checked]="item.id == as_driver_id" id="{{item.id}}" [disabled]="checkdriver(item)" (change)="selectDriver($event,item)"   value="{{item.id}}">
+<label for="{{item.id}}"></label>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-md-4 dri_sec" *ngIf = "isShowStore || isEdit"  >
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Stores</h4>
+</div>
+<div class="two_col1">
+<form class="search-form">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" [(ngModel)]="searchStore" [ngModelOptions]="{standalone: true}" class="form-control search-control">
+</div>
+<!-- /.input-group -->
+</form>
+</div>
+<div class="ord_tab">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<!-- <div *ngFor="let item of storeList;let i = index">
+<input type="text" value="{{item}}">
+</div> -->
+<tr *ngFor="let item of storeList | filter:searchStore;let i = index" >
+<td style="width:30%"><img src="{{item.storeImage}}"></td>
+<td style="width:40%"><span>{{item.storeName}}</span><br>
+<span class="red_color">{{item.storeID}}</span><br>
+<span class="light_color">Orders : 0</span>
+</td>
+
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+</div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+    <p style="font-size: 20px; color: white">Loading...</p>
+    </ngx-spinner>
+<div class="col-md-3">
+<div class="card">
+<div class="make_sec">
+<div class="material-datatables">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr *ngIf = "driverhtml == true">
+<td><img src="{{driverImage}}"></td>
+<td><span>{{driverName}}</span>&nbsp;&nbsp;
+<span class="red_color">{{driverID}}</span><br>
+<span class="light_color">Orders : {{driverOrders}}</span>
+</td>
+<td *ngIf = "showAccept == 'true'" style="vertical-align: middle;"><button  (click)="driverAssign()" class="update_btn">Update</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="make_order" *ngFor="let item of selection;let i = index">
+<p class="red_color">{{item.orderIDs}}</p>
+<span *ngFor="let store of item.storeList" class="light_color">{{store.storeName}},</span><br>
+<!-- <p class="light_color">Meat Shop, Super Market</p> -->
+<p class="ligi_li_color">Delivery : {{item.fromTime}} - {{item.toTime}}</p>
+</div>
+<!-- <div class="make_order">
+<p class="red_color">#Order_ID</p>
+<p class="light_color">Meat Shop, Super Market</p>
+<p class="ligi_li_color">Delivery : 02:00PM - 05:00PM</p>
+</div> -->
+<p class="assing_route text-center">Assignment Route</p>
+<div class="row" *ngIf = "!isEdit" >
+    <div class="col-md-12">
+<div class="ass_sss">
+<ngx-sortable [items]="distance" (listSorted)="listOrderChanged($event)">
+<ng-template let-item>
+<div *ngIf = "item.storeName" class="sortable-list-item">
+{{item.storeName}}
+</div>
+<div *ngIf = "item.firstName" class="sortable-list-item">
+{{item.firstName}} - {{item.orderIDs}}
+</div>
+</ng-template>
+</ngx-sortable>
+</div>
+</div>
+</div>
+
+     <div class="row" *ngIf = "isEdit" >
+    <div class="col-md-12">
+    <div class="ass_sss">
+    <ngx-sortable [items]="oldDistance" (listSorted)="listOrderChanged($event)">
+    <ng-template let-item>
+    <div *ngIf = "item.storeName" class="sortable-list-item">
+    {{item.storeName}}
+    </div>
+    <div *ngIf = "item.firstName" class="sortable-list-item">
+    {{item.firstName}} - {{item.orderIDs}}
+    </div>
+    </ng-template>
+    </ngx-sortable>
+    </div>
+    </div>
+    </div>
+
+<br>
+</div>
+</div>
+
+
+
+
+
+</div>
+</div>

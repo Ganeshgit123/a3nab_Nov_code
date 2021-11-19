@@ -1,0 +1,281 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-11">
+        <div class="search-bar">
+           <form>
+             <label for="searchQuery">
+              <span><img src="assets/img/search_icon.svg" width="18px"></span>
+             </label>
+             <input type="search" id="searchQuery" name="searchQuery" placeholder="search" (input)="searchStores($event.target.value)"/>
+           </form>
+         </div>
+         </div>
+         </div>
+<div class="row">
+<div class="col-md-6">
+<ul>
+<li style="padding-left: 10px;">
+Map View &nbsp;&nbsp;
+<label class="switch">
+<input type="checkbox" (change)="onchangeMap($event)">
+<span class="slider"></span>
+</label>
+</li>
+</ul>
+</div>
+<div class="col-md-6 right_cont">
+<ul>
+<li>
+<i class="fa fa-refresh"></i>
+</li>
+<li *ngIf="showExport == 'true'">
+<button class="float_cash_btn" (click)="exportList($event);">Export XLS</button>
+</li>
+<li *ngIf="showAccept == 'true'">
+<button type="button" class="float_cash_btn" data-toggle="modal" (click)="openAddStore()" data-target="#add_store_btn">Add Store</button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="custom_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+
+<div class="row" *ngIf="showMap">
+<div class="col-md-12">
+<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false">
+<agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(infowindow)" [latitude]="m.latitude" [longitude]="m.longitude">
+<agm-info-window #infowindow>
+<p><strong>Store Name: </strong> {{m.storeName}} ({{m.storeID}})</p>
+</agm-info-window>
+</agm-marker>
+
+<agm-circle *ngFor="let m of markers; let i = index" [latitude]="m.latitude" [longitude]="m.longitude" [radius]="m.storeRadius" [fillColor]="'red'" [circleDraggable]="false" [editable]="false">
+</agm-circle>
+
+</agm-map>
+<!-- <div id="map"></div> -->
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Status</th>
+<th>Signup Date</th>
+<th class="col_chan">Store ID</th>
+<th>Name</th>
+<th>Category</th>
+<th>Managers</th>
+<th>Activity</th>
+<th>Phone No.</th>
+<th>Store Address</th>
+<th>Rejected %</th>
+<th>Orders</th>
+<th>Due</th>
+<th>Earned</th>
+<th *ngIf="showAccept == 'true'" class="text-center">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of storeList;let i = index">
+<td>
+    <div class="container-category-switch">
+        <label class="switch" *ngIf="showAccept == 'true'">
+<input  *ngIf="item.status == 'active'"  checked type="checkbox" (change)="ChnageStoteStatus($event.target.checked, item.id)"/>
+<input  *ngIf="item.status == 'inactive'" unchecked type="checkbox" (change)="ChnageStoteStatus($event.target.checked, item.id)" />    <span class="slider"></span>
+</label>
+<label class="switch" *ngIf="showAccept !== 'true'">
+    <input  *ngIf="item.status == 'active'"  checked type="checkbox" />
+    <input  *ngIf="item.status == 'inactive'" unchecked type="checkbox" />    <span class="slider"></span>
+    </label>
+    </div>
+</td>
+<td>{{item.createdDate}} -{{item.time}} </td>
+<td class="col_chan"><a routerLink="/view-store/{{ item.id }}">{{item.storeID}}</a></td>
+<td>{{item.storeName}}</td>
+<td class="some-container">
+    <span *ngFor="let att of item.category; let i=index;">{{att.categoryName}} <span class="list-comma">,</span> </span>
+</td>
+<td><span>{{item.managerFname}}</span></td>
+<td>
+    <span *ngIf="item.status == 'active'" class="online_btn">Online</span>
+    <span *ngIf="item.status == 'inactive'" class="cod_btn">Offline</span>
+</td>
+<td>{{item.mobileNumber}}</td>
+<td>{{item.storeAddress}}</td>
+<td>{{item.cancellation | number:'1.2-2'}}</td>
+<td>{{item.orders}}</td>
+<td>{{item.due}}</td>
+<td>{{item.overAllRevenue}}</td>
+<td *ngIf="showAccept == 'true'"><button (click)="deleteStore(item.id)" class="save_btn">Delete</button></td>
+</tr>
+</tbody>
+</table>
+<p class="text-center">
+<ngb-pagination [collectionSize]="pages" (pageChange)="nextPage($event)" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+</ngb-pagination>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<style type="text/css">
+.dataTables_filter {
+margin-top: -34%;
+}
+</style>
+</div>
+</div>
+</div>
+<section class="add_offer_sec">
+<div class="modal right fade" id="add_store_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" style="overflow-y: scroll;" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5"></div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="storeForm" (ngSubmit)="onSubmit()">
+<div class="col-md-3"></div>
+<div class="col-md-8">
+<div class="image-upload text-center">
+<label for="file-input">
+<!-- Subcategory Image -->
+<img class="upload-img" style="width: 120px;" *ngIf="!imagePreview"  src="assets/img/product1.png"/>
+<img class="upload-img" style="width: 120px;" *ngIf="imagePreview" src="{{imagePreview}}"/>
+</label>
+<input formControlName="storeImage" id="file-input" type="file" (change)="uploadImageFile($event)" />
+<p *ngIf="!storeForm.controls.storeImage.valid && submitted" class="error-val-pro">Please select image</p>
+</div>
+<!-- <div class="immm_sec">
+<input type="file" id="file1" name="image" accept="image/*" capture style="display:none"/>
+<img src="assets/img/product1.png" id="upfile1" style="cursor:pointer" class="image" />
+<div class="middle">
+<i class="fa fa-upload"></i>
+</div>
+</div> -->
+</div>
+<div class="col-md-1"></div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Store Name</label>
+<input type="text" formControlName="storeName" class="form-control">
+<p *ngIf="!storeForm.controls.storeName.valid && submitted" class="error-val-pro">Please enter a store name</p>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Manager First Name</label>
+<input type="text" formControlName="managerFname" class="form-control">
+<p *ngIf="!storeForm.controls.managerFname.valid && submitted" class="error-val-pro">Please enter a manager name</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Manager Last Name</label>
+<input type="text" formControlName="managerLname" class="form-control">
+<p *ngIf="!storeForm.controls.managerLname.valid && submitted" class="error-val-pro">Please enter a manager name</p>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Email</label>
+<input type="email" formControlName="email" class="form-control">
+<p *ngIf="!storeForm.controls.email.valid && submitted" class="error-val-pro">Please enter a valid email</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Phone</label>
+<input type="number" formControlName="mobileNumber" class="form-control">
+<p *ngIf="!storeForm.controls.mobileNumber.valid && submitted" class="error-val-pro">Please enter a valid mobile number</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>latitude</label>
+<input type="text" formControlName="latitude" class="form-control">
+<p *ngIf="!storeForm.controls.latitude.valid && submitted" class="error-val-pro">Please enter a valid latitude</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>longitude</label>
+<input type="text" formControlName="longitude" class="form-control">
+<p *ngIf="!storeForm.controls.longitude.valid && submitted" class="error-val-pro">Please enter a valid longitude</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>dueDay ( 1 to 31 )</label>
+<input type="number" (keypress)="restrictNumeric($event)" formControlName="dueDay" class="form-control">
+<p *ngIf="!storeForm.controls.dueDay.valid && submitted" class="error-val-pro">Please enter a valid dueDay</p>
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="form-group">
+<label>Radius</label>
+<input type="text" formControlName="storeRadius" class="form-control">
+<p *ngIf="!storeForm.controls.storeRadius.valid && submitted" class="error-val-pro">Please enter a valid store radius</p>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Store Address</label>
+<input type="text" class="form-control" formControlName="storeAddress">
+<p *ngIf="!storeForm.controls.storeAddress.valid && submitted" class="error-val-pro">Please enter a valid store address</p>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Commission Percentage</label>
+<input type="text" class="form-control" formControlName="storePercentage">
+<p *ngIf="!storeForm.controls.storePercentage.valid && submitted" class="error-val-pro">Please enter a valid store percentage</p>
+</div>
+</div>
+</div>
+<br>
+<p class="text-center"><button class="add_car_btn">Add store</button></p>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>

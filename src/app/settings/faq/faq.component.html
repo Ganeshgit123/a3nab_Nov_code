@@ -1,0 +1,543 @@
+<div class="container-fluid">
+<div class="card">
+<div class="cc_card_content">
+<section class="faq_sec">
+<div id="exTab1">
+<ul class="nav nav-pills">
+<li class="active"><a href="#custfaq" data-toggle="tab">Customer FAQ</a></li>
+<li><a href="#storfaq" data-toggle="tab">Store Manager FAQ</a></li>
+<div style="float: right;">
+<li class="edit_faq_btn"><button data-toggle="modal" data-target="#edit_categ">Add Categories</button></li>
+</div>
+</ul>
+<div class="tab-content clearfix">
+<div class="tab-pane active" id="custfaq">
+<ul class="cate_sec">
+<li><button data-toggle="modal" (click)="add_on_click()" data-target="#add_faq">Add FAQ</button></li>
+</ul>
+<section class="notify_tab">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th></th>
+<th>Category</th>
+<th>Question</th>
+<th>Answer</th>
+<th>Question Arabic</th>
+<th>Answer Arabic</th>
+<!-- <th class="text-center">Chat</th>
+<th class="text-center">Call</th> -->
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of faqlist; index as i;">
+<td width="5%"><img src="assets/img/move_icon.svg"></td>
+<span *ngFor="let catitem of categorey_list">
+<td *ngIf="catitem.id==item.faqCategory" style="padding-left: 15px;padding-top:8px;">{{catitem.categoryName}}</td>
+</span>
+<td>{{item.question}} </td>
+<td>{{item.answer}}</td>
+<td>{{item.arabicQuestion}} </td>
+<td>{{item.arabicAnswer}}</td>
+<!-- <td class="text-center">
+<div class="mycheckbox">
+<input type="checkbox" name="useful" id="useful" />
+<label for="useful"></label>
+</div>
+</td>
+<td class="text-center">
+<div class="mycheckbox">
+<input type="checkbox" name="useful" id="useful" checked />
+<label for="useful"></label>
+</div>
+</td> -->
+<!-- <td class="text-center">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</td> -->
+<td class="text-center">
+<button class="edit_btn" data-toggle="modal" (click)="onclk_cus(item.id);" data-target="#add_faq"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td>
+<td class="text-center">
+<button class="edit_btn"  (click)="onclk_del(item.id);"><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></button>
+</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+<div class="tab-pane" id="storfaq">
+<ul class="cate_sec">
+<!-- <li><button data-toggle="modal" data-target="#edit_categ_stman">Edit Category</button></li> -->
+<li><button data-toggle="modal" (click) ="on_click_man()" data-target="#add_faq_stman">Add FAQ</button></li>
+</ul>
+<section class="notify_tab">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th></th>
+<th>Category</th>
+<th>Question</th>
+<th>Answer</th>
+<th>Question Arabic</th>
+<th>Answer Arabic</th>
+<!-- <th class="text-center">Chat</th>
+<th class="text-center">Call</th> -->
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+
+<tr *ngFor="let item of faqlistman; index as i;"  >
+<td width="5%"><img src="assets/img/move_icon.svg"></td>
+<span *ngFor="let catitem of categorey_list ;">
+<td *ngIf="catitem.id==item.faqCategory" style="padding-left: 15px;padding-top:8px;">{{catitem.categoryName}}</td>
+</span>
+<td>{{item.question}}</td>
+<td>{{item.answer}}</td>
+<td>{{item.arabicQuestion}} </td>
+<td>{{item.arabicAnswer}}</td>
+<!-- <td class="text-center">
+<div class="mycheckbox">
+<input type="checkbox" name="useful" id="useful" />
+<label for="useful"></label>
+</div>
+</td>
+<td class="text-center">
+<div class="mycheckbox">
+<input type="checkbox" name="useful" id="useful" checked />
+<label for="useful"></label>
+</div>
+</td> -->
+<!-- <td class="text-center">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</td> -->
+<td class="text-center">
+<button class="edit_btn" data-toggle="modal" (click)="onclk_man(item.id);" data-target="#add_faq_stman"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td>
+<td class="text-center">
+<button class="edit_btn" (click)="onclk_man_del(item.id);" ><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></button>
+</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+
+<section class="add_driv_sec">
+<div class="modal right fade" id="edit_categ" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="addCat" (ngSubmit)="add_cat_cus()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Add Category</label>
+<input type="text" formControlName="categoryName" class="form-control" placeholder="Category name">
+</div>
+<br>
+<div class="form-group">
+<label>Add Category Arabic</label>
+<input type="text" formControlName="arabicName" class="form-control" placeholder="Category name arabicName">
+</div>
+<p class="text-center"><button class="prod_add_btn">Submit</button></p>
+</div>
+</div>
+
+<ul class="cate_fi_lis" *ngFor="let item of categorey_list;" >
+<li>
+<label class="switch"><input type="checkbox" [checked] = "item.status == 'true'"  (change)="faq_cus_status($event,item.id)"/><span class="slider"></span>
+</label>
+</li>
+<li>{{item.categoryName}}</li>
+<li>{{item.arabicName}}</li>
+<li class="righ_col">
+    <button class="edit_btn"  (click)="del_cat_cus(item.id);"><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></button>
+</li>
+<li class="righ_col">
+<button class="edit_btn" data-toggle="modal" (click)="edit_cat_cus(item.id)" data-target="#edit_categ_edit"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</li>
+</ul>
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>
+
+<section class="add_driv_sec">
+<div class="modal right fade" id="edit_categ_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="editCat" (ngSubmit)="update_cat_cus()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Add Category</label>
+<input type="text" formControlName="categoryName" class="form-control" placeholder="Category name">
+</div>
+<div class="form-group">
+<label>Add Category Arabic</label>
+<input type="text" formControlName="arabicName" class="form-control" placeholder="Category name arabicName">
+</div>
+
+<p class="text-center"><button class="prod_add_btn" >Submit</button></p>
+</div>
+</div>
+
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>
+
+<!-- <section class="add_driv_sec">
+<div class="modal right fade" id="edit_categ_stman" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="addCatsto" (ngSubmit)="add_cat_store()" >
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<div class="cat_nam">
+<label>Add Category</label>
+<input type="text" formControlName="categoryName" class="form-control" placeholder="Category Name">
+</div>
+<div class="cat_nam">
+<label>Add Category Arabic</label>
+<input type="text" formControlName="arabicName" class="form-control" placeholder="Category Name Arabic">
+</div>
+
+
+<div class="cat_add">
+<button class="prod_add_btn" >Submit</button>
+</div>
+</div>
+</div>
+</div>
+<ul class="cate_list" *ngFor="let item of categorey_list;">
+<li>
+<label class="switch"><input type="checkbox" [checked] = "item.status == 'true'"  (change)="faq_cus_status($event,item.id)"/><span class="slider"></span>
+</label>
+</li>
+<li>{{item.categoryName}}</li>
+<li>{{item.arabicName}}</li>
+<li class="righ_col">
+<button class="edit_btn" data-toggle="modal" (click)="edit_cat_sto(item.id)" data-target="#edit_categ_edit_sto"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</li>
+<li class="righ_col">
+<button class="edit_btn"  (click)="del_cat_sto(item.id);"><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></button>
+</li>
+</ul>
+
+
+
+</div>
+</form>
+</div>
+</div> -->
+<!-- modal-content -->
+<!-- </div> -->
+<!-- modal-dialog -->
+<!-- </div>
+</section> -->
+
+<!-- <section class="add_driv_sec">
+<div class="modal right fade" id="edit_categ_edit_sto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="editCatsto" (ngSubmit)="update_cat_sto()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<div class="cat_nam">
+<label>Add Category</label>
+<input type="text" formControlName="categoryName" class="form-control" placeholder="Category name">
+<div></div>
+</div>
+<div class="cat_nam">
+<label>Add Category Arabic</label>
+<input type="text" formControlName="arabicName" class="form-control" placeholder="Category name arabicName">
+<div></div>
+</div><br><br>
+<div class="cat_add">
+<button class="prod_add_btn" >Submit</button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+</div>
+</form>
+</div>
+</div>
+
+</div>
+
+</div>
+</section> -->
+
+<section class="add_driv_sec">
+<div class="modal right fade" id="add_faq" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7 faq_ss">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+<!-- <li class="stat_btn text-center">
+Status &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
+</li> -->
+</ul>
+</div>
+<div class="col-md-5">
+<!-- <ul class="right_side_icon">
+<li><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></li>
+<li><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></li>
+</ul> -->
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form  [formGroup]="addFAQ" (ngSubmit)="add_que_ans_cus()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<!-- <label>Select Category</label>
+<select>
+<option>Category 1</option>
+</select> -->
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Select Category</label>
+<select  formControlName ="faqCategory">
+<option *ngFor="let catitem of categorey_list ;" value="{{catitem.id}}">
+{{catitem.categoryName}}
+</option>
+</select>
+</div>
+</div>
+
+</div>
+<br>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Add Question</label>
+<textarea class="form-control" formControlName="question" ></textarea>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Add Question(Arabic)</label>
+<textarea class="form-control" formControlName="arabicQuestion" ></textarea>
+</div>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Add Answer</label>
+<textarea class="form-control" formControlName="answer"></textarea>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Add Answer (Arabic)</label>
+<textarea class="form-control" formControlName="arabicAnswer">      
+</textarea>
+</div>
+</div>
+</div>
+</div>
+<br><br>
+<button class="prod_add_btn" >Submit</button>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>
+
+
+<section class="add_driv_sec">
+<div class="modal right fade" id="add_faq_stman" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7 faq_ss">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+<!-- <li class="stat_btn text-center">
+Status &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
+</li> -->
+</ul>
+</div>
+<div class="col-md-5">
+<!-- <ul class="right_side_icon">
+<li><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></li>
+<li><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></li>
+</ul> -->
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form  [formGroup]="addFAQman" (ngSubmit)="add_que_ans_man()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<!-- <label>Select Category</label>
+<select>
+<option>Category 1</option>
+</select> -->
+</div>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Select Category</label>
+<select formControlName ="faqCategory">
+<option>---select---</option>
+<option *ngFor="let item of categorey_list; index as i;"  value="{{item.id}}"  >{{item.categoryName}}</option>
+</select>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Add Question</label>
+<textarea class="form-control" formControlName="question"></textarea>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Add Question</label>
+<textarea class="form-control" formControlName="arabicQuestion"></textarea>
+</div>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Add Answer</label>
+<textarea class="form-control"  formControlName="answer" rows="5"></textarea>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Add Answer Arabic</label>
+<textarea class="form-control"  formControlName="arabicAnswer" rows="5"></textarea>
+</div>
+</div>
+</div>
+</div>
+<br>
+<button class="prod_add_btn" >Submit</button>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>

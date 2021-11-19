@@ -1,0 +1,147 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-11">
+<div class="search-bar">
+<form>
+    <label for="searchQuery">
+    <span><img src="assets/img/search_icon.svg" width="18px"></span>
+    </label>
+    <input type="search"  id="searchQuery" name="searchQuery" placeholder="search" (input)="searchStoreProduct($event.target.value)"/>
+</form>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-9">
+<ul>
+<li>
+<!-- <div class="form-group"> -->
+<!-- <label>Select Category</label><br> -->
+<select (change)="onChangeCategory($event.target.value, 'Category', false)">
+<option [selected]="true" value="Empty" disabled>Select Category</option>
+<option *ngFor="let item of category;let i = index" value="{{item.id}}" >{{item.categoryName}}</option>
+</select>
+</li>
+<li>
+<!-- <div class="form-group"> -->
+<!-- <select>
+<option>Select Subcategory</option>
+</select> -->
+
+<select (change)="onChangeSubCategory($event.target.value)">
+<option [selected]="true" value="Empty" disabled>Select Subcategory</option>
+<option *ngFor="let item of subCategory;let i = index" value="{{item.id}}" >{{item.productCategoryName}}</option>
+</select>
+</li>
+<li *ngIf = "isSubsubcategory">
+<!-- <div class="form-group"> -->
+
+<select  (change)="onChangeCategory($event.target.value, 'subSubCategory', false)">
+<option [selected]="true" value="Empty" disabled>Select Sub-Subcategory</option>
+<option *ngFor="let item of subSubCategory;let i = index" value="{{item.id}}" >{{item.productSubCategoryName}}</option>
+</select>
+<!-- <select>
+<option>Select Sub-Subcategory</option>
+</select> -->
+</li>
+<li>
+
+<select (change)="onChangeProducts($event.target.value)">
+<option [selected]="true" value="" disabled>Select Product</option>
+<option *ngFor="let item of productList" value="{{item.id}}" >{{item.productName}}</option>
+</select>
+</li>
+<li>
+<input type="text" bsDatepicker  placeholder="Start Date" (bsValueChange) ="valuefrom($event)"  [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</li>
+<li>
+<input type="text" bsDatepicker  placeholder="End Date" (bsValueChange) ="valueTo($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+
+</li>
+</ul>
+</div>
+<div class="col-md-3 right_cont_stats">
+<ul>
+<li>
+<a (click)="pageReload()" ><i class="fa fa-refresh"></i></a >
+</li>
+<li *ngIf = "showExport == 'true'">
+<button class="float_cash_btn"  (click) = "exportList($event);">Export XLS</button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="custom_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="row">
+<div class="col-md-12">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Status</th>
+<th>Category</th>
+<th>Sub Category</th>
+<th>Sub Sub-Category</th>
+<th>Product Name</th>
+<!-- <th>Other Variants</th> -->
+<th>Assigned Store</th>
+<th>Stock Count</th>
+<th>Sell Count</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of productsList" >
+<td>
+<div class="container-category-switch">
+<label class="switch"><input  *ngIf="item.productStatus == 'active'"  checked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'Products', item.id)"/>
+<input  *ngIf="item.productStatus == 'inactive'" unchecked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'Products', item.id)" />    <span class="slider"></span>
+</label>
+</div>
+</td>
+<td>{{item.categoryName}}</td>
+<td>{{item.productCategoryName}}</td>
+<td>{{item.productSubCategoryName}}</td>
+<td>{{item.productName}}</td>
+<!-- <td class="some-container">
+<span *ngFor="let arr of item.variant; let i=index;">{{arr.name}} <span class="list-comma">,</span> </span>                                          
+</td> -->
+<td>{{item.storeName}}</td>
+<!-- <td><span *ngFor="let arr of item.storeProduct; let i=index;">{{arr.storeName}} <span class="list-comma">,</span> </span>  </td> -->
+<!-- <td class="some-container">
+<span *ngFor="let arr of item.variant; let i=index;">{{arr.stock}} Units <span class="list-comma">,</span> </span>                                          
+</td> -->
+<td>{{item.storeStock}} Units</td>
+<td>{{item.sellCount}} Units</td>
+</tr>
+</tbody>
+</table>
+<p class="text-center"><ngb-pagination  [collectionSize]="pages" (pageChange)="nextPage($event)" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<style type="text/css">
+.dataTables_filter {
+margin-top: -34%;
+}
+</style>
+</div>
+</div>
+</div>

@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+@import "assets/css/style.css";
+
+agm-map {
+    height: 350px !important;
+    width: 100%;  /* This is really important*/
+  }
+
+  body .bs-datepicker-container .bs-datepicker-head{
+    background-color: #c33e3a;
+  }
+  body .bs-datepicker-container .bs-datepicker-head * {
+    color: #fff;
+  }
+  
+  .theme-green .bs-datepicker-body table td span.selected, .theme-green .bs-datepicker-body table td.selected span, .theme-green .bs-datepicker-body table td span[class*="select-"]:after, .theme-green .bs-datepicker-body table td[class*="select-"] span:after{
+    background-color : #c33e3a !important;
+  }
+  
+  .theme-green .bs-datepicker-body table td.week span{
+    color : #c33e3a !important;
+  }
+  .sortable-list li {
+    display: block !important;
+  }
+
+  .sortable-container{
+    max-width: 240px !important;
+  }
+  @media only screen and (max-width: 1399px) and (min-width: 1000px){
+    .sortable-container{
+      max-width: 200px ! important;
+    }
+  }
+  .error-val-pro{
+    font-size: 10px;
+    color: red;
+}

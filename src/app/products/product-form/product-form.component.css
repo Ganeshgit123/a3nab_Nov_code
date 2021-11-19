@@ -1,0 +1,17 @@
+.container-switch-variant {
+    position: relative;
+    right: 0;
+    top: 11px;
+}
+.upload-img{
+    /* width: 100px; */
+    /* height: 100px; */
+    cursor: pointer;
+    margin: 0 10px;
+  }   
+  
+  .prod_img{
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+  }

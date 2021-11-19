@@ -1,0 +1,492 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-11">
+<div class="search-bar">
+<form>
+<label for="searchQuery">
+<span><img src="assets/img/search_icon.svg" width="18px"></span>
+</label>
+<input type="search" id="searchQuery" name="searchQuery" placeholder="search" [(ngModel)]="searchCar" [ngModelOptions]="{standalone: true}" />
+</form>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-4">
+<ul>
+<li>
+<select (change)="onChangeFilter($event.target.value)">
+<option value="ALL">Car Status</option>
+<option value="ASSIGN">ASSIGN</option>
+<option value="UNASSIGN">UNASSIGN</option>
+</select>
+</li>
+</ul>
+</div>
+<div class="col-md-8 right_cont">
+<ul>
+<li *ngIf = "showAccept == 'true'">
+<button type="button" class="float_cash_btn" data-toggle="modal" data-target="#add_driv_btn" (click) = "add_car_click();">Add Car</button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="custom_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="row">
+<div class="col-md-12">
+<agm-map 
+[latitude]="lat"
+[longitude]="lng"
+[zoom]="zoom"
+[disableDefaultUI]="false"
+[zoomControl]="false">
+<agm-marker 
+*ngFor="let m of markers; let i = index"
+(markerClick)="clickedMarker(infowindow)"
+[latitude]="m.latitude"
+[longitude]="m.longitude"
+>
+<agm-info-window #infowindow>
+<p><strong>Name: </strong> {{m.firstName}}</p>
+</agm-info-window>
+</agm-marker>
+</agm-map>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="driver_sec">
+<div class="container-fluid">
+<div class="col-md-3" *ngFor="let item of carList | filter:searchCar">
+<div class="card">
+<div class="prof_sec">
+<div class="row">
+<div class="col-md-4 driv_img">
+<a data-toggle="modal" data-target="#car_profile"  (click)="drivStat(item.id,'','')"><img src="{{item.carImage}}" style="cursor: pointer;"></a>
+</div>
+
+<div class="col-md-8">
+<p *ngIf = "!item.crId" >Driver Name</p>
+<p *ngIf = "item.crId" >{{item.firstName}} {{item.lastName}}</p>
+<p class="red_color">{{item.carID}}</p>
+<p><span class="light_color">Mileage :</span> {{item.startingMileage}}</p>
+</div>
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-8">
+<button *ngIf = "!item.crId && showAccept == 'true'" type="button" class="assig_dri_btn" (click)="assigndri(item)" data-toggle="modal" data-target="#assign_dri_btn">Assign Driver</button>
+
+<button *ngIf = "item.crId" type="button" class="assig_gree_btn">Driver : {{item.drId}}</button>
+</div>
+<div class="col-md-2"></div>
+</div>
+</div>
+<div class="row driv_btn_sec">
+<div class="col-md-12">
+<div class="map_div_sec">
+<div class="map_div_dd">
+<p class="text-center edit_bttn" checked (click)="editCars(item)" *ngIf = "showAccept == 'true'">Edit</p>
+</div>
+<div class="map_div_dd1">
+<p class="text-center del_btn" (click)="deleteCars(item.id)" *ngIf = "showAccept == 'true'">Delete</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="assing_dr_sc">
+<div class="modal right fade" id="assign_dri_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-1"></div>
+<div class="col-md-2">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+<div class="col-md-6">
+<h4 class="card-title">Drivers</h4>
+</div>
+<div class="col-md-2">
+<form class="search-form">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" [(ngModel)]="searchDriverAssign" [ngModelOptions]="{standalone: true}" class="form-control search-control">
+<!-- <input type="text" (input)="searchDriver($event.target.value)" class="form-control search-control"> -->
+</div>
+<!-- /.input-group -->
+</form>
+</div>
+<div class="col-md-1"></div>
+</div>
+
+</div>
+<div class="modal-body">
+<div class="ord_tab">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr *ngFor="let item of driverList | filter:searchDriverAssign">
+<td style="width:30%"><img  style="width: 62px;" src="{{item.profilePic}}"></td>
+<td style="width:80%"><span class="red_color">{{item.drId}}</span><br>
+<span>{{item.firstName}} {{item.lastName}}</span><br>
+<ngb-rating [(rate)]="item.rating" class="rating-star-point" [readonly]="true" [max]="5"></ngb-rating>
+<!-- <span class="light_color">Success Rate : 0%</span> -->
+</td>
+<td style="width:10%;text-align: right;">
+
+<div class="form-check-inline" *ngIf = "showAccept == 'true'">
+<label class="form-check-label" for="{{item.drId}}">
+<input type="radio" (change) ="handleChange($event.target.value)" class="form-check-input" id="{{item.drId}}"  value="{{item.id}}" >
+</label>
+</div>
+<!-- <div class="trigger">
+<input type="checkbox" name="useful" id="useful" />
+<label for="trigger"></label>
+</div> -->
+</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>    
+<section class="add_driv_sec">
+<div class="modal right fade" id="add_driv_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5">
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="addCar" (ngSubmit)="onSubmit()">                      
+<div class="row">
+
+<div class="row">
+<div class="col-md-12">
+<div class="image-upload text-center">
+<label for="file-input">
+<!-- Subcategory Image -->
+<p class="text-center"><img class="upload-img" *ngIf="!imagePreview"  src="assets/img/big_car.png"/></p>
+<p class="text-center"><img class="upload-img" *ngIf="imagePreview" src="{{imagePreview}}"/></p>
+</label>
+<input formControlName="carImage" id="file-input" type="file" (change)="uploadImageFile($event)" />
+</div>
+
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Car ID ( License Plate Number )</label>
+<input type="text" formControlName="licenseNumber" class="form-control" >
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>License Expiration Date</label>
+<input type="text" formControlName="expirationDate" bsDatepicker  placeholder="Expiration Date" [(bsValue)]="bsValue" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Starting Mileage</label>
+<input type="number" formControlName="startingMileage" class="form-control" >
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Model</label>
+<input type="text" formControlName="carModel" class="form-control">
+</div>
+</div>
+</div>
+
+<div class="add_car_sec" *ngIf = " isEdit === false ">
+<p class="text-center"><button class="add_car_btn">Add Car</button></p>
+</div>
+
+<div class="add_car_sec" *ngIf = " isEdit === true ">
+    <p class="text-center"><button class="add_car_btn">Save</button></p>
+    </div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>
+
+<section class="car_modal">
+<div class="modal right fade" id="car_profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12 left_sec">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8 log_sec">
+<br>
+<ul>
+<li><button type="button" class="car_log_btn" data-toggle="modal" data-target="#log_man">Maintenance Log</button></li>
+<li><button type="button" class="assign_his_btn" data-toggle="modal" data-target="#assign_his">Assign History</button></li>
+</ul>
+<div class="stat_sss">
+<ul class="stat_li">
+<li class="light_color">Current Status</li>
+<li class="ri_c">Assigned to {{carFname}} {{carLname}}</li>
+</ul>
+<ul>
+<li class="light_color">Current Mileage</li>
+<li class="ri_c">{{startingMileage}}</li>
+</ul>
+<ul>
+<li class="light_color">Last Oil Change</li>
+<li class="ri_c">{{carlastOilChange}}</li>
+</ul>
+<ul>
+<li class="light_color">Last Gas Refill</li>
+<li class="ri_c">{{carlastGasRefill}}</li>
+</ul>
+</div>
+<div class="stat_sss1">
+<ul class="stat_li">
+<li class="light_color">Car ID ( License Number )</li>
+<li class="ri_c">{{licenseNumber}}</li>
+</ul>
+<ul>
+<li class="light_color">License Expiration Date</li>
+<li class="ri_c">{{expirationListDate}}</li>
+</ul>
+<ul>
+<li class="light_color">Model</li>
+<li class="ri_c">{{carModel}}</li>
+</ul>
+<!-- <ul>
+<li class="light_color">Total Orders Delivered</li>
+<li class="ri_c">{{this.carMainList.BMW}}</li>
+</ul> -->
+</div>
+<div class="table-responsive las_tab">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th><span class="all_head">All Damages</span></th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor = "let list of carDamageList">
+<td class="light_color">{{list.DamageReason}}</td>
+<!-- <td class="light_color">#DriverID007</td>
+<td class="text-center"><span class="green">Fixed</span></td>
+<td class="light_color">{{list.createdAt}}</td> -->
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="col-md-4">
+<img src="{{carImage}}" class="car_img_mod">
+</div>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</div>
+</section>
+
+<section class="car_modal">
+<div class="modal right fade" id="log_man" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12 left_sec">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+<!-- <li><img src="assets/img/left_arrow.svg"></li> -->
+<li>
+<!-- <select>
+<option>Yesterday</option>
+</select> -->
+<input type="text" bsDatepicker  placeholder="From Date"  (bsValueChange) ="rangevalueFrom($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</li>
+<li>
+<input type="text" bsDatepicker  placeholder="To Date"  (bsValueChange) ="rangevalueTo($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+<!-- <select>
+<option>Today</option>
+</select> -->
+</li>
+<li>
+<p class="dri_hed">Task</p>
+</li>
+<li class="serch">
+<form class="search-form">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" class="form-control search-control" [(ngModel)]="searchAssign" [ngModelOptions]="{standalone: true}" > 
+</div>
+<!-- /.input-group -->
+</form>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8 log_sec">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<th class="text-center">Date</th>
+<th class="text-center">Task</th>
+<th class="text-center">Price</th>
+<th class="text-center">Driver</th>
+<th class="text-center">Mileage</th>
+</thead>
+<tbody>
+<tr *ngFor = "let listmm of carMaintainList  | filter:searchAssign">
+<td class="text-center">{{listmm.createdAt}}</td>
+<td class="text-center">{{listmm.maintenanceName}}</td>
+<td class="text-center">SAR {{listmm.maintenanceAmount}}</td>
+<td class="text-center"><span class="red_color">{{listmm.drId}}</span></td>
+<td class="text-center">{{listmm.currentMileage}}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</div>
+</section>
+
+<section class="car_modal">
+<div class="modal right fade" id="assign_his" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+
+<div class="col-md-12 log_sec">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+<!-- <li><img src="assets/img/left_arrow.svg"></li> -->
+<li>
+<input type="text" bsDatepicker  placeholder="From Date"  (bsValueChange) ="rangevalueFrom($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+<!-- <p>
+Start Date : 
+<select>
+<option>Yesterday</option>
+</select>
+</p> -->
+</li>
+<li>
+<input type="text" bsDatepicker  placeholder="To Date"  (bsValueChange) ="rangevalueTo($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+<!-- <p>
+End Date : 
+<select>
+<option>Today</option>
+</select>
+</p> -->
+</li>
+<li>
+<p class="dri_hed">Drivers</p>
+</li>
+<li class="serch">
+<form class="search-form">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" class="form-control search-control" [(ngModel)]="searchMaintainList" [ngModelOptions]="{standalone: true}" >
+</div>
+<!-- /.input-group -->
+</form>
+</li>
+</ul>
+</div>
+</div>
+<section class="assi_hist_sec" *ngFor = "let listmm of carMaintainList  | filter:searchMaintainList">
+<ul>
+<li>{{listmm.firstName}} {{listmm.lastName}}</li>
+<li class="red_color">{{listmm.drId}}</li>
+<li><span class="light_color">Starting Mileage</span> : {{listmm.startingMileage}}</li>
+<li><span class="light_color">Return Mileage</span> : {{listmm.currentMileage}}</li>
+<li>{{listmm.createdAt}}</li>
+</ul>
+<ul class="bot_sec">
+<li>
+<span class="blue">Maintenance ( if any )</span><br>
+<span>{{listmm.maintenanceName}} - {{listmm.maintenanceAmount}}</span>
+</li>
+<li>
+<div class="vl"></div>
+</li>
+<li class="dam_ss">
+<span class="orange">Damages ( if any )</span><br>
+<span>{{listmm.message}}</span>
+</li>
+</ul>
+</section>
+
+</div>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</div>
+</section>

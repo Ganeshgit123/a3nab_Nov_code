@@ -1,0 +1,310 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="product_head ng-scope">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li style="padding-left: 10px;">
+Show only active Products &nbsp;&nbsp;
+<label class="switch">
+<input type="checkbox" (change)="onchangeActiveCategory($event.target.checked)">
+<span class="slider"></span>
+</label>
+</li>
+<li style="padding-left: 10px;">
+Show only favorite Products &nbsp;&nbsp;
+<label class="switch">
+<input type="checkbox" (change)="onchangeBestProducts($event.target.checked)">
+<span class="slider"></span>
+</label>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="prod_cate ng-scope">
+<div class="container-fluid">
+<!------------------CATEGORY----------------------------------->
+<div class="col-md-3 dri_sec">
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Product Category</h4>
+</div>
+<div class="two_col1">
+<form class="search-form ng-pristine ng-valid">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" [(ngModel)]="searchCategory"  name="storename" class="form-control search-control">
+
+<!-- <input type="text" (input)="searchSuggestion($event.target.value, 'Category')" class="form-control search-control"> -->
+</div>
+<!-- /.input-group -->
+</form>
+</div>
+</div>
+<div class="card_sec">
+
+<div *ngFor="let item of category | filter:searchCategory" class="card-content" [ngClass]="{'active': item.id == mainCategoryId}">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr>
+<td class="prod_img"><img src="{{item.categoryImage}}"></td>
+<td class="cat_nam"><a (click)="categoryClick(item, 'category')" [ngClass]="{'active-text': item.id == mainCategoryId}">{{item.categoryName}}</a></td>
+<td>
+    <div class="container-category-switch" *ngIf="showAccept == 'true'">
+        <label class="switch"><input  *ngIf="item.categoryStatus == 'active'"  checked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'Category', item.id)"/>
+<input  *ngIf="item.categoryStatus == 'inactive'" unchecked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'Category', item.id)" />    <span class="slider"></span>
+</label>
+    </div>
+    <div class="container-category-switch" *ngIf="showAccept !== 'true'">
+        <label class="switch"><input  *ngIf="item.categoryStatus == 'active'"  checked type="checkbox" />
+<input  *ngIf="item.categoryStatus == 'inactive'" unchecked type="checkbox" />    <span class="slider"></span>
+</label>
+    </div>
+</td>
+<!-- <td class="del_ico cate_hand"> <a (click)="deleteCategory(item, 'Category')"><img src="assets/img/delete_icon.svg"></a></td> -->
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+</div>
+<div class="tab_sec" *ngIf="showAccept == 'true'">
+<p class="text-center cate_hand"><a (click)="openCategoryTab('category')">Add New Category</a></p>
+</div>
+</div>
+</div>
+
+<!------------------CATEGORY END----------------------------------->
+
+<!------------------PRODUCT CATEGORY----------------------------------->
+
+<div class="col-md-3 dri_sec" *ngIf="showSubCate">
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Product Subcategory</h4>
+</div>
+<div class="two_col1">
+<form class="search-form ng-pristine ng-valid">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" [(ngModel)]="searchSubcategory"  name="storename" class="form-control search-control">
+
+<!-- <input type="text" (input)="searchSuggestion($event.target.value, 'ProductCategory')" class="form-control search-control"> -->
+</div>
+<!-- /.input-group -->
+</form>
+</div>
+</div>
+<div class="card_sec">
+
+<div *ngFor="let item of subCategory | filter:searchSubcategory" class="card-content" [ngClass]="{'active': item.id == subCategoryId}">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr>
+<td class="prod_img"><img src="{{item.productCategoryImage}}"></td>
+<td class="cat_nam"> <a [ngClass]="{'active-text': item.id == subCategoryId}" (click)="subCategoryClick(item, 'subCategory')">{{item.productCategoryName}}</a> </td>
+<td>
+    <div class="container-category-switch" *ngIf="showAccept == 'true'">
+        <label class="switch"><input  *ngIf="item.productCategoryStatus == 'active'"  checked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'ProductCategory', item.id)"/>
+<input  *ngIf="item.productCategoryStatus == 'inactive'" unchecked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'ProductCategory', item.id)" />   <span class="slider"></span>
+</label>
+    </div>
+    <div class="container-category-switch" *ngIf="showAccept !== 'true'">
+        <label class="switch"><input  *ngIf="item.productCategoryStatus == 'active'"  checked type="checkbox" />
+<input  *ngIf="item.productCategoryStatus == 'inactive'" unchecked type="checkbox" />   <span class="slider"></span>
+</label>
+    </div>
+</td>
+<!-- <td class="del_ico cate_hand"> <a (click)="deleteCategory(item, 'ProductCategory')"><img src="assets/img/delete_icon.svg"></a></td> -->
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="tab_sec" *ngIf="showAccept == 'true'">
+<p class="text-center cate_hand"><a (click)="openCategoryTab('subCategory')">Add New Subcategory</a></p>
+</div>
+</div>
+</div>
+
+<!------------------PRODUCT CATEGORY END----------------------------------->
+
+<div class="col-md-3 dri_sec" *ngIf="showSubsubCategory">
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Product Sub-Subcategory</h4>
+</div>
+<div class="two_col1">
+<form class="search-form ng-pristine ng-valid">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" [(ngModel)]="searchSubSubcategory"  name="storename" class="form-control search-control">
+
+<!-- <input type="text" class="form-control search-control" (input)="searchSuggestion($event.target.value, 'SubSubCategory')"> -->
+</div>
+<!-- /.input-group -->
+</form>
+</div>
+</div>
+<div class="card_sec">
+
+
+<div *ngFor="let item of showSubsubCategoryList | filter:searchSubSubcategory" class="card-content" [ngClass]="{'active': item.id == subSubCategoryId}">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr>
+<td class="prod_img"><img src="{{item.productSubCategoryImage}}"></td>
+<td class="cat_nam"> <a (click)="showSubsubCategoryClick(item, 'subSubCategory')" [ngClass]="{'active-text': item.id == subSubCategoryId}">{{item.productSubCategoryName}}</a></td>
+<td>
+    <div class="container-category-switch" *ngIf="showAccept == 'true'">
+        <label class="switch"><input  *ngIf="item.productSubCategoryStatus == 'active'"  checked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'SubCategory', item.id)"/>
+<input  *ngIf="item.productSubCategoryStatus == 'inactive'" unchecked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'SubCategory', item.id)" /> <span class="slider"></span>
+</label>
+    </div>
+    <div class="container-category-switch" *ngIf="showAccept !== 'true'">
+        <label class="switch"><input  *ngIf="item.productSubCategoryStatus == 'active'"  checked type="checkbox" />
+<input  *ngIf="item.productSubCategoryStatus == 'inactive'" unchecked type="checkbox" /> <span class="slider"></span>
+</label>
+    </div>
+</td>
+<!-- <td class="del_ico cate_hand"> <a (click)="deleteCategory(item, 'SubSubCategory')"><img src="assets/img/delete_icon.svg"></a></td> -->
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="tab_sec" *ngIf="showAccept == 'true'">
+<p class="text-center cate_hand" id="sub_sub_category" (click)="openCategoryTab('subSubCategory')"><a>Add New Sub-Subcategory</a></p>
+</div>
+</div>
+</div>
+
+<!----------------PRODUCTS------------------------------------------------->
+
+<div class="col-md-3 dri_sec" *ngIf="showProducts">
+<div class="card">
+<div class="card-header">
+<div class="two_col">
+<h4 class="card-title">Products</h4>
+</div>
+<div class="two_col1">
+<form class="search-form ng-pristine ng-valid">
+<div class="input-group search-group">
+<span><img src="assets/img/search_icon.svg"></span>
+<input type="text" [(ngModel)]="searchproduct"  name="storename" class="form-control search-control">
+
+<!-- <input type="text" class="form-control search-control" (input)="searchPoductSuggestion($event.target.value, 'Products')"> -->
+</div>
+<!-- /.input-group -->
+</form>
+</div>
+</div>
+<div class="card_sec">
+
+
+<div *ngFor="let item of productList | filter:searchproduct" class="card-content" [ngClass]="{'active': item.id == productId}">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr>
+<td class="prod_img"><img src={{item.productImage}}></td>
+<td class="cat_nam"> <a (click)="clickProduct(item, 'products')" [ngClass]="{'active-text': item.id == productId}">{{item.productName}}</a></td>
+<td *ngIf="showAccept == 'true'">
+    <a *ngIf="item.isBestProduct === 1" (click)="clickBestProduct(item)"> <i class="fa fa-star"></i> </a>
+
+    <a *ngIf="item.isBestProduct === 0" (click)="clickBestProduct(item)"> <i class="fa fa-star-o"></i> </a>
+
+</td>
+<td *ngIf="showAccept !== 'true'">
+    <a *ngIf="item.isBestProduct === 1"> <i class="fa fa-star"></i> </a>
+
+    <a *ngIf="item.isBestProduct === 0"> <i class="fa fa-star-o"></i> </a>
+
+</td>
+<td>
+    <div class="container-category-switch" *ngIf="showAccept == 'true'">
+        <label class="switch"><input  *ngIf="item.productStatus == 'active'"  checked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'Products', item.id)"/>
+<input  *ngIf="item.productStatus == 'inactive'" unchecked type="checkbox" (change)="ChnageCategoryStatus($event.target.checked, 'Products', item.id)" />    <span class="slider"></span>
+</label>
+    </div>
+    <div class="container-category-switch" *ngIf="showAccept !== 'true'">
+        <label class="switch"><input  *ngIf="item.productStatus == 'active'"  checked type="checkbox"/>
+<input  *ngIf="item.productStatus == 'inactive'" unchecked type="checkbox" />    <span class="slider"></span>
+</label>
+    </div>
+</td>
+<td class="del_ico cate_hand"  *ngIf="showAccept == 'true'"> <a (click)="deleteCategory(item, 'Products')"><img src="assets/img/delete_icon.svg"></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+</div>
+<div class="tab_sec" *ngIf="showAccept == 'true'">
+<p class="text-center cate_hand"><a (click)="openCategoryTab('products')">Add New Product</a></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="cate_sec ng-scope">
+<div class="container-fluid">
+<!------------------------Category From-------------------------------------------------------------------->
+<div *ngIf="showCategoryTab" id="category">
+<div class="card">
+<div class="card-content">
+
+<app-category-form></app-category-form>
+
+</div>
+</div>
+</div>
+
+<!------------------------Category From-------------------------------------------------------------------->
+
+<div id="sub_category" *ngIf="showSubCategoryTab">
+<div class="card">
+<div class="card-content">
+<app-sub-category-form [mainCategory]="mainCategoryId"> </app-sub-category-form>
+</div>
+</div>
+</div>
+
+
+<div id="sub_sub_category" *ngIf="showSubSubCategoryTab">
+<div class="card">
+<div class="card-content">
+<app-sub-sub-category-form></app-sub-sub-category-form>
+</div>
+</div>
+</div>
+
+
+<div id="product" *ngIf="showProductsTab">
+<div class="card">
+<div class="card-content">
+<app-product-form></app-product-form>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>

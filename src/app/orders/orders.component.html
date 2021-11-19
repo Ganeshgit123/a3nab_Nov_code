@@ -1,0 +1,194 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+<div class="search-bar">
+<form>
+<label for="searchQuery">
+<span><img src="assets/img/search_icon.svg" width="18px"></span>
+</label>
+<input type="search" id="searchQuery" name="searchQuery" placeholder="search" (input)="searchOrder($event.target.value)"/>
+</form>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-10">
+<ul>
+<li style="padding-left: 10px;">
+Map View &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox" (change)="onchangeMap($event)">
+<span class="slider"></span>
+</label>
+</li>
+<li>
+<select (change)="onChangeFilter($event.target.value, 'Status')">
+<option value="ALL">Order Status</option>
+<option value="PENDING">Pending</option>
+<option value="ACCEPTED">Accepted</option>
+<option value="ONGOING">Ongoing</option>
+<option value="CANCELLED">Cancelled</option>
+<option value="COMPLETED">Completed</option>
+</select>
+</li>
+<li>
+<select (change)="onChangeFilter($event.target.value, 'StoreStatus')">
+<option value="NONE">Store Status</option>
+<option value="ACCEPTED">Accepted</option>
+<option value="REJECTED">Rejected</option>
+<option value="ONGOING">Ongoing</option>
+</select>
+</li>
+<li>
+<select (change)="onChangeFilter($event.target.value, 'Delivery')">
+<option value="0">Delivery Time</option>
+<option value="{{item.id}}" *ngFor="let item of timeList">{{item.fromTime}} - {{item.toTime}}</option>
+</select>
+</li>
+
+<li>
+
+<input type="text" bsDatepicker  placeholder="Select Date"  (bsValueChange) ="value($event)" [(bsValue)]="bsValue" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+
+</li>
+</ul>
+</div>
+<div class="col-md-2 right_cont">
+<ul>
+<li>
+<a (click)="pageReload()" > <i class="fa fa-refresh"></i> </a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="custom_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="row" *ngIf ="showMap">
+<div class="col-md-12">
+<agm-map 
+[latitude]="lat"
+[longitude]="lng"
+[zoom]="zoom"
+[disableDefaultUI]="false"
+[zoomControl]="false">
+<agm-marker 
+*ngFor="let m of markers; let i = index"
+(markerClick)="clickedMarker(infowindow)"
+[latitude]="m.latitude"
+[longitude]="m.longitude"
+>
+<agm-info-window #infowindow>
+<p><strong>Address: </strong> {{m.addressPinDetails}}</p>
+    <p class="text-center">{{m.orderIDs}}</p>
+</agm-info-window>
+</agm-marker>
+<span *ngFor="let m of markers; let i = index">
+<agm-marker 
+*ngFor="let st of m.storeList; let ii = index"
+(markerClick)="storeclickedMarker(infowindow1)"
+[iconUrl]="StoreiconUrl"
+[latitude]="st.storeLatitude"
+[longitude]="st.storeLongitude"
+>
+<agm-info-window #infowindow1>
+<p><strong>Name: </strong> {{st.storeName}}</p>
+</agm-info-window>
+</agm-marker>
+</span>
+</agm-map>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="material-datatables">
+<div class="table-responsive text-nowrap">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Date</th>
+<th>Order ID</th>
+<th>Delivery By</th>
+<th>Customer ID</th>
+<th>Price</th>
+<th>Payment</th>
+<th>Order Status</th>
+<th>Cancellation %</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of orderList;let i = index" >
+<td>{{item.orderOn}}</td>
+<td><span class="red_color"><a routerLink="/order-details/{{ item.id }}">{{item.orderIDs}}</a></span><br>
+<span *ngIf = "item.fastDelivery === 1">Fast Delivery</span></td>
+<td>{{item.deliveryDate}}</td>
+<td><span class="red_color"><a routerLink="/customer/{{ item.userId }}">{{item.customerID}}</a></span><br><span>{{item.firstName}}</span> ,<span>{{item.landmark}}</span><br><span> {{item.addressPinDetails}}</span></td>
+<td>SAR {{item.grand | number : '1.2-2'}} </td>
+<td>
+<span *ngIf = "item.paytype === 'card'" class="online_btn">Paid Online</span>
+<span *ngIf = "item.paytype === 'Apple Pay'" class="online_btn">Apple Pay</span>
+<span *ngIf = "item.paytype === 'Machine'" class="cod_btn">Machine</span>
+<span *ngIf = "item.paytype === 'cash'" class="cod_btn">C.O.D</span>
+</td>
+<!-- <td><span class="online_btn">Paid Online</span></td> -->
+<!-- <td><span class="yellow">Pending</span><br>Not confirmed by #store_ID</td> -->
+
+<td>
+<div *ngFor="let store of item.storeList">
+<div>
+    <span *ngIf = "item.orderStatus == 'PENDING'" class="yellow">Pending</span>
+    <span *ngIf = "item.orderStatus == 'COMPLETED'" class="green">Completed</span>
+    <span *ngIf = "item.orderStatus == 'CANCELLED'" class="red_color">Cancellation</span>
+    <span *ngIf = "item.orderStatus == 'ACCEPTED'" class="green">Accepted</span>
+    <span *ngIf = "item.orderStatus == 'ONGOING'" class="yellow">Ongoing</span>
+    <span *ngIf = "item.orderStatus == 'REJECTED'" class="red_color">Rejected</span>
+<br>
+    <span>{{item.orderProgress}}</span>
+<br>
+</div>
+<span  class="red_color"><a routerLink="/view-store/{{ store.storeId }}">{{store.storeID}}</a></span>
+</div>
+</td>
+
+<td>
+<div *ngFor="let store of item.storeList">
+<p *ngIf = "store.storeStatus == 'NOT CONFIRM'" > <span  class="red_color"><a routerLink="/view-store/{{ store.storeId }}">  {{store.storeID}}</a></span>&nbsp;&nbsp;<span>{{store.storeName}}</span>&nbsp;&nbsp;<span class="yellow"> Not Confirmed</span></p>
+<p *ngIf = "store.storeStatus == 'ACCEPTED'" > <span class="red_color"><a routerLink="/view-store/{{ store.storeId }}">  {{store.storeID}}</a></span>&nbsp;&nbsp;<span>  {{store.storeName}}</span>&nbsp;&nbsp;<span class="green"> Accepted</span></p>
+<p *ngIf = "store.storeStatus == 'PICKUP'" > <span class="red_color"><a routerLink="/view-store/{{ store.storeId }}">  {{store.storeID}}</a></span>&nbsp;&nbsp;<span>  {{store.storeName}}</span>&nbsp;&nbsp;<span class="yellow"> Pickup</span></p>
+<p *ngIf = "store.storeStatus == 'ONGOING' && item.orderStatus !== 'COMPLETED'"> <span class="red_color"><a routerLink="/view-store/{{ store.storeId }}">  {{store.storeID}}</a></span>&nbsp;&nbsp;<span>  {{store.storeName}}</span>&nbsp;&nbsp;<span class="green"> Ongoing</span></p>
+<p *ngIf = "item.orderStatus == 'COMPLETED'" > <span class="red_color"><a routerLink="/view-store/{{ store.storeId }}">  {{store.storeID}}</a></span>&nbsp;&nbsp;<span>  {{store.storeName}}</span>&nbsp;&nbsp;<span class="green"> Completed</span></p>
+<p *ngIf = "store.storeStatus == 'REJECTED'" ><span class="red_color"><a routerLink="/view-store/{{ store.storeId }}"> {{store.storeID}}</a></span>&nbsp;&nbsp;<span> {{store.storeName}}</span>&nbsp;&nbsp;<span class="red_color"> Rejected</span></p>
+<!-- <span class="red_color">{{store.storeID}}</span>&nbsp;&nbsp;<span>{{store.storeName}}</span>&nbsp;&nbsp;<span class="yellow">{{store.storeStatus}}</span> -->
+</div>
+</td>
+<td>
+    <span *ngIf = "item.orderStatus == 'PENDING'" class="yellow">Pending</span>
+    <span *ngIf = "item.orderStatus == 'COMPLETED'" class="green">Completed</span>
+    <span *ngIf = "item.orderStatus == 'CANCELLED'" class="red_color">Cancellation</span>
+    <span *ngIf = "item.orderStatus == 'ACCEPTED'" class="green">Accepted</span>
+    <span *ngIf = "item.orderStatus == 'ONGOING'" class="yellow">Ongoing</span>
+    <span *ngIf = "item.orderStatus == 'REJECTED'" class="red_color">Rejected</span>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="text-center"><ngb-pagination  [collectionSize]="pages" (pageChange)="nextPage($event)" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>

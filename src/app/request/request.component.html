@@ -1,0 +1,116 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="req_sec">
+<div class="row">
+<div class="col-md-6">
+<div class="card">
+<div class="card-content">
+<div class="table-responsive">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Date & Time</th>
+<th>Location</th>
+<th>Phone No.</th>
+</tr>
+</thead>
+<tbody class="req_hei">
+<tr *ngFor="let item of requestProduct;let i = index">
+<td>{{item.createdDate}} - {{item.time}}</td>
+<td>{{item.address}}</td>
+<td>{{item.mobileNumber}}</td>
+</tr>
+</tbody>
+</table>
+<p class="text-center"><ngb-pagination [collectionSize]="pages" (pageChange)="nextPage($event)" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+</ngb-pagination></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="card">
+<div class="card-content">
+<ul>
+<li style="padding-left: 10px;">
+Map View &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox" checked (change)="onchangeMap($event)">
+<span class="slider"></span>
+</label>
+</li>
+<li class="refresh_btn">
+<a (click)="pageReload()"> <i class="fa fa-refresh"></i> </a>
+</li>
+</ul>
+</div>
+<div class="card-content" *ngIf ="showMap">
+<agm-map 
+[latitude]="lat"
+[longitude]="lng"
+[zoom]="zoom"
+[disableDefaultUI]="false"
+[zoomControl]="false">
+<agm-marker 
+*ngFor="let m of markers; let i = index"
+(markerClick)="clickedMarker(infowindow)"
+[latitude]="m.latitude"
+[longitude]="m.longitude"
+>
+<agm-info-window #infowindow>
+<p><strong>Name: </strong> {{m.address}}</p>
+</agm-info-window>
+</agm-marker>
+</agm-map>
+<!-- <div id="map"></div> -->
+</div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<h3 class="text-center special_head">Special Request</h3>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<div class="card">
+<div class="card-content">
+<div class="table-responsive">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+<th>Customer Id</th>
+<th>Mobile Number</th>
+<th>Search Text</th>
+</tr>
+</thead>
+<tbody class="req_hei">
+<tr *ngFor="let items of search;let i = index">
+<td>{{items.type}}</td>
+<td>{{items.firstName}} - {{items.lastName}}</td>
+<td>{{items.customerID}}</td>
+<td>{{items.mobileNumber}}</td>
+<td>{{items.searchText}}</td>
+</tr>
+</tbody>
+</table>
+<p class="text-center"><ngb-pagination [collectionSize]="paginat" (pageChange)="pagination($event)" [(page)]="searchpage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+</ngb-pagination></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>

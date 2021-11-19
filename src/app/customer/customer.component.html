@@ -1,0 +1,562 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-11">
+<div class="search-bar">
+<form>
+<label for="searchQuery">
+<span><img src="assets/img/search_icon.svg" width="18px"></span>
+</label>
+<!-- <input class="form-control"  (input)="searchUser($event.target.value)" placeholder="Search User"  type="text"> -->
+<input type="search" id="searchQuery" name="searchQuery" placeholder="Search User"  (input)="searchUser($event.target.value)" />
+</form>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-9">
+<ul>
+<li style="padding-left: 10px;padding-right: 10px;">
+Map View &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox" (change)="onchangeMap($event)">
+<span class="slider"></span>
+</label>
+</li>
+<li>
+
+<input type="text" bsDatepicker  placeholder="Signup Date"  (bsValueChange) ="dateValue($event)" [(bsValue)]="bsValue" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+
+<!-- <select>
+<option>Signup Date</option>
+</select> -->
+</li>
+<li>
+<select (change)="onChangeLimit($event.target.value)">
+<option value="0">select</option>
+<option value="25">Show 25</option>
+<option value="50">Show 50</option>
+</select>
+</li>
+
+</ul>
+</div>
+<div class="col-md-3 right_cont">
+<ul>
+<li>
+<a (click)="pageReload()"> <i class="fa fa-refresh"></i> </a>
+</li>
+<li *ngIf = "showExport == 'true'">
+<button class="float_cash_btn"  (click) = "exportList($event);">Export XLS</button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="custom_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="row" *ngIf ="showMap">
+<div class="col-md-12">
+<agm-map 
+[latitude]="lat"
+[longitude]="lng"
+[zoom]="zoom"
+[disableDefaultUI]="false"
+[zoomControl]="false">
+<agm-marker 
+*ngFor="let m of markers; let i = index"
+(markerClick)="clickedMarker(infowindow)"
+[latitude]="m.latitude"
+[longitude]="m.longitude"
+>
+<agm-info-window #infowindow>
+<p><strong>Name: </strong> {{m.firstName}} {{m.lastName}}<br>
+{{m.customerID}}</p>
+</agm-info-window>
+</agm-marker>
+</agm-map>
+<!-- <div id="map"></div> -->
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="table-responsive">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable text-nowrap" id="customerTable">
+<thead>
+<tr>
+<th>Status</th>
+<th>Last Login</th>
+<th>Signup Date</th>
+<th>Customer ID</th>
+<th>Customer Name</th>
+<th>Gender</th>
+<th>DOB</th>
+<th>Phone No</th>
+<th>Address</th>
+<th>Cancellation %</th>
+<th>Last Order</th>
+<th>Total Order</th>
+<th>Total Spent</th>
+<th>Avg. Product Rating</th>
+<th>Avg. Driver Rating</th>
+<th>Platform</th>
+</tr>
+</thead>
+<tbody>
+<tr  *ngFor="let item of userList;let i = index">
+<td>
+
+<div class="container-category-switch">
+<label class="switch"><input  *ngIf="item.userStatus == 'active'"  checked type="checkbox" (change)="ChangeUserStatus($event.target.checked, item.id)"/>
+<input  *ngIf="item.userStatus == 'inactive'" unchecked type="checkbox" (change)="ChangeUserStatus($event.target.checked, item.id)" />    <span class="slider"></span>
+</label>
+</div>
+<!-- <div class="">
+<label class="switch"><input type="checkbox" /> <span class="slider"></span>
+</label>
+</div> -->
+</td>
+<td>{{item.updatedAt}} - {{item.updatedAtTime}}</td>
+<td>{{item.signupDate}} - {{item.newSisgnup}}</td>
+<td class="col_chan"><button type="button" (click)="viewUser(item.id,'','')" class="cust_view_btn" data-toggle="modal" data-target="#cust_btn">{{item.customerID}}</button></td>
+<td>{{item.firstName}} {{item.lastName}}</td>
+<td>{{item.gender}}</td>
+<td>{{item.DOB}}</td>
+<td>+{{item.countryCode}} {{item.mobileNumber}}</td>
+<td>{{item.addressPinDetails}}</td>
+<td class="text-center">{{item.cancellation | number:'1.2-2' }}</td>
+<td>{{item.lastOrder}}- {{item.lastOrdertime}}</td>
+<td class="text-center">{{item.orders}}</td>
+<td>SAR {{item.amount}}</td>
+<td>
+<span *ngFor ="let items of item.rating;let ii = index">
+    <ngb-rating [(rate)]="items.productRating" class="rating-star-point" [readonly]="true" [max]="5"></ngb-rating>
+</span>
+</td>
+<td>
+   <span *ngFor ="let items of item.rating;let ii = index"><ngb-rating [(rate)]="items.driverRating" class="rating-star-point" [readonly]="true" [max]="5"></ngb-rating></span> 
+</td>
+<td class="text-center">{{item.os}}</td>
+</tr>
+</tbody>
+</table>
+<p class="text-center"><ngb-pagination  [collectionSize]="pages" (pageChange)="nextPage($event)" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="customer_modal">
+<div class="modal right fade" id="cust_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5">
+    <ul class="right_side_icon">
+    <li *ngIf = "showAccept == 'true'">
+        <button class="edit_btn" (click)="editWallet();"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+    </li>
+    </ul>
+</div>
+</div>
+<div class="modal-body">
+<div class="row">
+<div class="col-md-5">
+<img src="assets/img/custo_img.png" class="cuto_img">
+</div>
+<div class="col-md-7">
+<div class="custo_sec">
+<p>{{customerID}}</p>
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr>
+<td class="cus_head">Platform</td>
+<td>{{os}}</td>
+</tr>
+<tr>
+<td class="cus_head">Wallet Point</td>
+<td>{{userPoints}}</td>
+</tr>
+<tr>
+<td class="cus_head">Wallet Amount</td>
+<td>SAR {{walletAmount}}</td>
+</tr>
+<tr>
+<td class="cus_head">Total Orders</td>
+<td>{{orders}}</td>
+</tr>
+<tr>
+<td class="cus_head">Total Spent</td>
+<td>SAR {{amount}}</td>
+</tr>
+<tr>
+<td class="cus_head">Cancellation %</td>
+<td>{{cancellation | number:'1.2-2'}}</td>
+</tr>
+<tr>
+<td class="cus_head">Signup Date</td>
+<td>{{signupDate}}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<form [formGroup]="trustUserForm" (ngSubmit)="onSubmit()">
+<!-- <li class="trust text-center">
+Trusty User &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox" formControlName="trustUser">
+<span class="slider"></span>
+</label>
+</li> -->
+<li><button type="button" class="car_log_btn" data-toggle="modal" data-target="#log_man">Action Log</button></li>
+<li><button type="button" class="car_log_btn" data-toggle="modal" data-target="#wall_his">Wallet History</button></li>
+<br>
+<!-- <li> 
+<div class="form-group">
+<label>Package Value</label>
+<input class="form-control" formControlName="packageValue" type="text">
+</div>
+</li>
+<li *ngIf = "showAccept == 'true'">
+<button  class="action_log_btn" >Submit</button>
+</li> -->
+</form>
+</ul>
+<form>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>First Name</label>
+<p>{{firstName}}</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Last Name</label>
+<p>{{lastName}}</p>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Email Address</label>
+<p>{{email}}</p>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Phone Number</label>
+<p>{{mobileNumber}}</p>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Date of Birth</label>
+<p>{{DOB}}</p>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Address</label>
+<p>{{addressPinDetails}}</p>
+</div>
+</div>
+</div>
+<!-- <div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Address Note From Driver</label>
+<input type="email" name="" class="form-control" placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy">
+</div>
+</div>
+</div> -->
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Gender</label>
+<ul>
+<!-- <li>Female</li>
+<li>
+<label class="switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
+</li> -->
+<li>{{gender}}</li>
+</ul>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div>
+
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</div>
+</section>
+
+<section class="car_modal">
+<div class="modal right fade" id="log_man" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<div class="row">
+<div class="col-md-8">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+<!-- <li><img src="assets/img/left_arrow.svg"></li> -->
+<li>
+<input type="text" bsDatepicker  placeholder="From Date"  (bsValueChange) ="rangevalueFrom($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</li>
+<li>
+<input type="text" bsDatepicker  placeholder="To Date"  (bsValueChange) ="rangevalueTo($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</li>
+</ul>
+</div>
+<div class="col-md-4 custom_head">
+<ul class="right_cont">
+<li>
+<a (click)="pageReload()" ><i class="fa fa-refresh"></i></a >
+</li>
+<li *ngIf = "showExport == 'true'">
+<button class="float_cash_btn" (click) = "logExportList($event);">Export XLS</button>
+</li>
+</ul>
+</div>
+</div>
+<section class="extand_table">
+<div class="material-datatables">
+<div class="table-responsive text-nowrap">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Entry</th>
+<th>Action</th>
+<th>Stores</th>
+<th>Order</th>
+<th>Wallet Point<br><span class="red_color">Total = {{userPoints}}</span></th>
+<th>Wallet Point Amount</th>
+<th>Wallet Amount<br><span class="red_color">Total = SAR {{walletAmount}}</span></th>
+<th class="text-center">Price</th>
+<th>Product Rating</th>
+<th>Driver Rating</th>
+<th>Feedback Note</th>
+</tr>
+</thead>
+<tbody>
+
+<tr *ngFor="let item of userOrderList;let i = index">
+<td>{{item.orderOn}}</td>
+<td>Place New Order</td>
+<td>
+<p  *ngFor="let store of item.stores" class="red_color">{{store.storeID}}</p> 
+<!-- <br> -->
+<!-- <span class="red_color">#Store_ID_2</span> -->
+</td>
+<td>
+
+<span class="red_color">{{item.orderIDs}}</span> <br> 
+Order Status : <span class="blue" *ngIf = "item.orderStatus == 'ONGOING'">{{item.orderStatus}}</span> 
+<span class="green" *ngIf = "item.orderStatus == 'COMPLETED'">{{item.orderStatus}}</span>
+<span class="red_color" *ngIf = "item.orderStatus == 'CANCELLED'">{{item.orderStatus}}</span>
+<span class="yellow" *ngIf = "item.orderStatus == 'PENDING'">{{item.orderStatus}}</span>
+<span class="red_color" *ngIf = "item.orderStatus == 'REJECTED'">{{item.orderStatus}}</span><br> 
+<span *ngIf = "item.fastDelivery === 1">Fast Delivery</span>
+</td>
+
+<td class="text-center"><span class="green" *ngIf = "item.detectedPoint !== 0"> {{item.detectedPoint}}</span>
+    <span class="red_color" *ngIf = "item.detectedPoint == 0">{{item.detectedPoint}}</span></td>
+
+<td class="text-center"><span class="green" *ngIf = "item.pointsAmount !== 0"> {{item.pointsAmount}}</span>
+    <span class="red_color" *ngIf = "item.pointsAmount == 0">{{item.pointsAmount}}</span></td>
+
+<td class="text-center"><span class="green" *ngIf = "item.paidByWallet !== 0"> {{item.paidByWallet}}</span>
+    <span class="red_color" *ngIf = "item.paidByWallet == 0">{{item.paidByWallet}}</span></td>
+    
+<td class="text-center">SAR {{item.grand | number : '1.2-2'}} <br>
+<span *ngIf = "item.paytype == 'card'" class="online_btn">Paid Online</span>
+<span *ngIf = "item.paytype == 'cash'" class="cod_btn">C.O.D</span>
+<span *ngIf = "item.paytype === 'Apple Pay'" class="online_btn">Apple Pay</span>
+<span *ngIf = "item.paytype === 'Machine'" class="cod_btn">Machine</span>
+
+<!-- <span class="online_btn">Paid Online</span> -->
+</td>
+<td> <ngb-rating [(rate)]="item.productRating" class="rating-star-point" [readonly]="true" [max]="5"></ngb-rating></td>
+<td><ngb-rating [(rate)]="item.driverRating" class="rating-star-point" [readonly]="true" [max]="5"></ngb-rating></td>
+<td>{{item.commemts}}</td>
+</tr>
+
+<!-- <tr>
+<td>7/6/20 - 12:43 pm</td>
+<td>Place New Order</td>
+<td><span class="red_color">#Store_ID_1</span> <br><span class="red_color">#Store_ID_2</span></td>
+<td><span class="red_color">#Order_ID</span> <br> Order Status : <span class="green">Delivered</span></td>
+<td>- -</td>
+<td><span class="red_color">+ SAR 50.00</span></td>
+<td>SAR 177.00 <br> <span class="online_btn">Paid Online</span></td>
+<td><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></td>
+<td><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></td>
+<td>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</td>
+</tr>
+<tr>
+<td>7/6/20 - 12:43 pm</td>
+<td>Refund Credit on order</td>
+<td>- -</td>
+<td><span class="red_color">#Order_ID</span> <br> Order Status : <span class="blue">Ongoing</span></td>
+<td><span class="green">+ 600.00</span> <br> <span class="yellow">Expires on : 15/15/20</span></td>
+<td><span class="green">+ SAR 50.00</span></td>
+<td>SAR 177.00 <br> <span class="cod_btn">C.O.D</span></td>
+<td><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></td>
+<td><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></td>
+<td>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</td>
+</tr> -->
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</div>
+</section>
+
+
+</div>
+</div>
+</div>
+
+<section class="add_driv_sec">
+    <div class="modal right fade" id="edit_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+    <div class="row">
+    <div class="col-md-7">
+    <ul>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </ul>
+    </div>
+    </div>
+    </div>
+    <div class="modal-body">
+    <form  [formGroup]="walletUpdateForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+    <!-- <div class="col-md-6">
+    <div class="form-group">
+    <label>Wallet Point</label>
+    <input type="text" name="" class="form-control" formControlName="walletPoint" placeholder="points">
+    </div>
+    </div> -->
+    <div class="col-md-6">
+    <div class="form-group">
+    <label>Wallet Amount</label>
+    <input type="text" name="" class="form-control" formControlName="walletAmount" placeholder="SAR">
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+    
+    <br>
+    <p class="text-center"><button class="add_car_btn">Submit</button></p>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+    </div>
+    </section>
+
+    <section class="car_modal">
+        <div class="modal right fade" id="wall_his" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-7">
+                <ul>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </ul>
+                </div>
+                </div>
+        <div class="row">
+        <div class="col-md-12">
+        <section class="extand_table">
+        <div class="material-datatables">
+        <div class="table-responsive text-nowrap">
+        <table class="table table-bordered table-striped table_datatable" id="customerTable">
+        <thead>
+        <tr>
+        <th>Order Id</th>
+        <th>Amount</th>
+        <th>Type</th>
+        <th>Transaction</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+        <tr *ngFor="let item of wallHis">
+        <td>{{item.orderId}}</td>
+        <td>{{item.amount}}</td>
+        <td>{{item.transactionType}}</td>
+        <td>{{item.typeOfTrans}}</td>
+      
+        </tbody>
+        </table>
+        </div>
+        </div>
+        </section>
+        </div>
+        </div>
+        </div>
+        <!-- modal-content -->
+        </div>
+        <!-- modal-dialog -->
+        </div>
+        </div>
+        </section>

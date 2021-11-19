@@ -1,0 +1,180 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="gene_setting_sec">
+<div class="row">
+<div class="col-md-2">
+<div class="container-fluid">
+<div class="card">
+<ul class="nav nav-pills">
+<li class="active"><a href="#1a" data-toggle="tab">General</a></li>
+<li><a href="#2a" data-toggle="tab">Delivery</a></li>
+<li *ngIf = "showAccept == 'true'"><a href="#3a" data-toggle="tab">User Settings</a></li>
+<li *ngIf = "showAccept == 'true'"><a href="#4a" data-toggle="tab" (click)="getAdminList()">Admin Users</a></li>
+<li *ngIf = "showAccept == 'true'"><a href="#5a" data-toggle="tab">Notifications</a></li>
+<li *ngIf = "showAccept == 'true'" style="width: 100%;"><a href="#6a" data-toggle="tab">Rules</a></li>
+<li *ngIf = "showAccept == 'true'"><a href="#7a" data-toggle="tab">FAQ</a></li>
+<li *ngIf = "showAccept == 'true'"><a href="#8a" data-toggle="tab">P.P. & TnC</a></li>
+<li *ngIf = "showAccept == 'true'"><a href="#9a" data-toggle="tab">Admin Numbers</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-10">
+<div class="tab-content clearfix">
+<div class="tab-pane active" id="1a">
+<app-general></app-general>
+</div>
+<div class="tab-pane" id="2a">
+<app-delivery></app-delivery>
+</div>
+<div class="tab-pane" id="3a">
+<app-user-setting></app-user-setting>
+</div>
+
+<div class="tab-pane" id="4a">
+    <div class="container-fluid">
+    <div class="col-md-12">
+    <div class="card">
+    <div class="card-content">
+    <section class="notify_tab">
+    <div class="material-datatables">
+    <div class="table-responsive">
+    <table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+    <thead>
+    <tr>
+    <th>User Level</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>Phone Number</th>
+    <th>Date of Birth</th>
+    <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor = "let user of userlist">
+    <td>{{user.roleName}}</td>
+    <td>{{user.firstName}}</td>
+    <td>{{user.lastName}}</td>
+    <td>{{user.email}}</td>
+    <td>{{user.mobileNumber}}</td>
+    <td>{{user.dob}}</td>
+    <td class="text-center">
+    <button class="edit_btn" (click)="edituser(user);"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+    </td>
+    <td class="text-center">
+    <button class="edit_btn" (click)="deleteUser(user.id)"><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></button>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+    </div>
+    </section>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+<div class="tab-pane" id="5a">
+<app-notifications></app-notifications>
+</div>
+<div class="tab-pane" id="6a">
+<app-rules></app-rules>
+</div>
+<div class="tab-pane" id="7a">
+<app-faq></app-faq>
+</div>
+<div class="tab-pane" id="8a">
+<app-privacty-policy></app-privacty-policy>
+</div>
+<div class="tab-pane" id="9a">
+<app-admin-num></app-admin-num>
+</div>
+
+</div>
+</div>
+</div>
+
+<section class="add_driv_sec">
+    <div class="modal right fade" id="edit_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+    <div class="row">
+    <div class="col-md-7">
+    <ul>
+    </ul>
+    </div>
+    </div>
+    </div>
+    <div class="modal-body">
+    <form [formGroup]="addUserSetting" (ngSubmit)="onSubmit()">
+    <div class="row">
+    <div class="col-md-6">
+    <div class="form-group">
+    <label>First Name</label>
+    <input type="text" name="" class="form-control" formControlName="firstName" placeholder="Sharad">
+    </div>
+    </div>
+    <div class="col-md-6">
+    <div class="form-group">
+    <label>Last Name</label>
+    <input type="text" name="" class="form-control" formControlName="lastName" placeholder="Kant">
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+    <div class="form-group">
+    <label>Email</label>
+    <input type="email" name="" class="form-control" formControlName="email" placeholder="consult@sharadkant.com">
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-6">
+    <div class="form-group">
+    <label>Date of Birth</label>
+    <input type="text" formControlName="dob" bsDatepicker  placeholder="DOB" [(bsValue)]="bsValue" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+    </div>
+    </div>
+    <div class="col-md-6">
+    <div class="form-group">
+    <label>Phone Number</label>
+    <input type="number" name="" class="form-control" formControlName="mobileNumber" placeholder="+91 1234 567 890">
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-6">
+    <div class="form-group">
+    <label>Roles</label>
+    <select  formControlName ="roleId">
+    <option value="1">Level 1</option>
+    <option value="2">Level 2</option>
+    <option value="3">Level 3</option>
+    <option value="4">SuperAdmin</option>
+    </select>
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-12">
+    
+    <br>
+    <p class="text-center"><button class="add_car_btn">Submit</button></p>
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
+    <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+    </div>
+    </section>
+

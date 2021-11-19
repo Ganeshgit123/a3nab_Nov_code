@@ -1,0 +1,165 @@
+<div class="col-md-6">
+<div class="card">
+<div class="card-content">
+<div class="box_tit">
+<h4>Order Settings</h4>
+<form [formGroup]="addextras" (ngSubmit)="changeOrder()">
+<div class="lef_col">
+<div class="form-group">
+<label>Minimum Order Value for Free Delivery</label>
+<input type="text" class="form-control" formControlName="minimumOrderValue">
+</div>
+</div>
+<div class="righ_col" *ngIf = "showAccept == 'true'">
+    <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+</div>
+<ul class="del">
+    <li>Quick Delivery</li>
+    <li class="tog">
+        <label class="switch" *ngIf = "showAccept == 'true'"><input  type="checkbox" *ngIf="quickDelivery == 'true'"  checked (change)="statclick($event.target.checked)"/>
+            <input  type="checkbox" *ngIf="quickDelivery == 'false'" unchecked (change)="statclick($event.target.checked)"/>    <span class="slider"></span>
+        </label>
+        <label class="switch" *ngIf = "showAccept !== 'true'"><input  type="checkbox" *ngIf="quickDelivery == 'true'"  checked/>
+            <input  type="checkbox" *ngIf="quickDelivery == 'false'" unchecked />    <span class="slider"></span>
+        </label>
+    <!-- <label class="switch"><input type="checkbox" formControlName="quickDelivery"/><span class="slider"></span>
+    </label> -->
+    </li>
+    </ul>
+<div class="lef_col">
+<div class="form-group">
+<label>Refer & Earn Wallet Amount</label>
+<input type="text" class="form-control"  formControlName="walletAmount">
+</div>
+</div>
+<div class="righ_col" *ngIf = "showAccept == 'true'">
+    <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="card">
+<div class="card-content">
+<div class="box_tit">
+<h4>Wallet Settings</h4>
+<form [formGroup]="addextras" (ngSubmit)="changeWallet()">
+<ul class="right_amt" style="padding-bottom: 8px;">
+<li>
+<label>Wallet Points</label>
+<div class="form-group">
+<input type="text" name="" class="form-control" formControlName="walletPoints">
+</div>
+</li>
+<li class="equ_spc"> = </li>
+<li>
+<div class="form-group">
+<input type="text" name="" class="form-control" formControlName="walletSAR">
+</div>
+</li>
+<li class="righ_col" *ngIf = "showAccept == 'true'">
+    <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+</li>
+</ul>
+<!-- <div class="lef_col">
+<div class="form-group">
+<label>Wallet Points Expiration</label>
+<input type="text" class="form-control" formControlName="expiryDate">
+</div>
+</div>
+<div class="righ_col" *ngIf = "showAccept == 'true'">
+    <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+</div> -->
+<div class="lef_col">
+    <div class="form-group">
+    <label>Tax Percentage</label>
+    <input type="text" class="form-control" formControlName="taxAmount">
+    </div>
+    </div>
+    <div class="righ_col" *ngIf = "showAccept == 'true'"> 
+        <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+        </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-12">
+<div class="card">
+<div class="card-content">
+<form [formGroup]="addLink" (ngSubmit)="onlinks()">
+<div class="col-md-6">
+<div class="med_sec">
+<div class="lef_col">
+<div class="form-group">
+<label>Instagram Url</label>
+<ul class="soc_sec">
+<li class="img_sec"><img src="assets/img/instagram.svg"></li>
+<li class="pllcd"><input type="text" class="form-control" formControlName="instagramURL"></li>
+
+</ul>
+</div>
+</div>
+<div class="righ_col" *ngIf = "showAccept == 'true'">
+    <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+</div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="med_sec">
+<div class="lef_col">
+<div class="form-group">
+<label>Facebook Url</label>
+<ul class="soc_sec">
+<li class="img_sec"><img src="assets/img/facebook.svg"></li>
+<li class="pllcd"><input type="text" class="form-control" formControlName="facebookURL"></li>
+
+</ul>
+</div>
+</div>
+<div class="righ_col" *ngIf = "showAccept == 'true'">
+    <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+</div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="med_sec">
+<div class="lef_col">
+<div class="form-group">
+<label>Linkedin Url</label>
+<ul class="soc_sec">
+<li class="img_sec"><img src="assets/img/linkedin.svg"></li>
+<li class="pllcd"><input type="text" class="form-control" formControlName="linkedURL"></li>
+
+</ul>
+</div>
+</div>
+<div class="righ_col" *ngIf = "showAccept == 'true'">
+    <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+</div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="med_sec">
+<div class="lef_col">
+<div class="form-group">
+<label>Twitter Url</label>
+<ul class="soc_sec">
+<li class="img_sec"><img src="assets/img/twitter.svg"></li>
+<li class="pllcd"><input type="text" class="form-control" formControlName="twitterURL"></li>
+
+</ul>
+</div>
+</div>
+<div class="righ_col" *ngIf = "showAccept == 'true'">
+    <button type="submit" class="up_btn"><img src="assets/img/rotate.svg" onmouseover="this.src='assets/img/rotate_hover.svg'" onmouseout="this.src='assets/img/rotate.svg'"></button>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+

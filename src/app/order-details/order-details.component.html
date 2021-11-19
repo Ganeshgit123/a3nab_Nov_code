@@ -1,0 +1,632 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="progress_bar_sec">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-10.5">
+<ul class="prog_bar">
+<li [ngClass] ="{'current': orderProgress === 'PLACED' || orderProgress === 'ACCEPTSTORE' }" >Order Placed</li>
+<li [ngClass] ="{'current': orderProgress === 'ACCEPTSTORE' || acceptByStore === 1}">Accepted by Stores</li>
+<li [ngClass] ="{'red': orderProgress === 'CANCELLED' || cancelledByUser === 1}">Cancelled by User</li>
+<li [ngClass] ="{'pink':  packedByStore === 1}">Packed by Store</li>
+<li [ngClass] ="{'yellow':  assignDriver === 1}">Assign Driver</li>
+<li [ngClass] ="{'red':  packedByDriver === 1}">Picked by Driver</li>
+<li [ngClass] ="{'pink': onWayToDelivery === 1}">Driver On Way</li>
+<li [ngClass] ="{'current':  orderStatus === 'COMPLETED'}">Delivered</li>
+</ul>
+</div>
+<div class="col-md-1.5">
+<ul class="invo_btn" *ngIf = "showAccept == 'true'">
+<li><button type="button" class="float_cash_btn" data-toggle="modal" data-target="#add_driv_btn">Invoice</button></li>
+<li *ngIf = " orderStatus === 'PENDING'" ><button (click)="updateOrderStatus('ACCEPTED')" class="save_invo_btn">Accept Order</button></li>
+<li *ngIf = " orderStatus === 'ACCEPTED'"><button (click)="updateOrderStatus('REJECTED')" class="save_invo_btn">Cancel Order</button></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+
+<section class="add_driv_sec">
+<div class="modal center fade" id="add_driv_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<div class="col-md-6">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="col-md-3">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="width: 100%;" ngxPrint printSectionId="print_view">
+<span aria-hidden="true" style="font-size: 14px;">Print View</span>
+</button>
+</div>
+<div class="col-md-3">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="width: 100%;">
+<span aria-hidden="true" style="font-size: 14px;" (click)="onPrint()">Direct Print</span>
+</button>
+</div>
+</div>
+</div>
+<div id="print_view">
+<div class="row">
+<div class="col-md-12">
+<div style="text-align: center;">Invoice</div>
+</div>
+
+<div class="col-md-12">
+<div style="text-align: center;">{{orderIDs}} : Order Id</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 10px; text-align: center;">
+<img style="width: 20%;" src="assets/img/bill_logo.png" alt="a3nab_image"/>
+<div style="text-align: center;">a3nab@gmail.com</div>
+<div style="text-align: center;">Taif, Makkah Province Saudi Arabia</div>
+<div style="text-align: center;">8028456 :????? ???????</div>
+</div>
+
+<div class="row">
+<div class="column" style="float: left;width: 50%;">
+    <p>{{orderOn}} : Order Date</p>
+<p>{{firstName}} {{lastName}} : Customer Name</p>
+<p *ngFor="let item of orderDetails">
+    <span>{{item.storeName}} : StoreName</span>
+</p>
+</div>
+<div class="column" style="float: right;width: 50%;text-align: right;">
+    <p>{{ordertime}} : Order Time</p>
+    <p>{{mobileNumber}} : Mobile Number</p>
+    <p *ngFor="let item of orderDetails">
+        <span>{{item.storeID}} : StoreName</span>
+    </p>
+</div>
+</div>
+
+<hr style="border-style: dashed;">
+<table style="width:100%">
+<thead style="border-bottom: dashed;">
+<tr>
+<th>Product</th>
+<th>Quantity</th>
+<th>Price</th>
+<th>Amount (SAR)</th>
+</tr>
+</thead>
+
+<tbody *ngFor="let item of orderDetails" style="margin-top: 10px;">
+<tr *ngFor="let prod of item.products">
+<td style="text-align: center;">{{prod.productName}}</td>
+<td style="text-align: center;">{{prod.quantity}}</td>
+<td style="text-align: center;">{{prod.singlePrice | number : '1.2-2'}}</td>
+<td style="text-align: center;">{{prod.supplyPrice | number : '1.2-2'}}</td>
+</tr>
+</tbody>
+</table>
+<hr style="border-style: dashed;">
+
+<div class="row" style="width: 100%;">
+    <div class="column" style="width: 50%;">
+    </div>
+    <div class="column" style="float:right;width: 25%;text-align: right;">
+        <p>{{totalAmount | number : '1.2-2'}} SAR</p>
+        <p *ngIf='discountAmount !== 0'><span class="green">(-) </span>{{discountAmount}} SAR</p>
+        <p *ngIf = "couponDiscount !== 0"><span class="green">(-) </span>{{couponDiscount}} SAR</p>
+        <p *ngIf = "pointsAmount !== 0"><span class="green">(-) </span>{{pointsAmount}} SAR</p>
+        <p *ngIf = "paidByWallet !== 0"><span class="green">(-) </span>{{paidByWallet}} SAR</p>
+        <p><span class="green">(+) </span>{{fastDelievryCharge}} SAR</p>
+        <p>{{subtot2 | number : '1.2-2'}} SAR</p>
+        <p>{{taxtot | number : '1.2-2'}} SAR</p>
+        <hr style="border-style: dashed;">
+        <p>{{finalTot | number : '1.2-2'}} SAR</p>
+        <hr style="border-style: dashed;">
+    </div>
+    <div class="column" style="float:right;width: 25%;text-align: right;">
+        <p>Product Total</p>
+        <p *ngIf='discountAmount !== 0'>Discount</p>
+        <p *ngIf = "couponDiscount !== 0">Coupon Discount </p>
+        <p *ngIf = "pointsAmount !== 0">Wallet Amount </p>
+        <p *ngIf = "paidByWallet !== 0">Paid By Wallet </p>
+        <p>Fast Delivery Charges</p>
+        <p>Sub Total</p>
+        <p>Tax</p>
+        <hr style="border-style: dashed;">
+        <p>Grand Total </p>
+        <hr style="border-style: dashed;">
+    </div>
+    </div>
+
+</div>
+</div>
+<div id='print_portion'>
+<div class="row">
+<div class="col-md-12">
+<div style="text-align: center;">Invoice</div>
+</div>
+
+<div class="col-md-12">
+<div style="text-align: center;">{{orderIDs}} : Order Id</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 10px; text-align: center;">
+<img style="width: 20%;" src="assets/img/bill_logo.png" alt="a3nab_image"/>
+<div style="text-align: center;">a3nab@gmail.com</div>
+<div style="text-align: center;">Taif, Makkah Province Saudi Arabia</div>
+<div style="text-align: center;">8028456 :????? ???????</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 20px;">
+<div class="col-md-6">
+<p>{{ordertime}} : Order Time</p>
+</div>
+<div class="col-md-6">
+<p class="text-right">{{orderOn}} : Order Date</p>
+</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-6">
+<p>{{firstName}} {{lastName}} : Customer Name</p>
+</div>
+<div class="col-md-6">
+<p class="text-right">{{mobileNumber}} : Mobile Number</p>
+</div>
+</div>
+
+<div class="col-md-12" *ngFor="let item of orderDetails" style="margin-top: 10px;">
+<div>
+<div class="col-md-6" style="text-align: left;">
+<p>{{item.storeName}} : StoreName</p>
+</div>
+<div class="col-md-6" style="text-align: right; margin: 0px;">
+<p>{{item.storeID}} : Store Id</p>
+</div>
+</div>
+</div>
+
+
+<div class="col-md-12" style="text-align: center;">
+---------------------------------------------------------------------------------------------------------------------------  
+</div>
+<div class="col-md-12">
+<div class="col-md-4">
+Product
+</div>
+<div class="col-md-2" style="text-align: center;">
+Quantity
+</div>
+<div class="col-md-3" style="text-align: center;">
+Price
+</div>
+<div class="col-md-3" style="text-align: right;">
+Amount (SAR)
+</div>
+</div>
+
+<div class="col-md-12" style="text-align: center;" >
+---------------------------------------------------------------------------------------------------------------------------  
+</div>
+
+
+<div *ngFor="let item of orderDetails" >
+<span class="col-md-12" *ngFor="let prod of item.products">
+<div class="col-md-4">
+<p>{{prod.productName}}</p>
+</div>
+<div class="col-md-2" style="text-align: center;">
+<p>{{prod.quantity}}</p>
+</div>
+<div class="col-md-3" style="text-align: center;">
+<p>{{prod.singlePrice | number : '1.2-2'}}</p>
+</div>
+<div class="col-md-3" style="text-align: right;">
+<p>{{prod.supplyPrice | number : '1.2-2'}}</p>
+</div>
+</span>
+</div>
+
+
+<div class="col-md-12" style="text-align: center;">
+---------------------------------------------------------------------------------------------------------------------------  
+</div>
+
+<div class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-9" style='text-align: right;'>
+Product Total
+</div>
+<div class="col-md-3" style="text-align: right;">
+{{totalAmount | number : '1.2-2'}} SAR
+</div>
+</div>
+
+<div *ngIf='discountAmount !== 0' class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-9" style='text-align: right;'>
+Discount
+</div>
+<div class="col-md-3" style="text-align: right;">
+<span class="green">(-) </span>{{discountAmount}} SAR
+</div>
+</div>
+
+<div *ngIf = " couponDiscount !== 0 " class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-9" style='text-align: right;'>
+Coupon Discount 
+</div>
+<div class="col-md-3" style="text-align: right;">
+<span class="green">(-) </span>{{couponDiscount}} SAR
+</div>
+</div>
+
+<div *ngIf = " pointsAmount !== 0 " class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-9" style='text-align: right;'>
+Wallet Amount 
+</div>
+<div class="col-md-3" style="text-align: right;">
+<span class="green">(-) </span>{{pointsAmount}} SAR
+</div>
+</div>
+
+<div *ngIf = " paidByWallet !== 0 " class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-9" style='text-align: right;'>
+Paid By Wallet 
+</div>
+<div class="col-md-3" style="text-align: right;">
+<span class="green">(-) </span>{{paidByWallet}} SAR
+</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 15px;">
+<div class="col-md-9" style='text-align: right;'>
+Fast Delivery Charges 
+</div>
+<div class="col-md-3" style="text-align: right;">
+<span class="green">(+) </span>{{fastDelievryCharge}} SAR
+</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-9" style='text-align: right;'>
+Sub Total
+</div>
+<div class="col-md-3" style="text-align: right;">
+{{subtot2 | number : '1.2-2'}} SAR
+</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-9" style='text-align: right;'>
+Tax
+</div>
+<div class="col-md-3" style="text-align: right;">
+{{taxtot | number : '1.2-2'}} SAR
+</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 10px; text-align: center;">
+------------------------------------------------------------------------------------------------------------------------- 
+</div>
+
+<div class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-9" style="text-align: right;">
+Grand Total 
+</div>
+<div class="col-md-3" style="text-align: right;">
+{{finalTot | number : '1.2-2'}} SAR
+</div>
+</div>
+<div class="col-md-12" style="margin-top: 10px; text-align: center;">
+    ------------------------------------------------------------------------------------------------------------------------- 
+    </div>
+<!-- <div *ngFor="let item of orderDetails" >
+<div class="col-md-12" style="margin-top: 10px; text-align: center;">
+<img src="{{item.storeImage}}" class="" style="width: 10%; border-radius: 60%;">
+</div>
+</div> -->
+
+<!-- <div class="col-md-12" style="margin-top: 20px; text-align: center;">
+>>>>>>>>>>>>>>>>>>>>>>>>> {{orderIDs}} >>>>>>>>>>>>>>>>>>>>>>>>>
+</div> -->
+
+<!-- <div class="" style="margin: 20px; text-align: center;">
+<img src="assets/img/sample.png" style="width: 50%; margin-top: 30px;"/>
+</div> -->
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+<section class="custom_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="row">
+<div class="col-md-8">
+<div class="above_ord_det">
+<ul class="plus_cc">
+<li class="box_cc"><span class="light_color">Order Placed :</span> {{orderOn}} at {{ordertime}}</li>
+<li class="box_cc"><span class="light_color">Delivery By :</span> {{deliveryDate}} | {{fromTime }} to {{toTime}}</li>
+</ul>
+</div>
+</div>
+<div class="col-md-4">
+<div class="above_ord_det">
+<!-- <ul class="plus_cc_right">
+<li class="plus_ico"><a href=""><i class="fa fa-plus"></i>Add Item</a></li>
+<li class="max_ico"><img src="assets/img/maxi_icon.svg" width="20px" height="20px"></li>
+</ul> -->
+</div>
+</div>
+</div>
+<div class="suppor_li_table">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<!-- <th>Store</th> -->
+<th>Product</th>
+<th></th>
+<th>Category</th>
+<th>SubCategory</th>
+<th>Sub-SubCategory</th>
+<!-- <th>Variant</th> -->
+<th class="text-center">Instructions</th>
+<!-- <th class="text-center">Status</th> -->
+<th class="text-center">Quantity</th>
+<th>Price / unit</th>
+<th>Product Discount</th>
+<th>Amount</th>
+<th></th>
+</tr>
+</thead>
+<tbody *ngFor="let item of orderDetails;let i = index" >
+<tr>
+<td>{{item.storeName}}</td>
+</tr>
+<tr *ngFor="let prod of item.products">
+<!-- <td>
+My Super Mart<br>
+<span class="red_color">#Store_ID</span><br>
+<ul class="pho_ic_img">
+<li><img src="assets/img/phone_icon.svg"></li>
+<li><img src="assets/img/file.svg"></li>
+</ul>
+</td> -->
+<td style="width: 30px;">
+<img src="{{prod.productImage}}">
+</td>
+<td>
+<p>{{prod.productName}}</p>
+<p class="red_color"><a routerLink="/products/{{ prod.productId }}">{{prod.productCode}}</a></p>
+</td>
+<td>{{prod.categoryName}}</td>
+<td>{{prod.productCategoryName}}</td>
+<td>{{prod.productSubCategoryName}}</td>
+<!-- <td>250ml</td> -->
+<td class="text-center">{{prod.orderInstructions}}</td>
+<!-- <td class="text-center">
+<ul class="status_icon">
+<li><img src="assets/img/packed.svg"></li>
+<li><img src="assets/img/picked_by_driver.svg"></li>
+</ul>
+</td> -->
+<td class="text-center">x{{prod.quantity}}</td>
+<td>SAR {{prod.price + prod.cuttingStylePrice + prod.boxStylePrice}}</td>
+<td>{{prod.discount}} %</td>
+<td>
+   
+    SAR {{prod.quantity * (prod.price + prod.cuttingStylePrice + prod.boxStylePrice - (prod.price * prod.discount /100)) | number : '1.2-2'}}</td>
+<td *ngIf = "showAccept == 'true'"> 
+    <!-- <a style="cursor: pointer;" ng-really-message="Are you sure?" ng-really-click="removeOrderItems(prod)"> <img src="assets/img/delete_icon.svg" style="width: 18px;height: 18px;"> </a> -->
+    <a
+    mwlConfirmationPopover
+    [popoverTitle]="popoverTitle"
+    [popoverMessage]="popoverMessage"
+    [confirmText]="confirmText"
+    [cancelText]="cancelText"
+    placement="left"
+    (confirm)="removeOrderItems(prod)"
+    (cancel)="cancelClicked = true"
+    confirmButtonType="danger"
+    cancelButtonType="outline-secondary"
+    (click)="confirmClicked = false; cancelClicked = false"
+    [appendToBody]="true"
+  >
+  <img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'" style="width: 20px;height: 20px;">
+</a>
+</td> 
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="ord_descrip">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-3">
+<div class="card">
+<div class="card-content">
+<ul>
+<li><img src="assets/img/user.png"></li>
+<li class="ord_det"><span class="usr_name">{{firstName}} {{lastName}}</span><br><span class="red_color"><a routerLink="/customer/{{ userId }}">{{customerID}}</a></span></li>
+</ul>
+<h5>Delivery Address</h5>
+<p>{{landmark}}, {{addressPinDetails}}</p>
+<h5>Driver's Note</h5>
+<p>{{deliveryNotes}}</p>
+<h5>Phone Number</h5>
+<p>{{mobileNumber}}</p>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card">
+<div class="card-content">
+<h5>Delivery Address</h5>
+<p>{{landmark}}, {{addressPinDetails}}</p>
+<h5  *ngIf = "deleteItems === 0">For unavailable item</h5>
+<p  *ngIf = "deleteItems === 0">Deleted the item</p>
+<h5  *ngIf = "deleteItems === 1">For unavailable item</h5>
+<p  *ngIf = "deleteItems === 1">Replace the item</p>
+<p></p>
+<ul class="prod_tot">
+<li class="light_color">Product Total</li>
+<li class="righ_cont">{{subtot | number : '1.2-2'}} SAR </li>
+</ul>
+<!-- <ul>
+<li class="light_color">Product Discount</li>
+<li class="righ_cont">(-) {{discountAmount}} % </li>
+</ul> -->
+<ul *ngIf = " couponDiscount !== 0 ">
+<li class="light_color">Coupon Discount</li>
+<li class="righ_cont">(-) {{couponDiscount}} SAR </li>
+</ul>
+
+<ul *ngIf = " pointsAmount !== 0 ">
+<li class="light_color">Wallet Amount</li>
+<li class="righ_cont">(-) {{pointsAmount}} SAR </li>
+</ul>
+<ul *ngIf = " paidByWallet !== 0 ">
+<li class="light_color">Paid By Wallet</li>
+<li class="righ_cont">(-) {{paidByWallet}} SAR </li>
+</ul>
+<ul>
+<li class="light_color">Fast Delivery Charges</li>
+<li class="righ_cont">(+) {{fastDelievryCharge}} SAR </li>
+</ul>
+<ul>
+<li class="light_color">Sub Total</li>
+<li class="righ_cont">{{subtot2 | number : '1.2-2'}} SAR </li>
+</ul>
+<ul>
+<li class="light_color">Tax</li>
+<li class="righ_cont">{{taxtot | number : '1.2-2'}} SAR</li>
+</ul>
+
+<ul>
+<li class="light_color">Total Bill</li>
+<li class="righ_cont">{{finalTot | number : '1.2-2'}} SAR</li>
+</ul>
+
+<p  *ngIf = " payType === 'card' " class="text-center paid_btn">Online Paid</p> 
+<p  *ngIf = " payType === 'Apple Pay' " class="text-center paid_btn">Apple Pay</p> 
+<p  *ngIf = " payType === 'Machine' " class="text-center cod_btn">Machine</p> 
+
+<p  *ngIf = " payType === 'cash' " class="text-center cod_btn">C.O.D</p> 
+
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card">
+<div class="card-content">
+<div class="row">
+<div class="col-md-4">
+<img *ngIf="!driverImage"  src="assets/img/driver1.png"/>
+<img *ngIf="driverImage" src="{{driverImage}}">
+</div>
+<div class="col-md-8">
+<div *ngIf="drId">
+<span class="red_color"><a routerLink="/drivers/{{ driverId }}">{{drId}}</a></span><br>
+<span><ngb-rating [(rate)]="drivRating" class="rating-star-point" [readonly]="true" [max]="5"></ngb-rating>
+</span><br>
+<!-- <span class="light_color">Success Rate : 85%</span> -->
+</div>
+<div *ngIf="!drId">
+    <span class="red_color">Driver is not assigned</span><br>
+    </div>
+</div>
+</div>
+<br>
+<ul>
+<li>Assignment</li>
+<li class="righ_cont">
+    <span class="red_color" *ngIf="!assignment_ID">Not assign</span>
+    <span class="red_color" *ngIf="assignment_ID"><a routerLink="/makeassignment/{{assignId}}">{{assignment_ID}}</a></span>
+</li>
+</ul>
+<!-- <p class="driv_desc">Driver is picking up the item from Store 2 ( #store_id )</p> -->
+<div class="row">
+<div class="col-md-12">
+<agm-map 
+[latitude]="lat"
+[longitude]="lng"
+[zoom]="zoom"
+[disableDefaultUI]="false"
+[zoomControl]="false">
+<agm-marker 
+*ngFor="let m of storemarker; let i = index"
+(markerClick)="clickedMarker(infowindow)"
+[iconUrl]="StoreiconUrl"
+[latitude]="m.storeLatitude"
+[longitude]="m.storeLongitude"
+>
+<agm-info-window #infowindow>
+<p><strong>Name: </strong> {{m.storeName}}</p>
+</agm-info-window>
+</agm-marker>
+<agm-marker 
+(markerClick)="clickedMarkerDriver(infowindowdriver)"
+[iconUrl]="DrivericonUrl"
+[latitude]="driverLatitude"
+[longitude]="driverLongitude"
+>
+<agm-info-window #infowindowdriver>
+<p><strong>Name: </strong> {{driverName}}</p>
+</agm-info-window>
+</agm-marker>
+<agm-marker 
+(markerClick)="clickedMarkerUser(infowindowuser)"
+[iconUrl]="UsericonUrl"
+[latitude]="userLatitude"
+[longitude]="userLongitude"
+>
+<agm-info-window #infowindowuser>
+<p><strong>Name: </strong> {{firstName}} {{lastName}}</p>
+</agm-info-window>
+</agm-marker>
+</agm-map>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card">
+<div class="card-content">
+<ul *ngFor="let item of orderDetails;let i = index" style="display: flex; overflow: hidden;">
+<li class="ord_det col-md-4" style="padding-left: 0px; padding-right: 0px; margin-top: 8px;">
+<img src="{{item.storeImage}}">
+</li>
+<li class="ord_det col-md-12" style="padding-right: 0px;"><span>{{item.storeName}}</span><br>
+<span class="red_color"><a routerLink="/view-store/{{ item.storeId }}">{{item.storeID}}</a></span><br>
+<span class="light_color" *ngIf="orderStatus !== 'COMPLETED'">Status &nbsp; <b class="green">{{item.storeStatus}}</b></span>
+<span class="light_color" *ngIf="orderStatus == 'COMPLETED'">Status &nbsp; <b class="green">{{orderStatus}}</b></span><br>
+<span *ngIf="orderStatus == 'CANCELLED'" class="light_color">Order Status &nbsp; <b class="green">{{orderStatus}}</b></span><br>
+<span *ngIf="cancelReason" class="light_color">Cancel Reason &nbsp; <b class="red">{{cancelReason}}</b></span>
+</li>
+</ul>
+<ul class="rej_bbn" style="display: block ruby;">
+<!-- <li class="col-md-9" style="padding-left: 0px; padding-top: 10px; padding-bottom: 10px;"><button type="button" class="float_cash_btn">Reject Reason</button></li> -->
+<!-- <li><button type="button" class="float_cash_btn">Assign Store</button></li> -->
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,69 @@
+<div class="col-md-6">
+<div class="card">
+<div class="card-content">
+<div class="box_tit">
+<h4>Customer Application</h4>
+<form [formGroup]="adminNum" (ngSubmit)="changeAdminNum()">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Admin Number</label>
+<input type="text" class="form-control" formControlName="customerAdminNum">
+</div>
+</div>
+</div>
+<div *ngIf = "showAccept == 'true'">
+    <p class="text-center"><button type="submit" class="adm_subm_btn">Submit</button></p>
+    </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-md-6">
+    <div class="card">
+    <div class="card-content">
+<div class="box_tit">
+<h4>Driver Application</h4>
+<form [formGroup]="adminNum" (ngSubmit)="changeAdminNum()">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Admin Number</label>
+<input type="text" class="form-control" formControlName="driverAdminNum">
+</div>
+</div>
+</div>
+<div *ngIf = "showAccept == 'true'">
+    <p class="text-center"><button type="submit" class="adm_subm_btn">Submit</button></p>
+    </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-md-6">
+    <div class="card">
+    <div class="card-content">
+<div class="box_tit">
+<h4>Store Manager Application</h4>
+<form [formGroup]="adminNum" (ngSubmit)="changeAdminNum()">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Admin Number</label>
+<input type="text" class="form-control" formControlName="storeAdminNum">
+</div>
+</div>
+</div>
+<div *ngIf = "showAccept == 'true'">
+    <p class="text-center"><button type="submit" class="adm_subm_btn">Submit</button></p>
+    </div>
+</form>
+</div>
+
+</div>
+</div>
+</div>

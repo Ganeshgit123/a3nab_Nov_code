@@ -1,0 +1,159 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="export_sec">
+<div class="container-fluid">
+<div class="radiogroup">
+<ul>
+<li>
+<label class="control control-radio" for="1">
+<input type="radio" id="1" name="filt" value="current" (click) = "currentMonth($event);">
+<span>Current Month</span>
+<div class="control-indicator"></div>
+</label>
+</li>
+<li>
+<label class="control control-radio" for="2">
+<input type="radio" id="2" name="filt" value="last_month" (click) = "currentMonth($event);">
+<span>Last Month</span>
+<div class="control-indicator"></div>
+</label>
+</li>
+<li>
+<label class="control control-radio" for="3">
+<input type="radio" id="3" name="filt" value="last_3_month" (click) = "currentMonth($event);">
+<span>Last 3 Months</span>
+<div class="control-indicator"></div>
+</label>
+</li>
+<li>
+<label class="control control-radio" for="4">
+<input type="radio" id="4" name="filt" value="last_6_month" (click) = "currentMonth($event);">
+<span>Last 6 Months</span>
+<div class="control-indicator"></div>
+</label>
+</li>
+<li>
+<label class="control control-radio" for="6">
+<input type="radio" id="6" name="filt" value="last_year" (click) = "currentMonth($event);">
+<span>Last Year</span>
+<div class="control-indicator"></div>
+</label>
+</li>
+<li>
+    <input type="text" bsDatepicker  placeholder="Start Date" (bsValueChange) ="valuefrom($event)"  [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</li>
+<li>
+    <input type="text" bsDatepicker  placeholder="End Date" (bsValueChange) ="valueTo($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</li>
+<!-- <li class="ll_se">
+<label class="control control-radio" for="7">
+<input type="radio" id="7" name="filt" value="">
+
+<span class="date_se">
+<ul class="st_dt">
+<li>
+</li>
+<li>
+</li>
+</ul>
+</span>
+</label>
+</li> -->
+</ul>
+</div>
+</div>
+</section>
+<ngx-spinner
+bdColor="rgba(51,51,51,0.8)"
+size="medium"
+color="#fff"
+type="ball-scale-multiple">
+<p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+<section class="filt_sec">
+<div class="card">
+<div class="card-content">
+<form [formGroup]="exportForm" (ngSubmit)="onSubmit()">
+<div class="row">
+<div class="col-md-6">
+<ul>
+<li>
+<button type="button" class="float_cash_btn" (click)="selectAll($event)">Select All
+    <!-- <input type="checkbox" (change)="selectAll($event)">
+    <label> Select All</label> -->
+</button>
+</li>
+<li style="padding-left: 30px;">
+    <button type="button" class="float_cash_btn" (click)="deselectAll($event)">Deselect All
+        <!-- <input type="checkbox" (change)="selectAll($event)">
+        <label>Deselect All </label> -->
+    </button>
+    </li>
+</ul>
+</div>
+<div class="col-md-6 right_cont">
+<ul>
+<li *ngIf = "showExport == 'true'">
+<button class="float_cash_btn">Export Report</button>
+</li>
+<!-- <li>
+<button type="button" class="float_cash_btn">Export XLS</button>
+</li> -->
+</ul>
+</div>
+</div>
+<div class="selec_sec">
+<div class="mycheckbox">
+<input type="checkbox" formControlName="product" [checked]="exportForm.value.product" id="products" />
+<label for="products">Products</label>
+</div>
+</div>
+<div class="selec_sec">
+<div class="mycheckbox">
+<input type="checkbox" formControlName="driver" [checked]="exportForm.value.driver" id="driver" />
+<label for="driver">Drivers</label>
+</div>
+</div>
+<div class="selec_sec">
+<div class="mycheckbox">
+<input type="checkbox" formControlName="users" [checked]="exportForm.value.users" id="users" />
+<label for="users">Customers</label>
+</div>
+</div>
+<div class="selec_sec">
+<div class="mycheckbox">
+<input type="checkbox" formControlName="orders" [checked]="exportForm.value.orders" id="order" />
+<label for="order">Orders</label>
+</div>
+</div>
+<div class="selec_sec">
+<div class="mycheckbox">
+<input type="checkbox" formControlName="cars" [checked]="exportForm.value.cars" id="cars" />
+<label for="cars">Cars</label>
+</div>
+</div>
+<div class="selec_sec">
+<div class="mycheckbox">
+<input type="checkbox" formControlName="support" [checked]="exportForm.value.support" id="support" />
+<label for="support">Support</label>
+</div>
+</div>
+<div class="selec_sec">
+<div class="mycheckbox">
+<input type="checkbox" formControlName="store" [checked]="exportForm.value.store" id="store" />
+<label for="store">Stores</label>
+</div>
+</div>
+<div class="selec_sec">
+<div class="mycheckbox">
+<input type="checkbox" formControlName="vendor" [checked]="exportForm.value.vendor" id="vendor" />
+<label for="vendor">Vendors</label>
+</div>
+</div>
+</form>
+</div>
+</div>
+</section>

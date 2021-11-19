@@ -1,0 +1,153 @@
+<div class="container-fluid">
+<p class="text-right" data-toggle="modal" data-target="#add_adm_btn"><button class="add_admin_btn">Add Admin</button></p>
+<div class="col-md-12 usr_sec">
+<div class="card">
+<div class="card-content">
+<section class="custom_head">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li>
+   <label>User Level -</label>
+<select (change)="onChangeFilter($event.target.value)">
+<option *ngFor="let item of getroleslist" value="{{item.id}}">{{item.roleName}}</option>
+</select>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<div class="material-datatables">
+<div class="table-responsive text-nowrap">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Permission Name</th>
+<th>ReadOpt</th>
+<th>WriteOpt</th>
+<th>ExportOpt</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let items of getpermission">
+<td>{{items.permissionName}}</td>
+<td> 
+<label class="switch"><input type="checkbox" [checked] = "items.readOpt == 'true'" (change)="read_update_change($event,items.id)" /><span class="slider"></span>
+</label>
+</td>
+<td>
+   <label class="switch"><input type="checkbox" [checked] = "items.writeOpt == 'true'" (change)="write_update_change($event,items.id)" /><span class="slider"></span>
+   </label>
+</td>
+<td>
+   <label class="switch"><input type="checkbox" [checked] = "items.exportOpt == 'true'"(change)="export_update_change($event,items.id)" /><span class="slider"></span>
+   </label>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<section class="add_driv_sec">
+<div class="modal right fade" id="add_adm_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+<!-- <li class="stat_btn text-center"><label>Status</label>
+<label class="switch"><input type="checkbox"/><span class="slider"></span>
+</label>
+</li> -->
+</ul>
+</div>
+<!-- <div class="col-md-5">
+<ul class="right_side_icon">
+<li><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></li>
+<li><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></li>
+</ul>
+</div> -->
+</div>
+</div>
+<div class="modal-body">
+<!-- <p class="red_color">#Admin_ID</p> -->
+<form [formGroup]="addUserSetting" (ngSubmit)="onSubmit()">
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>First Name</label>
+<input type="text" name="" class="form-control" formControlName="firstName" placeholder="First Name">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Last Name</label>
+<input type="text" name="" class="form-control" formControlName="lastName" placeholder="Last Name">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Email</label>
+<input type="email" name="" class="form-control" formControlName="email" placeholder="Enter email">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Date of Birth</label>
+<input type="text" formControlName="dob" bsDatepicker  placeholder="DOB" [(bsValue)]="bsValue" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Phone Number</label>
+<input type="number" name="" class="form-control" formControlName="mobileNumber" placeholder="Enter Number">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Password</label>
+<input type="password" name="" class="form-control" formControlName="password" placeholder="Enter Password">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Roles</label>
+<select  formControlName ="roleId">
+<option value="1">Level 1</option>
+<option value="2">Level 2</option>
+<option value="3">Level 3</option>
+<option value="4">SuperAdmin</option>
+</select>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+
+<br>
+<p class="text-center"><button class="add_car_btn">Submit</button></p>
+</div>
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>

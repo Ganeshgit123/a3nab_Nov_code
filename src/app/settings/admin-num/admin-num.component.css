@@ -1,0 +1,9 @@
+.adm_subm_btn{
+    color: #C1003A;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border: 2px solid #C1003A;
+    border-radius: 5px;
+    background: transparent;
+}

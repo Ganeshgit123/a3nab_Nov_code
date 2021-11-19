@@ -1,0 +1,45 @@
+<form [formGroup]="subCategoryForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+       <!-- <div class="col-md-2">
+          <input type="file" id="input-file-now-custom-1" formControlName="productSubCategoryImage" (change)="onSelectFile($event)" accept=".png, .jpg, .jpeg">
+          </div> -->
+          <ngx-spinner
+          bdColor="rgba(51,51,51,0.8)"
+          size="medium"
+          color="#fff"
+          type="ball-scale-multiple">
+          <p style="font-size: 20px; color: white">Loading...</p>
+       </ngx-spinner>
+       <div class="col-md-10">
+          <div class="row">
+             <div class="col-md-4">
+                <div class="form-group">
+                   <label>Name</label>
+                   <input type="text" class="form-control" formControlName="productSubCategoryName">
+                   <p *ngIf="!subCategoryForm.controls.productSubCategoryName.valid && submitted" class="error-val-pro">Please enter a sub category name</p>
+
+                </div>
+             </div>
+             <div class="col-md-4"></div>
+          </div>
+          <br>
+          <div class="row">
+             <div class="col-md-4">
+                <div class="form-group">
+                   <label>Arabic Name</label>
+                   <input type="text" formControlName="arabicName" class="form-control">
+                   <p *ngIf="!subCategoryForm.controls.arabicName.valid && submitted" class="error-val-pro">Please enter a name</p>
+                </div>
+             </div>
+             <div class="col-md-4">
+                <div class="form-group" *ngIf = "showAccept == 'true'">
+                   <button class="save_btn">Save</button>	
+                   <div>
+                   </div>
+                </div>
+             </div>
+             <div class="col-md-4"></div>
+          </div>
+       </div>
+    </div>
+    </form>

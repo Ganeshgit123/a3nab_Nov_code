@@ -1,0 +1,276 @@
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="not_tit">
+<h4>Customer Notifications</h4>
+</div>
+<section class="notify_tab">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Action</th>
+<!-- <th class="text-center">Email</th> -->
+<!-- <th class="text-center">SMS</th> -->
+<th class="text-center">Push</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of customernotlist">
+<td width="60%" >{{item.name}}</td>
+<!-- <td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.email == 'true'"  (change)="email_status_click($event,item.id)"/><span class="slider"></span>
+</label>
+<button class="edit_btn"  (click)="editcusemail(item.id);" data-toggle="modal" data-target="#edit_email"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td> -->
+<!-- <td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.sms == 'true'" (change)="sms_status_click($event,item.id)" /><span class="slider"></span>
+</label>
+<button class="edit_btn" (click)="editcussms(item.id);" data-toggle="modal" data-target="#edit_sms"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td> -->
+<td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.push == 'true'" (change)="push_status_click($event,item.id)"/><span class="slider"></span>
+</label>
+<button class="edit_btn" (click)="editcuspush(item.id);" data-toggle="modal" data-target="#edit_push_notify">
+    <img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'">
+</button>
+</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="not_tit">
+<h4>Store Manager Notifications</h4>
+</div>
+<section class="notify_tab">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Action</th>
+<!-- <th class="text-center">Email</th> -->
+<!-- <th class="text-center">SMS</th> -->
+<th class="text-center">Push</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of managernotlist">
+<td width="60%">{{item.name}}</td>
+<!-- <td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.email == 'true'" (change)="store_email_status_click($event,item.id)"/><span class="slider"></span>
+</label>   
+<button class="edit_btn" data-toggle="modal"  (click)="editstoemail(item.id);" data-target="#edit_email"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td> -->
+<!-- <td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.sms == 'true'" (change)="store_sms_status_click($event,item.id)" /><span class="slider"></span>
+</label>
+<button class="edit_btn" data-toggle="modal"  (click)="editstosms(item.id);"data-target="#edit_sms"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td> -->
+<td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.push == 'true'" (change)="store_push_status_click($event,item.id)" /><span class="slider"></span>
+</label>
+<button class="edit_btn" data-toggle="modal"  (click)="editstopush(item.id);" data-target="#edit_push_notify"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="not_tit">
+<h4>Delivery Partner Notifications</h4>
+</div>
+<section class="notify_tab">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Action</th>
+<!-- <th class="text-center">Email</th> -->
+<!-- <th class="text-center">SMS</th> -->
+<th class="text-center">Push</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of deliverynotlist">
+<td width="60%">{{item.name}}</td>
+<!-- <td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.email == 'true'" (change)="deli_email_status_click($event,item.id)" /><span class="slider"></span>
+</label>
+<button class="edit_btn" data-toggle="modal"  (click)="editdeliemail(item.id);"  data-target="#edit_email"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td> -->
+<!-- <td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.sms == 'true'" (change)="deli_sms_status_click($event,item.id)" /><span class="slider"></span>
+</label>
+<button class="edit_btn" data-toggle="modal" (click)="editdelisms(item.id);" data-target="#edit_sms" ><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td> -->
+<td class="text-center">
+<label class="switch"><input type="checkbox" [checked] = "item.push == 'true'" (change)="deli_push_status_click($event,item.id)" /><span class="slider"></span>
+</label>
+<button class="edit_btn" data-toggle="modal" (click)="editdelipush(item.id);" data-target="#edit_push_notify"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<section class="add_driv_sec">
+<div class="modal right fade" id="edit_email" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="listnotify" (ngSubmit)="onSubmit()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Enter Email Subject</label>
+<textarea class="form-control" formControlName="title"></textarea>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Enter Email Content</label>
+<textarea class="form-control cont" rows="10" formControlName="description"></textarea>
+</div>
+</div>
+</div>
+<br>
+<p class="text-center"><button class="add_car_btn">Save</button></p>
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>
+<section class="add_driv_sec">
+<div class="modal right fade" id="edit_push_notify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5">
+<!-- <ul class="right_side_icon">
+<li><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></li>
+</ul> -->
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="addpush" (ngSubmit)="add_push_cus()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Push Notification Header</label>
+<textarea class="form-control" formControlName="title"></textarea>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Push Notification Content</label>
+<textarea class="form-control cont" rows="10" formControlName="description"></textarea>
+</div>
+</div>
+</div>
+<br>
+<p class="text-center"><button class="add_car_btn">Save</button></p>
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>
+<section class="add_driv_sec">
+<div class="modal right fade" id="edit_sms" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5">
+<!-- <ul class="right_side_icon">
+<li><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></li>
+</ul> -->
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form  [formGroup]="addsms" (ngSubmit)="add_sms_cus()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>SMS Title</label>
+<textarea class="form-control" formControlName="title"></textarea>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Contents</label>
+<textarea class="form-control cont" formControlName="description" rows="10"></textarea>
+</div>
+</div>
+</div>
+</div>
+<p class="text-center"><button class="add_car_btn">Save</button></p>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>

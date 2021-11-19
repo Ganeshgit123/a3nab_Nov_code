@@ -1,0 +1,12 @@
+.image-upload>input {
+  display: none;
+}
+.upload-img{
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}   
+
+  /* .text-box-border {
+    border-bottom: 1px solid red;
+  } */

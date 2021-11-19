@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 20 22">
+    <defs>
+        <style>
+            .cls-1{fill:none;stroke:#c1003a;stroke-linecap:round;stroke-width:2px}
+        </style>
+    </defs>
+    <g id="Icon_-_Delete_:_Hover" transform="translate(1 1)">
+        <g id="Icon_feather-trash" transform="translate(-4.5 -3)">
+            <path id="Path_4049" d="M4.5 9h18" class="cls-1" transform="translate(0 -2)"/>
+            <path id="Path_4050" d="M21.5 7v14a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V7m3 0V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" class="cls-1" transform="translate(-1)"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,27 @@
+.modal.right .modal-content{
+    height: 600px;
+}
+@media only screen and (max-width: 1399px) and (min-width: 1000px){
+    .modal.right .modal-content{
+        height: 530px ! important;
+    }
+    .modal.right .modal-dialog{
+      width: 40%;
+    }
+  }
+@media only screen and (max-width: 1024px) and (min-width: 767px){
+    .modal.right .modal-content{
+        height: 670px ! important;
+    }
+  }
+  @media only screen and (max-width: 1200px) and (min-width: 1024px){
+    .modal.right .modal-content{
+        height: 430px ! important;
+    }
+  }
+  .modal .modal-header {
+    padding: 23px 16px 0 16px !important;
+  }
+  .modal select{
+    padding: 0.5em 0.5em 0.5em 0em !important;
+  }

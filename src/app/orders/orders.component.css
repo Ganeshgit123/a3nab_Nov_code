@@ -1,0 +1,53 @@
+.form-control.datepicker{
+     height: 42px;
+     margin-left: 10px;
+     margin-right: 10px;
+     
+}
+::placeholder{
+     color: #12303C40 ! important;
+}
+.search-bar {
+     display: grid;
+     grid-template-columns: 1fr 3rem;
+     grid-gap: 10px;
+     border: 2px solid #0000001f;
+   border-radius: 10px;
+   padding: 5px;
+   margin-bottom: 30px;
+   }
+   .search-bar:hover{
+     border: none;
+     background: #fff;
+     box-shadow: 0px 6px 40px #0000000a;
+   }
+   
+   .search-bar form {
+     display: grid;
+     grid-template-columns: 1rem 1fr;
+     grid-gap: 10px;
+     padding-left:0.5rem;
+   }
+   
+   .search-bar form input[type="search"] {
+     border:0;  
+     padding-left: 0.5rem;
+     padding-right: 0.5rem; 
+     outline: none;
+     letter-spacing: 1px;
+     background: transparent;
+   }
+   .search-bar form input:focus{
+     background: #fff;
+     border: none;
+   }
+   
+   .search-bar button {
+     border:0;
+     background-color:transparent;
+     cursor: pointer;
+   }
+   
+   .search-bar button:hover {
+     opacity: 0.5;
+   }

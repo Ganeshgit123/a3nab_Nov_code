@@ -1,0 +1,111 @@
+   <form [formGroup]="subCategoryForm" (ngSubmit)="onSubmit()">
+   <div class="row">
+   <ngx-spinner
+   bdColor="rgba(51,51,51,0.8)"
+   size="medium"
+   color="#fff"
+   type="ball-scale-multiple">
+   <p style="font-size: 20px; color: white">Loading...</p>
+   </ngx-spinner>
+   <div class="col-md-2">
+      <div class="image-upload text-center">
+         <label for="file-input">
+         <!-- Subcategory Image -->
+         <img class="upload-img" *ngIf="!imagePreview"  src="assets/img/product1.png"/>
+         <img class="upload-img" *ngIf="imagePreview" src="{{imagePreview}}"/>
+         </label>
+         <input type="file" id="file-input" formControlName="productCategoryImage" (change)="onSelectFile($event)" accept=".png, .jpg, .jpeg">
+         <p *ngIf="!subCategoryForm.controls.productCategoryImage.valid && submitted" class="error-val-pro">Please select image</p>      
+         </div>
+   </div>
+   <div class="col-md-10">
+   <div class="row">
+   <div class="col-md-2">
+   <div class="form-group">
+   <label>Min. Order Value</label>
+   <input type="text"  class="form-control"  formControlName="minimumOrderValue">
+   <p *ngIf="!subCategoryForm.controls.minimumOrderValue.valid && submitted" class="error-val-pro">Please enter a Min Order Value</p>
+   </div>
+   </div>
+   <div class="col-md-3">
+   <div class="form-group">
+   <label>Name</label>
+   <input type="text" class="form-control" formControlName="productCategoryName">
+   <p *ngIf="!subCategoryForm.controls.productCategoryName.valid && submitted" class="error-val-pro">Please enter a name</p>
+   </div>
+   </div>
+   <div class="col-md-3">
+   <div class="form-group">
+   <label>Arabic Name</label>
+   <input type="text" formControlName="arabicName" class="form-control">
+   <p *ngIf="!subCategoryForm.controls.arabicName.valid && submitted" class="error-val-pro">Please enter a name</p>
+   </div>
+   </div>
+   <div class="col-md-4">
+   <div class="form-group">
+   <label class="perm">Permissions</label>
+   <ul>
+   <li>Store Manager can change price</li>
+   <li style="float: right;">
+   <div class="container-switch">
+   <label class="switch"><input type="checkbox" formControlName="managerPrice" /> <span class="slider"></span>
+   </label>
+   </div>
+   </li>
+   </ul>
+   </div>
+   </div>
+   </div>
+   <div class="row">
+   <div class="col-md-2">
+   <div class="form-group">
+   <label>Min. Order Time (Give mins)</label>
+   <input type="text"  class="form-control" formControlName="minOrderTime">
+   <p *ngIf="!subCategoryForm.controls.minOrderTime.valid && submitted" class="error-val-pro">Please enter a Min. Order Time</p>
+   </div>
+   </div>
+   <div class="col-md-3">
+   <div class="form-group">
+   <label>Order Processing Time</label>
+   <input type="text"  class="form-control" formControlName="orderProcessing">
+   <p *ngIf="!subCategoryForm.controls.orderProcessing.valid && submitted" class="error-val-pro">Please enter a order processing</p>
+   </div>
+   </div>
+   <div class="col-md-3">
+   <div class="form-group">
+   <label>Assign to store</label><br>
+   <select formControlName="storeId">
+   <option [selected]="true" value="">None</option>
+   <option *ngFor="let item of storeList;let i = index" value="{{item.id}}" >{{item.storeName}}</option>
+   </select>
+   <p *ngIf="!subCategoryForm.controls.storeId.valid && submitted" class="error-val-pro">Please select store</p>
+   </div>
+   </div>
+   <div class="col-md-4">
+   <div class="form-group">
+   <ul>
+   <li>Coming Soon Status</li>
+   <li style="float: right;">
+   <div class="container-switch">
+   <label class="switch"><input type="checkbox" formControlName="isComingSoon" />  <span class="slider"></span>
+   </label>
+   </div>
+   </li>
+   <br>
+   <li>Sub-sub category</li>
+   <li style="float: right;">
+   <div class="container-switch">
+   <label class="switch"><input type="checkbox" formControlName="isSubcate" />  <span class="slider"></span>
+   </label>
+   </div>
+   </li>
+   </ul>
+   <div *ngIf = "showAccept == 'true'">
+   <button class="save_btn">Save</button>	
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+   </form>

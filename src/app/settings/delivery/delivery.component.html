@@ -1,0 +1,429 @@
+<div class="container-fluid">
+<div class="card">
+<div class="col-md-12">
+<div class="material-datatables time_slot_tab">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th class="text-center" *ngFor="let item of dayslot;let i = index">{{item.dayName}}</th>
+</tr>
+</thead>
+<tbody>
+
+
+<td *ngFor="let item of dayslot;let i = index">
+<tr class="text-center" *ngFor="let items of item.slot;let ii = index">
+{{items.fromTime}} - {{items.toTime}}<br>
+<span>Max Order : {{items.maxOrder}}</span><br>
+<span>Used Count : {{items.usedCount}}</span>
+<ul class="timeslot_edit" *ngIf = "showAccept == 'true'">
+<li>
+<button type="button" class="add_bnnt" (click)="editTimeSlot(items)"><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></button>
+</li>
+<li>
+<button type="button" class="add_bnnt" (click)="deleteTimeSlot(items,item.id)"><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></button>
+</li>
+</ul>
+
+</tr>
+</td>
+
+<tr class="add_time_secc">
+<td class="text-center">
+<ul class="new_time_sec">
+<li class="text-center" *ngIf = "showAccept == 'true'">
+<button type="button" class="add_bnnt" data-toggle="modal" (click)="openAddTimeslot()" data-target="#add_time_slot_btn"><img src="assets/img/plus.svg" onmouseover="this.src='assets/img/plus_hover_icon.svg'" onmouseout="this.src='assets/img/plus.svg'"></button>
+</li>
+</ul>
+</td>
+<td class="text-center">
+<ul class="new_time_sec">
+<li class="text-center" *ngIf = "showAccept == 'true'">
+<button type="button" class="add_bnnt" data-toggle="modal" (click)="openAddTimeslot()" data-target="#add_time_slot_btn"><img src="assets/img/plus.svg" onmouseover="this.src='assets/img/plus_hover_icon.svg'" onmouseout="this.src='assets/img/plus.svg'"></button>
+</li>
+</ul>
+</td>
+<td class="text-center">
+<ul class="new_time_sec">
+<li class="text-center" *ngIf = "showAccept == 'true'">
+<button type="button" class="add_bnnt" data-toggle="modal" (click)="openAddTimeslot()" data-target="#add_time_slot_btn"><img src="assets/img/plus.svg" onmouseover="this.src='assets/img/plus_hover_icon.svg'" onmouseout="this.src='assets/img/plus.svg'"></button>
+</li>
+</ul>
+</td>
+<td class="text-center">
+<ul class="new_time_sec">
+<li class="text-center" *ngIf = "showAccept == 'true'">
+<button type="button" class="add_bnnt" data-toggle="modal" (click)="openAddTimeslot()" data-target="#add_time_slot_btn"><img src="assets/img/plus.svg" onmouseover="this.src='assets/img/plus_hover_icon.svg'" onmouseout="this.src='assets/img/plus.svg'"></button>
+</li>
+</ul>
+</td>
+<td class="text-center">
+<ul class="new_time_sec">
+<li class="text-center" *ngIf = "showAccept == 'true'">
+<button type="button" class="add_bnnt" data-toggle="modal" (click)="openAddTimeslot()" data-target="#add_time_slot_btn"><img src="assets/img/plus.svg" onmouseover="this.src='assets/img/plus_hover_icon.svg'" onmouseout="this.src='assets/img/plus.svg'"></button>
+</li>
+</ul>
+</td>
+<td class="text-center">
+<ul class="new_time_sec">
+<li class="text-center" *ngIf = "showAccept == 'true'">
+<button type="button" class="add_bnnt" data-toggle="modal" (click)="openAddTimeslot()" data-target="#add_time_slot_btn"><img src="assets/img/plus.svg" onmouseover="this.src='assets/img/plus_hover_icon.svg'" onmouseout="this.src='assets/img/plus.svg'"></button>
+</li>
+</ul>
+</td>
+<td class="text-center">
+<ul class="new_time_sec">
+<li class="text-center" *ngIf = "showAccept == 'true'">
+<button type="button" class="add_bnnt" data-toggle="modal" (click)="openAddTimeslot()" data-target="#add_time_slot_btn"><img src="assets/img/plus.svg" onmouseover="this.src='assets/img/plus_hover_icon.svg'" onmouseout="this.src='assets/img/plus.svg'"></button>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="card">
+<section class="delivery_sec">
+<div id="exTab1">
+<ul class="nav nav-pills">
+<!-- <li class="active"><a href="#rate_dist" data-toggle="tab">Rate by distance</a></li> -->
+<li class="active"><a href="#flat_rate" data-toggle="tab">Flat Rate</a></li>
+</ul>
+<div class="tab-content clearfix">
+<!-- <div class="tab-pane active" id="rate_dist">
+<div class="card-content">
+<ul class="rate_by_dist">
+<li>1 Km</li>
+<li>SAR 05.00</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>2 Km</li>
+<li>SAR 08.05</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>4 Km</li>
+<li>SAR 10.00</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>6 Km</li>
+<li>SAR 12.25</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>8 Km</li>
+<li>SAR 14.00</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="mod_sec">
+<li><button class="mod_btn" data-toggle="modal" data-target="#add_rate_dist">Add</button></li>
+<li><button class="mod_btn">Edit</button></li>
+<li><button class="mod_btn">Delete</button></li>
+</ul>
+</div>
+</div> -->
+<div class="tab-pane active" id="flat_rate">
+<form  [formGroup]="flatRatebykm" (ngSubmit)="changeRate()">
+<div class="card-content">
+<div class="form-group">
+<label>Flat Rate</label>
+<input type="text" class="form-control" formControlName="flatRate">
+</div>
+<div class="form-group">
+<label>Per Kms</label>
+<input type="text" class="form-control" formControlName="perKM">
+</div>
+<div class="form-group">
+<label>Quick Delivery Charge Per Kms</label>
+<input type="text" class="form-control" formControlName="QuickDeliveryPerKM">
+</div>
+</div>
+<div class="save_btn_sec" *ngIf = "showAccept == 'true'">
+<p class="text-center"><button class="mod_save_btn">Save</button></p>
+</div>
+</form>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<div class="col-md-6">
+<div class="card">
+<div class="card-content">
+<agm-map 
+[latitude]="lat"
+[longitude]="lng"
+[zoom]="zoom"
+[disableDefaultUI]="false"
+[zoomControl]="false">
+<agm-marker 
+*ngFor="let m of markers; let i = index"
+(markerClick)="clickedMarker(infowindow)"
+[latitude]="m.latitude"
+[longitude]="m.longitude"
+>
+<agm-info-window #infowindow>
+<p><strong>Name: </strong> {{m.address}}</p>
+</agm-info-window>
+</agm-marker>
+</agm-map>
+</div>
+</div>
+</div>
+</div>
+<!-- <div class="row">
+<div class="col-md-12">
+<div class="card">
+<div class="card-content">
+<section class="delivery_sec">
+<ul class="deli_charge">
+<li>Quick Delivery Charges</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>1 Km</li>
+<li>SAR 05.00</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>2 Km</li>
+<li>SAR 08.05</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>4 Km</li>
+<li>SAR 10.00</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>6 Km</li>
+<li>SAR 12.25</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="rate_by_dist">
+<li>8 Km</li>
+<li>SAR 14.00</li>
+<li class="tog_swi">
+<label class="switch"><input type="checkbox" /><span class="slider"></span>
+</label>
+</li>
+</ul>
+<ul class="mod_sec">
+<li><button class="mod_btn" data-toggle="modal" data-target="#add_delivery_charge">Add</button></li>
+<li><button class="mod_btn">Edit</button></li>
+<li><button class="mod_btn">Delete</button></li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</div> -->
+</div>
+
+<section class="time_slot_sec">
+<div class="modal right fade" id="add_time_slot_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5"></div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="addtimeslot" (ngSubmit)="onSubmit()">
+<div class="row">
+<div class="col-md-12">
+<div class="tit_sec">
+<h4>Add Time Slot</h4>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Starting Time</label><br>
+<input
+type="time"
+id="input"
+class="form-control"
+value="13:00"
+formControlName="fromTime"
+mdbInput
+/>
+<!-- <input type="text" name=""  formControlName="fromTime" class="form-control" placeholder="09:00 AM"> -->
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Ending Time</label><br>
+<input
+type="time"
+id="input1"
+class="form-control"
+value="13:00"
+formControlName="toTime"
+mdbInput
+/>
+<!-- <input type="text" name=""  formControlName="toTime" class="form-control" placeholder="12:00 PM"> -->
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Max Order per Slot</label>
+<input type="text" name="" formControlName="maxOrder" class="form-control" placeholder="Ex.10 using numbers only">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Day</label>
+<select formControlName="dayId" class="form-control">
+<option *ngFor="let item of dayslot;let i = index" value="{{item.id}}">{{item.dayName}}</option>
+</select>
+</div>
+</div>
+</div>
+
+<br>
+<p class="text-center"><button class="add_car_btn">Add Slot</button></p>
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="time_slot_sec">
+<div class="modal right fade" id="add_rate_dist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5"></div>
+</div>
+</div>
+<div class="modal-body">
+<form>
+<div class="row">
+<div class="col-md-12">
+<div class="tit_sec">
+<h4>Add Rate By Distance</h4>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>KM</label><br>
+<input type="text" name="" class="form-control" placeholder="5Km">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Amount</label><br>
+<input type="text" name="" class="form-control" placeholder="SAR 10.00"> 
+</div>
+</div>
+</div>
+<br>
+<p class="text-center"><button class="add_car_btn">Add</button></p>
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="time_slot_sec">
+<div class="modal right fade" id="add_delivery_charge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5"></div>
+</div>
+</div>
+<div class="modal-body">
+<form>
+<div class="row">
+<div class="col-md-12">
+<div class="tit_sec">
+<h4>Add Quick Delivery Charge</h4>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>KM</label><br>
+<input type="text" name="" class="form-control" placeholder="5Km">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Amount</label><br>
+<input type="text" name="" class="form-control" placeholder="SAR 10.00"> 
+</div>
+</div>
+</div>
+<br>
+<p class="text-center"><button class="add_car_btn">Add</button></p>
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>

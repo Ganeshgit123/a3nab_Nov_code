@@ -1,0 +1,356 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-md-12">
+      <div class="search-bar">
+      <form>
+      <label for="searchQuery">
+      <span><img src="assets/img/search_icon.svg" width="18px"></span>
+      </label>
+      <input type="search" id="searchQuery" name="searchQuery" placeholder="search" (input)="searchAssignment($event.target.value)"/>
+      </form>
+      </div>
+      </div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<ul>
+<li>
+<select (change)="onChangeFilter($event.target.value)">
+   <option value="0">Assignment Status</option>
+   <option value="1">Completed</option>
+   <option value="2">Pending</option>
+</select>
+</li>
+</ul>
+</div>
+<div class="col-md-6 right_cont">
+<ul>
+<li>
+   <a (click)="pageReload()" > <i class="fa fa-refresh"></i> </a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="custom_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="row assign_li_sec">
+<div class="col-md-12">
+<div class="material-datatables">
+<div class="table-responsive">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Date & Time</th>
+<th>Assignment ID</th>
+<th>Driver ID</th>
+<th>Order ID</th>
+<th>Customer ID</th>
+<th>Status</th>
+<th>Stops</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of assignmentList;let i = index">
+<td style="font-size: 13px;">{{item.assignDate}} - {{item.time}}</td>
+<td>
+   <a *ngIf="item.isComplete == 0" routerLink="/makeassignment/{{item.id }}">
+     {{item.assignment_ID}}
+   </a>
+   <a *ngIf="item.isComplete != 0">
+      {{item.assignment_ID}}
+     </a>
+</td>
+<td><span class="red_color"><a routerLink="/drivers/{{item.driverId }}">{{item.drId}}</a></span></td>
+<td>
+<tr *ngFor="let customer of item.orders" >
+<td *ngIf = "customer.type == 'ORDER'">
+   <a routerLink="/order-details/{{ customer.orderId }}"> {{customer.orderIDs}}</a><br>
+      <span *ngIf = "customer.fastDelivery === 1">Fast Delivery</span> 
+</td>
+</tr>
+</td>
+<td>
+<tr *ngFor="let customer of item.orders">
+<td *ngIf = "customer.type == 'ORDER'">
+   <a routerLink="/customer/{{ customer.userId }}">{{customer.customerID}} </a>
+</td>
+</tr>
+</td>
+
+<td>
+   <tr *ngFor="let customer of item.orders">
+   <td *ngIf = "customer.type == 'ORDER'">
+      {{customer.orderStatus}}
+   </td>
+   </tr>
+</td>
+
+<td>
+<tr *ngFor="let customer of item.orders">
+<td *ngIf = "customer.type == 'ORDER'">
+   <span class="light_color">Stop :</span> <span>{{customer.firstName}}</span>
+</td>
+</tr>
+<tr *ngFor="let customer of item.orders">
+<td *ngIf = "customer.type == 'STORE'">
+   <span  class="light_color">Store :</span> <span>{{customer.storeName}}</span>
+</td>
+</tr>
+</td>
+</tr>
+
+</tbody>
+</table>
+<p class="text-center"><ngb-pagination  [collectionSize]="pages" (pageChange)="nextPage($event)" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="customer_modal">
+<div class="modal right fade" id="cust_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-4">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+<li class="stat_btn text-center">
+<label>Status</label>
+<button type="button" class="btn btn-xs btn-secondary btn-toggle" data-toggle="button" aria-pressed="true" autocomplete="off">
+<div class="handle"></div>
+</button>
+</li>
+</ul>
+</div>
+<div class="col-md-5">
+<ul class="right_side_icon">
+<li><img src="assets/img/edit_icon.svg"></li>
+<li><img src="assets/img/delete_icon.svg"></li>
+</ul>
+</div>
+</div>
+<div class="modal-body">
+<div class="row">
+<div class="col-md-5">
+<img src="assets/img/custo_img.png" class="cuto_img">
+</div>
+<div class="col-md-7">
+<div class="custo_sec">
+<p>#Customer_ID</p>
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr>
+<td class="cus_head">Platform</td>
+<td>iOS</td>
+</tr>
+<tr>
+<td class="cus_head">Wallet Point</td>
+<td>2,154</td>
+</tr>
+<tr>
+<td class="cus_head">Wallet Balance</td>
+<td>SAR 125.00</td>
+</tr>
+<tr>
+<td class="cus_head">Total Orders</td>
+<td>64</td>
+</tr>
+<tr>
+<td class="cus_head">Total Spent</td>
+<td>SAR 1,645.00</td>
+</tr>
+<tr>
+<td class="cus_head">Cancellation %</td>
+<td>6%</td>
+</tr>
+<tr>
+<td class="cus_head">Signup Date</td>
+<td>22/11/20</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<li class="trust text-center">
+<label>Trusty User</label>
+<button type="button" class="btn btn-xs btn-secondary btn-toggle" data-toggle="button" aria-pressed="true" autocomplete="off">
+<div class="handle"></div>
+</button>
+</li>
+<li><button type="button" class="action_log_btn" data-toggle="modal" data-target="#action_log">View Action Log</button></li>
+</ul>
+<form>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>First Name</label>
+<input type="text" name="" class="form-control" placeholder="Sharad">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Last Name</label>
+<input type="text" name="" class="form-control" placeholder="Kant">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Email Address</label>
+<input type="email" name="" class="form-control" placeholder="consult@sharadkant.com">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Phone Number</label>
+<input type="number" name="" class="form-control" placeholder="+91 1234-568-980">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Date of Birth</label>
+<input type="text" name="" class="form-control" placeholder="22/11/20">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Address</label>
+<input type="email" name="" class="form-control" placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Address Note From Driver</label>
+<input type="email" name="" class="form-control" placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Select Gender</label>
+<ul>
+<li>Female</li>
+<li>
+<button type="button" class="btn btn-xs btn-secondary btn-toggle active" data-toggle="button" aria-pressed="true" autocomplete="off">
+<div class="handle"></div>
+</button>
+</li>
+<li>Male</li>
+</ul>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div>
+<div class="col-md-8">
+<div class="row">
+<div class="col-md-8">
+<ul>
+<li><img src="assets/img/left_arrow.svg"></li>
+<li>
+<select>
+<option>Start Date</option>
+</select>
+</li>
+<li>
+<select>
+<option>End Date</option>
+</select>
+</li>
+</ul>
+</div>
+<div class="col-md-4 custom_head">
+<ul class="right_cont">
+<li>
+<i class="fa fa-refresh"></i>
+</li>
+<li>
+<a href="" class="export_btn">Export XLS</a>
+</li>
+</ul>
+</div>
+</div>
+<section class="extand_table">
+<div class="material-datatables">
+<div class="table-responsive text-nowrap">
+<table class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Entry</th>
+<th>Action</th>
+<th>Stores</th>
+<th>Order</th>
+<th>Wallet Point<br><span class="red_color">Total = 10,000.00</span></th>
+<th>Wallet Balance<br><span class="red_color">Total = SAR 852.00</span></th>
+<th>Price</th>
+<th>Product Rating</th>
+<th>Driver Rating</th>
+<th>Feedback Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7/6/20 - 12:43 pm</td>
+<td>Place New Order</td>
+<td><span class="red_color">#Store_ID_1</span> <br><span class="red_color">#Store_ID_2</span></td>
+<td><span class="red_color">#Order_ID</span> <br> Order Status : <span class="green">Delivered</span></td>
+<td>- -</td>
+<td><span class="red_color">+ SAR 50.00</span></td>
+<td>SAR 177.00 <br> <span class="online_btn">Paid Online</span></td>
+<td><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></td>
+<td><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></td>
+<td>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</td>
+</tr>
+<tr>
+<td>7/6/20 - 12:43 pm</td>
+<td>Refund Credit on order</td>
+<td>- -</td>
+<td><span class="red_color">#Order_ID</span> <br> Order Status : <span class="blue">Ongoing</span></td>
+<td><span class="green">+ 600.00</span> <br> <span class="yellow">Expires on : 15/15/20</span></td>
+<td><span class="green">+ SAR 50.00</span></td>
+<td>SAR 177.00 <br> <span class="cod_btn">C.O.D</span></td>
+<td><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></td>
+<td><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></td>
+<td>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>

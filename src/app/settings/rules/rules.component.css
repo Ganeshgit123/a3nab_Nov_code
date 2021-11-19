@@ -1,0 +1,39 @@
+.modal.right .modal-content{
+    height: 600px;
+}
+@media only screen and (max-width: 1399px) and (min-width: 1000px){
+    .modal.right .modal-content{
+        height: 550px ! important;
+    }
+  }
+@media only screen and (max-width: 1024px) and (min-width: 767px){
+    .modal.right .modal-content{
+        height: 670px ! important;
+    }
+  }
+  @media only screen and (max-width: 1200px) and (min-width: 1024px){
+    .modal.right .modal-content{
+        height: 430px ! important;
+    }
+  }
+  .modal .modal-header {
+    padding: 23px 16px 0 16px !important;
+  }
+  .ent_tag{
+      list-style: none;
+  }
+  .ent_tag p{
+      margin-bottom: 0 !important;
+      text-align: center;
+  }
+.separe{
+  padding-bottom: 20px;
+  border-bottom: 1px solid #C1003A;
+}
+.view_ico i{
+    font-size: 26px;
+    color: #d6d1d1;
+}
+.view_ico i:hover{
+  color: #C1003A;
+}

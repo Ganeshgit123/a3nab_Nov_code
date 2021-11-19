@@ -1,0 +1,806 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-8">
+
+</div>
+<div class="col-md-4 right_cont">
+<ul>
+
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="store_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<ul>
+<li>
+<p>Store ID : <span>{{storeID}}</span></p>
+</li>
+<li>
+<p>Total Orders : <span>{{totalStoreOrder}}</span></p>
+</li>
+<li>
+<p>Total Earned : <span>SAR {{overAllRevenue}}</span></p>
+</li>
+<li>
+<p>Order Reject Percentage :  <span>{{cancellation  | number:'1.2-2'}}</span></p>
+</li>
+</ul>
+<div class="row sto_img">
+<form [formGroup]="storeForm" (ngSubmit)="onSubmitStore()">
+<div class="col-md-2">
+<!-- <img src="{{storeImage}}"> -->
+<div class="image-upload text-center">
+<label for="file-input">
+<!-- Subcategory Image -->
+<img class="upload-img" *ngIf="!imagePreview"  src="assets/img/product1.png"/>
+<img class="upload-img" *ngIf="imagePreview" src="{{imagePreview}}"/>
+</label>
+<input formControlName="storeImage" id="file-input" type="file" accept=".png" (change)="uploadImageFile($event)" />
+<!-- <p *ngIf="!subcategoryForm.controls.subcategoryImage.valid && submitted" class="error-val">Please select a Subcategory Image</p> -->
+</div>
+
+</div>
+<div class="col-md-10">
+
+<div class="row">
+<div class="col-md-4">
+<div class="form-group">
+<label>Store Name</label>
+<input type="text" formControlName="storeName" class="form-control">
+</div>
+</div>
+<div class="col-md-4">
+<div class="form-group">
+<label>Manager First Name</label>
+<input type="text" formControlName="managerFname" class="form-control">
+</div>
+</div>
+<div class="col-md-4">
+<div class="form-group">
+<label>Manager Last Name</label>
+<input type="text" formControlName="managerLname" class="form-control">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Email</label>
+<input type="email" formControlName="email" class="form-control">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Phone</label>
+<input type="number" formControlName="mobileNumber" class="form-control">
+</div>
+</div>
+</div>
+<div class="row">
+
+<div class="col-md-6">
+<div class="form-group">
+<label>Store Address</label>
+<input type="text" class="form-control" formControlName="storeAddress">
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="form-group">
+<label>Due Date</label>
+<input type="text" class="form-control" formControlName="dueDay">
+</div>
+</div>
+
+</div>
+<div class="row">
+
+<div class="col-md-6">
+<div class="form-group">
+<label>Latitude</label>
+<input type="text" class="form-control" formControlName="latitude">
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="form-group">
+<label>Longitude</label>
+<input type="text" class="form-control" formControlName="longitude">
+</div>
+</div>
+
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Radius</label>
+<input type="text" formControlName="storeRadius" class="form-control">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Percentage</label>
+<input type="text" formControlName="storePercentage" class="form-control">
+</div>
+</div>
+</div>
+<button class="save_btn" *ngIf="showAccept == 'true'">Save</button>
+
+</div>
+
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="store_ord">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-8">
+
+<div class="card">
+<div id="exTab1">
+<ul class="nav nav-pills">
+<li class="active"><a href="#1a" data-toggle="tab">Order</a></li>
+<li><a href="#2a" data-toggle="tab">Revenue</a></li>
+<li><a href="#3a" data-toggle="tab">Net Revenue</a></li>
+<li><a href="#4a" data-toggle="tab">Growth</a></li>
+</ul>
+<div class="tab-content clearfix">
+<div class="tab-pane active" id="1a">
+<div class="row">
+<div class="col-md-12">
+<apx-chart class="apex-charts" dir="ltr" [series]="storeOrderGraph.series" [chart]="storeOrderGraph.chart"
+[dataLabels]="storeOrderGraph.dataLabels" [stroke]="storeOrderGraph.stroke"
+[colors]="storeOrderGraph.colors" [xaxis]="storeOrderGraph.xaxis" [grid]="storeOrderGraph.grid"
+[tooltip]="storeOrderGraph.tooltip" [plotOptions]="storeOrderGraph.plotOptions"
+[fill]="storeOrderGraph.fill" [markers]="storeOrderGraph.markers" [legend]="storeOrderGraph.legend"
+[yaxis]="storeOrderGraph.yaxis" [tooltip]="storeOrderGraph.tooltip"></apx-chart>
+</div>
+</div>
+</div>
+<div class="tab-pane" id="2a">
+    <div class="row">
+        <div class="col-md-12">
+        <apx-chart class="apex-charts" dir="ltr" [series]="revenueGraph.series" [chart]="revenueGraph.chart"
+        [dataLabels]="revenueGraph.dataLabels" [stroke]="revenueGraph.stroke"
+        [colors]="revenueGraph.colors" [xaxis]="revenueGraph.xaxis" [grid]="revenueGraph.grid"
+        [tooltip]="revenueGraph.tooltip" [plotOptions]="revenueGraph.plotOptions"
+        [fill]="revenueGraph.fill" [markers]="revenueGraph.markers" [legend]="revenueGraph.legend"
+        [yaxis]="revenueGraph.yaxis" [tooltip]="revenueGraph.tooltip"></apx-chart>
+        </div>
+        </div>
+</div>
+<div class="tab-pane" id="3a">
+    <div class="row">
+        <div class="col-md-12">
+        <apx-chart class="apex-charts" dir="ltr" [series]="netRevenueGraph.series" [chart]="netRevenueGraph.chart"
+        [dataLabels]="netRevenueGraph.dataLabels" [stroke]="netRevenueGraph.stroke"
+        [colors]="netRevenueGraph.colors" [xaxis]="netRevenueGraph.xaxis" [grid]="netRevenueGraph.grid"
+        [tooltip]="netRevenueGraph.tooltip" [plotOptions]="netRevenueGraph.plotOptions"
+        [fill]="netRevenueGraph.fill" [markers]="netRevenueGraph.markers" [legend]="netRevenueGraph.legend"
+        [yaxis]="netRevenueGraph.yaxis" [tooltip]="netRevenueGraph.tooltip"></apx-chart>
+        </div>
+        </div>
+</div>
+<div class="tab-pane" id="4a">
+    <ul class="variable_filter_ul">
+        <li>
+        <label>Variable Range : </label>
+        <select (change)="lastClick($event.target.value)">
+            <option value="">Last Month</option>
+            <option value="last_week">Last Week</option>
+            <option value="last_qua">Last Quarter</option>
+            <option value="last_year">Last Year</option>
+        </select>
+        </li>
+        <!-- <li>
+            <input type="text" bsDatepicker placeholder="From Date" (bsValueChange)="graphvalueFrom($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly [outsideClick]="true" class="form-control datepicker">
+            </li>
+            <li>
+            <input type="text" bsDatepicker placeholder="To Date" (bsValueChange)="graphvalueTo($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly [outsideClick]="true" class="form-control datepicker">
+            </li> -->
+    </ul>
+    <div class="row">
+        <div class="col-md-12">
+          <apx-chart class="apex-charts" dir="ltr" [series]="growthChart.series" [chart]="growthChart.chart"
+          [dataLabels]="growthChart.dataLabels" [stroke]="growthChart.stroke"
+          [colors]="growthChart.colors" [xaxis]="growthChart.xaxis" [grid]="growthChart.grid"
+          [tooltip]="growthChart.tooltip" [plotOptions]="growthChart.plotOptions"
+          [fill]="growthChart.fill" [markers]="growthChart.markers" [legend]="growthChart.legend"
+          [yaxis]="growthChart.yaxis" [tooltip]="growthChart.tooltip"></apx-chart>
+        </div>
+        </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- <div class="col-md-4">
+<div class="card">
+<div class="card-content">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Due Period</th>
+<th>Amount</th>
+<th>Status</th>
+<th class="text-center">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of storeDue;let i = index">
+<td> {{item.from |  date: "dd/MM/yyy"}}  -  {{item.to |  date: "dd/MM/yyy"}}  </td>
+<td class="amt">SAR {{item.amount}}</td>
+<td *ngIf = "item.isPaid === 0"  class="pend">Pending</td>
+<td *ngIf = "item.isPaid === 1"  class="paid">Paid</td>
+<td class="text-center">
+<span *ngIf = "item.isPaid === 0" class="mark_pai">Mark Paid</span>
+<span *ngIf = "item.isPaid === 1" class="view_inv">View Invoice</span>
+</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div> -->
+<div class="col-md-4">
+<div class="card">
+<div class="card-content">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Staff</th>
+<th>Post</th>
+<th>Phone No.</th>
+<th class="text-center">
+<div class="btn-group">
+<button type="button" data-toggle="dropdown" class="dropdown-toggle">
+<div class="three-dots" *ngIf="showAccept == 'true'"></div>
+</button>
+<ul class="dropdown-menu">
+<!-- <li>
+<a href="#">
+<div>Edit Member</div>
+</a>
+</li>
+<li>
+<a href="#">
+<div>Delete Member</div>
+</a>
+</li> -->
+<li>
+<button type="button" class="add_mem_btn" (click)="addManager()" data-toggle="modal" data-target="#add_mem">Add New Member</button>
+</li>
+</ul>
+</div>
+</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of storeManagerList;let i = index">
+<td class="amt">{{item.firstName}} - {{item.lastName}}</td>
+<td>{{item.post}}</td>
+<td>{{item.mobileNumber}}</td>
+<td><span class="online_btn" *ngIf="item.status === 'active'">Online</span>
+<span class="offline_btn" *ngIf="item.status === 'inactive'">Offline</span>
+</td>
+<td>
+<div class="btn-group">
+<button type="button" data-toggle="dropdown" class="dropdown-toggle">
+<div class="three-dots" *ngIf="showAccept == 'true'"></div>
+</button>
+<ul class="dropdown-menu">
+<!-- <li><a href="#"><div>Edit Member</div></a></li> -->
+<!-- <li><a href="#"><div>Delete Member</div></a></li> -->
+<li>
+<button type="button" class="add_mem_btn" (click)="editManager(item)" data-toggle="modal" data-target="#add_mem">Edit Member</button>
+
+<button type="button" class="add_mem_btn" (click)="DeleteManager(item)">Delete Member</button>
+
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="store_ord">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+<div class="card">
+<div class="card-content">
+<button class="save_btn upload-btn" (click)="upload_btn_file()" *ngIf="showAccept == 'true'">Upload</button>
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Due Period</th>
+<th>Amount</th>
+<th>Commission Percentage</th>
+<th>Commission Amount</th>
+<th>Status</th>
+<th>Action</th>
+<th>Bill</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of storeDue;let i = index">
+<td class="amt"> {{item.fromDate}} - {{item.toDate}} </td>
+<td class="amt">SAR {{item.paidAmount}}</td>
+<td  class="amt">{{item.commissionperc}} %</td>
+<td  class="amt">SAR {{item.commissionAmt}}</td>
+<td *ngIf="item.status === 'PAID'" class="paid">Paid</td>
+<td *ngIf="item.status !== 'PAID' " class="pend">Pending</td>
+<td>
+<span *ngIf="item.status !== 'PAID'"><input id="file-input" type="file" (change)="uploadBillFile($event, item)" /></span>
+<a href="{{item.document}}" target="_blank"><span *ngIf = "item.status === 'PAID'" class="view_inv">View Invoice</span></a>
+</td>
+<td class="amt">{{item.document}}</td>
+
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="store_tab">
+<div class="container-fluid">
+<div id="exTab1">
+<ul class="nav nav-pills">
+<li class="active">
+<a href="#1b" data-toggle="tab">Orders</a>
+</li>
+<li><a href="#2b" data-toggle="tab">Products</a></li>
+<li><a href="#3b" data-toggle="tab">Vendors</a></li>
+</ul>
+<div class="tab-content clearfix">
+<div class="tab-pane active" id="1b">
+<ul class="filter_cont">
+<div class="row">
+<div class="col-md-4">
+<li>
+<p><input type="text" bsDatepicker placeholder="Start Date" (bsValueChange)="valuefrom($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly [outsideClick]="true" class="form-control datepicker"></p>
+</li>
+</div>
+<div class="col-md-8">
+<li>
+<p><input type="text" bsDatepicker placeholder="End Date" (bsValueChange)="valueTo($event)" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly [outsideClick]="true" class="form-control datepicker"></p>
+</li>
+<li>
+<p>Show :
+<select (change)="onChangeLimit($event.target.value)">
+<option value="">select</option>
+<option value="10">Show 10</option>
+<option value="25">Show 25</option>
+<option value="50">Show 50</option>
+</select>
+</p>
+</li>
+</div>
+</div>
+</ul>
+<div class="card">
+<div class="card-content">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Date & Time</th>
+<th>Order ID</th>
+<th>Customer ID</th>
+<th>Price</th>
+<th class="text-center">Payment Type</th>
+<!-- <th class="text-center">Commision</th> -->
+<th class="text-center">Store Payment</th>
+<th class="text-center">Status</th>
+<!-- <th class="text-center">Store Receipt</th> -->
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of storeOrder; let i = index">
+<td>{{item.orderOn}}</td>
+<td class="red_mar"><a routerLink="/order-details/{{ item.id }}">{{item.orderIDs}}</a></td>
+<td class="red_mar"><a routerLink="/customer/{{ item.userId }}">{{item.customerID}}</a></td>
+<td>SAR {{item.grandTotal | number : '1.2-2'}}</td>
+<td class="text-center">
+<span *ngIf="item.paytype === 'card'" class="online_btn">Paid Online</span>
+<span *ngIf="item.paytype === 'cash'" class="cod_btn">C.O.D</span>
+<span *ngIf = "item.paytype === 'Apple Pay'" class="online_btn">Apple Pay</span>
+<span *ngIf = "item.paytype === 'Machine'" class="cod_btn">Machine</span>
+</td>
+<!-- <td class="text-center"></td> -->
+<td class="text-center">SAR {{item.totalPrice}}</td>
+<td class="text-center">
+<select class="pend_btn">
+<option>{{item.orderStatus}}</option>
+</select>
+</td>
+<!-- <td class="text-center"><span class="view_reci">View Receipt</span></td> -->
+</tr>
+</tbody>
+</table>
+<p class="text-center">
+<ngb-pagination [collectionSize]="pages" (pageChange)="nextPage($event)" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="tab-pane" id="2b">
+    <br>
+<ul class="filter_cont">
+<li>
+    <div class="search-bar">
+        <form>
+        <label for="searchQuery">
+        <span><img src="assets/img/search_icon.svg" width="18px"></span>
+        </label>
+        <input type="search" id="searchQuery" name="searchQuery" placeholder="search" (input)="searchStoreProduct($event.target.value)"/>
+        </form>
+        </div>
+</li>
+<li>
+<p>
+Category Filter :
+<select (change)="onChangeCategory($event.target.value)">
+<option [selected]="true" value="">Select Category</option>
+<option *ngFor="let item of category;let i = index" value="{{item.id}}" >{{item.categoryName}}</option>
+</select>
+</p>
+</li>
+<li>
+<p>
+Status Filter :
+<select (change)="onProdStatusFilter($event.target.value)">
+<option value="ALL">All</option>
+<option value="STOCK">STOCK</option>
+<option value="OUT">OUT</option>
+</select>
+</p>
+</li>
+<li>
+<p>Show :
+<select (change)="onChangeProdlimt($event.target.value)">
+<option value="">select</option>
+<option value="10">Show 10</option>
+<option value="25">Show 25</option>
+<option value="50">Show 50</option>
+</select>
+</p>
+</li>
+<li>
+<button type="button" class="add_ven_btn" data-toggle="modal" data-target="#add_vend_btn" *ngIf="showAccept == 'true'">Add Vendor</button>
+<a href=""></a>
+</li>
+</ul>
+<div class="card">
+<div class="card-content">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Product</th>
+<!-- <th class="text-center">Variant</th> -->
+<th class="text-center">Sub-Category</th>
+<th class="text-center">Price / Unit</th>
+<th class="text-center">Units Sold</th>
+<th class="text-center">Stock Status</th>
+<th class="text-center">Action</th>
+<th class="text-center">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of storeproducts">
+<td>{{item.productName}}</td>
+<!-- <td class="text-center">1.25 Lt.</td> -->
+<td class="red_mar text-center">{{item.productCategoryName}}</td>
+<td class="text-center">SAR {{item.productPrice}}</td>
+<td class="text-center">{{item.purchasedUnits}}</td>
+<td *ngIf="item.storeStock === 0" class="red_mar text-center">Out of Stock</td>
+<td *ngIf="item.storeStock != 0" class="text-center">{{item.storeStock}} Units</td>
+<td>
+<p class="text-center"><button type="button" (click)="getProductStockValue(item)" class="view_det_bnt" data-toggle="modal" data-target="#view_det">
+View Details</button>
+</p>
+</td>
+<td class="text-center">
+<label class="switch"><input  *ngIf="item.productStatus == 'active'"  checked type="checkbox" />
+<input  *ngIf="item.productStatus == 'inactive'" unchecked type="checkbox"/>    <span class="slider"></span>
+</label>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="text-center">
+<ngb-pagination [collectionSize]="paginat" (pageChange)="stoProductPage($event)" [(page)]="pagno" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="tab-pane" id="3b">
+<ul class="filter_cont">
+<!-- <li>
+<button type="button" class="add_ven_btn" data-toggle="modal" data-target="#add_vend_btn">Add Vendor</button>
+<a href=""></a>
+</li>
+<li>
+<p>
+Show :  
+<select>
+<option>50 List</option>
+</select>
+</p>
+</li> -->
+</ul>
+<div class="card">
+<div class="card-content">
+<div class="material-datatables">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Vendor Name</th>
+<th class="text-center">Sub-Category</th>
+<th class="text-center">Product</th>
+<th class="text-center">Expiry Date</th>
+<th class="text-center">Units</th>
+<th class="text-center">Operation</th>
+<th class="text-center">Reason</th>
+<!-- <th class="text-center">Sold</th>
+<th class="text-center">Removed</th>
+<th class="text-center">Loss</th> -->
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of storeStock; let i = index">
+<td>{{item.vendorName}}</td>
+<td class="red_mar text-center">{{item.productCategoryName}}</td>
+<td class="text-center">{{item.productName}}</td>
+<td class="text-center">{{item.expiryDate}}</td>
+<td class="text-center">{{item.units}}</td>
+<td class="text-center">{{item.stockType}}</td>
+<td class="text-center">{{item.StockReason}}</td>
+<!-- <td class="text-center">300 Units</td>
+<td class="text-center">100 Units</td>
+<td class="text-center">SAR 200</td> -->
+</tr>
+<tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="modal right fade" id="view_det" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<!-- <h4 class="modal-title" id="myModalLabel2">Right Sidebar</h4> -->
+</div>
+<div class="modal-body">
+<form [formGroup]="storeStockUpdateFrom" (ngSubmit)="stockSubmitChange()">
+<div class="row" *ngIf="showAccept == 'true'">
+<div class="col-md-6">
+<div class="form-group">
+<label>Add More</label><br>
+<select formControlName="stockType">
+<option value="ADD" >ADD</option>
+<option value="SUBTRACT" >SUBTRACT</option>
+</select>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Enter Units</label>
+<input type="number" formControlName="units" class="form-control" placeholder="Units">
+<p *ngIf="!storeStockUpdateFrom.controls.units.valid && submitted" class="error-val-pro">Please Enter Numbers Only</p>
+
+</div>
+</div>
+</div>
+<div class="row" *ngIf="showAccept == 'true'">
+<div class="col-md-12">
+<div class="form-group">
+<label>Expiration Date</label><br>
+<input type="text" formControlName="expiryDate" bsDatepicker placeholder="Expiration Date" [(bsValue)]="bsValue" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly [outsideClick]="true" class="form-control datepicker">
+
+<!-- <input type="text" formControlName="expiryDate" class="form-control" placeholder="2020-12-23"> -->
+<!-- <select class="cus_sel">
+<option>22/06/20</option>
+</select> -->
+</div>
+</div>
+</div>
+<div class="row" *ngIf="showAccept == 'true'">
+<div class="col-md-12">
+<div class="form-group">
+<label>Choose Vendor</label><br>
+<select class="cus_sel" formControlName="vendorId">
+<option [selected]="true" value="" > Select Vendor </option>
+<option *ngFor="let item of vendorList;let i = index" value="{{item.id}}" >{{item.vendorName}}</option>
+</select>
+</div>
+</div>
+</div>
+<div class="row" *ngIf="showAccept == 'true'">
+<div class="col-md-12">
+<div class="form-group">
+<label>Reason</label><br>
+<input type="text" formControlName="StockReason" class="form-control" placeholder="Reason">
+</div>
+</div>
+</div>
+<div class="make_btn" *ngIf="showAccept == 'true'">
+<p class="text-center"><button class="ma_bbnt">Make Entry</button></p>
+</div>
+<div class="make_sec">
+<div class="row">
+<div class="col-md-4">
+<p>Stock History</p>
+</div>
+<div class="col-md-4">
+<select>
+<option>Start Date</option>
+</select>
+</div>
+<div class="col-md-4">
+<select>
+<option>End Date</option>
+</select>
+</div>
+</div>
+</div>
+<section class="make_list">
+<!-- <div class="make_data">
+<p>Added By : <span>User Name</span></p>
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr>
+<td>50 Units</td>
+<td>Added</td>
+<td>Vendor Name</td>
+<td>4th June 20</td>
+</tr>
+</tbody>
+</table>
+</div> -->
+<div class="make_data" *ngFor="let item of storeViewStock;let i = index">
+<p>Added By : <span>User Name</span></p>
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<tbody>
+<tr>
+<td>{{item.units}} Units</td>
+<td>{{item.stockType}}</td>
+<td>{{item.vendorName}}</td>
+<td>{{item.date}}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+<div class="modal right fade" id="add_vend_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<!-- <h4 class="modal-title" id="myModalLabel2">Right Sidebar</h4> -->
+</div>
+<div class="modal-body">
+<form [formGroup]="addVendor" (ngSubmit)="vendorSubmit()">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Vendor Name</label>
+<input type="text" formControlName="vendorName" class="form-control" placeholder="Vendor Name">
+</div>
+</div>
+</div>
+
+<div class="make_btn">
+<p class="text-center"><button class="ma_bbnt">Add Vendor</button></p>
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+<!-- </section -->
+</div>
+</div>
+</div>
+<section class="add_mem_sec">
+<div class="modal right fade" id="add_mem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<!-- <h4 class="modal-title" id="myModalLabel2">Right Sidebar</h4> -->
+</div>
+<div class="modal-body">
+<form [formGroup]="storeManager" (ngSubmit)="onSubmit()">
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>First Name</label>
+<input type="text" formControlName="firstName" class="form-control">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Last Name</label>
+<input type="text" formControlName="lastName" class="form-control">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Post</label>
+<input type="text" disabled formControlName="post" class="form-control">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Phone No.</label>
+<input type="text" formControlName="mobileNumber" class="form-control">
+</div>
+</div>
+</div>
+<div class="make_btn">
+<p class="text-center"><button class="ma_bbnt">Add New Member</button></p>
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>

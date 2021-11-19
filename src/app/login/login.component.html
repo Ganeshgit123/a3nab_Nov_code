@@ -1,0 +1,57 @@
+<div class="wrapper wrapper-full-page login_con">
+   <div class="full-page login-page">
+      <div class="content">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-4 col-sm-6 fn center-block">
+                  <form>
+                     <div class="card card-login" style="margin-top: 0px;">
+                        <!-- <div class="card-header"> -->
+                        <div class="logo_img">
+                           <img src="assets/img/logo.svg" class="" />
+                        </div>
+                        <!-- </div> -->
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <div class="card-content">
+                           <div class="input-group" style="display: contents;">
+                              <!-- <span class="input-group-addon">
+                                 <i class="material-icons">face</i>
+                                 </span> -->
+                              <div class="form-group label-floating">
+                                 <label class="control-label">Mobile/Email</label>
+                                 <input type="text" class="form-control" (keydown)="changeText()" formControlName="email">
+                              </div>
+                              <p *ngIf="!loginForm.controls.email.valid && submitted" class="text_error">Please enter a valid email or mobile number</p>
+                           </div>
+
+                           <div class="input-group" style="display: contents;">
+                              <!-- <span class="input-group-addon">
+                                 <i class="material-icons">lock_outline</i>
+                                 </span> -->
+                              <div class="form-group label-floating">
+                                 <label class="control-label">Password</label>
+                                 <input type="password" class="form-control" (keydown)="changeText()" formControlName="password">
+                              </div>
+                              <p *ngIf="!loginForm.controls.password.valid && submitted" class="text_error">Please enter a  valid password</p>
+                           </div>
+                           <p class="text-center text_error pv10" *ngIf = "isShow"><span>{{errorMessge}}</span></p>
+                        </div>
+                        <div class="text-center">
+                           <button class="log_btn">Login</button>
+                        </div>
+                       </form>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <footer class="footer">
+         <div class="container-fluid">
+            <p class="copyright center-align text-center">
+               © 2021 A3NAB Admin
+            </p>
+         </div>
+      </footer>
+   </div>
+</div>

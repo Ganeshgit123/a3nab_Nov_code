@@ -1,0 +1,287 @@
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+<div class="row">
+<div class="col-md-12">
+<div class="image-upload text-center">
+<!-- Subcategory Image -->
+<!-- <img class="upload-img" *ngIf="!productImages"  src="assets/img/product1.png"/> -->
+<div class="row">
+    <div class="col-md-2" *ngFor='let url of proImages; let i = index'>
+    <!-- <img class="upload-img"  src= "{{url.productImage}}" /> -->
+    <img class="upload-img" [src]="url.productImage">
+              <a (click)="removeImage(i)" class="btn btn-xs btn-danger" *ngIf="showAccept == 'true'">Remove</a>
+    </div>
+    </div>
+    <br>
+    <input type="file" id="file-input" multiple (change)="changeProductImages($event)" accept="image/*" formControlName="images">
+    </div>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-md-12">
+<div class="row">
+<div class="col-md-2">
+<div class="form-group">
+<label>Price</label>
+<input type="text" formControlName="productPrice" class="form-control">
+<p *ngIf="!productForm.controls.productPrice.valid && submitted" class="error-val-pro">Please enter a valid product price</p>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Name</label>
+<input type="text" formControlName="productName" class="form-control">
+<p *ngIf="!productForm.controls.productName.valid && submitted" class="error-val-pro">Please enter a product name</p>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Arabic Name</label>
+<input type="text" formControlName="arabicName" class="form-control">
+<p *ngIf="!productForm.controls.arabicName.valid && submitted" class="error-val-pro">Please enter a arabic name</p>
+</div>
+</div>
+<div class="col-md-4">
+<div class="form-group">
+<label class="perm">Permissions</label>
+<ul>
+<li>Store Manager can change price</li>
+<li style="float: right;">
+<div class="container-switch">
+<label class="switch"><input type="checkbox" formControlName="managerPrice" /> <span class="slider"></span>
+<p *ngIf="!productForm.controls.managerPrice.valid && submitted" class="error-val-pro">Please give this permission</p>
+</label>
+</div>
+<!-- <button type="button" class="btn btn-xs btn-secondary btn-toggle" data-toggle="button" aria-pressed="true" autocomplete="off">
+<div class="handle"></div>
+</button> -->
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-2">
+<div class="form-group">
+<label>Discount (percentage value %)</label>
+<input type="text" formControlName="productDiscount" class="form-control">
+<p *ngIf="!productForm.controls.productDiscount.valid && submitted" class="error-val-pro">Please enter a valid discount</p>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Quantity & Package Type</label><br>
+<input type="text" formControlName="qty" class="form-control">
+<p *ngIf="!productForm.controls.qty.valid && submitted" class="error-val-pro">Please enter a valid package type</p>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Max Ordered Quantity</label><br>
+<input type="text" formControlName="maxQty" class="form-control">
+<p *ngIf="!productForm.controls.maxQty.valid && submitted" class="error-val-pro">Please enter a valid max-quantity</p>
+</div>
+</div>
+<!-- <div class="col-md-2">
+<div class="form-group">
+<label>Assign to store</label><br>
+
+<angular2-multiselect  formControlName="storeId" [data]="dropdownList" [(ngModel)]="selectedItems" 
+[settings]="dropdownSettings" 
+(onSelect)="onItemSelect($event)" 
+(onDeSelect)="OnItemDeSelect($event)"
+(onSelectAll)="onSelectAll($event)"></angular2-multiselect>
+<select formControlName="storeId">
+<option [selected]="true" value="">None</option>
+<option *ngFor="let item of storeList;let i = index" value="{{item.id}}" >{{item.storeName}}</option>
+</select>
+</div>
+</div> -->
+<div class="col-md-4">
+<div class="form-group">
+<ul>
+<li>Special Instructions</li>
+<li style="float: right;">
+<div class="container-switch">
+<label class="switch"><input type="checkbox" formControlName="instructionsStatus" /> <span class="slider"></span>
+</label>
+</div>
+</li>
+<br>
+<li>Coming Soon Status</li>
+<li style="float: right;">
+<div class="container-switch">
+<label class="switch"><input type="checkbox" formControlName="isComingSoon" /> <span class="slider"></span>
+</label>
+</div>
+</li>
+</ul>
+<div>
+<!-- <button class="save_btn">Save</button>	 -->
+</div>
+</div>
+</div>
+</div>
+<br>
+</div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+<p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+<div class="row">
+<div class="col-md-4">
+<div class="form-group">
+<label>Assign to store</label><br>
+<angular2-multiselect formControlName="storeId" [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"></angular2-multiselect>
+<!-- <select formControlName="storeId">
+<option [selected]="true" value="">None</option>
+<option *ngFor="let item of storeList;let i = index" value="{{item.id}}" >{{item.storeName}}</option>
+</select> -->
+<p *ngIf="!productForm.controls.storeId.valid && submitted" class="error-val-pro">Please Select a store name</p>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<a class="vari-del" (click)="addcuttingStyle()">Add Cutting Style</a>
+<div formArrayName="cuttingStyle">
+<div class="row new_var_sec" *ngFor="let comp of productForm['controls'].cuttingStyle['controls']; let i=index;">
+<div [formGroupName]="i">
+<div class="col-md-3">
+<div class="form-group">
+<label>Cutting Name</label>
+<input type="text" formControlName="cuttingName" class="form-control">
+<p *ngIf="!comp.controls.cuttingName.valid && submitted" class="error-val-pro">Please enter a valid name</p>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Arabic Name</label>
+<input type="text" formControlName="arabicName" class="form-control">
+<p *ngIf="!comp.controls.arabicName.valid && submitted" class="error-val-pro">Please enter a valid name</p>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Price</label>
+<input type="text" formControlName="cuttingPrice" class="form-control">
+<p *ngIf="!comp.controls.cuttingPrice.valid && submitted" class="error-val-pro">Please enter a valid price</p>
+<!-- <p *ngIf="!productForm.controls.cuttingStyle.cuttingPrice.valid && submitted" class="error-val-pro">Please enter a valid price</p> -->
+</div>
+</div>
+<div class="col-md-2">
+<ul>
+<li>
+<a class="vari-del" (click)="deleteCuttingStyle(i)"> <img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"> </a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-6">
+<a class="vari-del" (click)="addboxStyle()">Add box Style</a>
+<div formArrayName="boxStyle">
+<div class="row new_var_sec" *ngFor="let comp of productForm['controls'].boxStyle['controls']; let i=index;">
+<div [formGroupName]="i">
+<div class="col-md-3">
+<div class="form-group">
+<label>Box Name</label>
+<input type="text" formControlName="boxName" class="form-control">
+<p *ngIf="!comp.controls.boxName.valid && submitted" class="error-val-pro">Please enter a valid name</p>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Arabic Name</label>
+<input type="text" formControlName="arabicName" class="form-control">
+<p *ngIf="!comp.controls.arabicName.valid && submitted" class="error-val-pro">Please enter a valid name</p>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Price</label>
+<input type="text" formControlName="boxPrice" class="form-control">
+<p *ngIf="!comp.controls.boxPrice.valid && submitted" class="error-val-pro">Please enter a valid price</p>
+</div>
+</div>
+<div class="col-md-2">
+<ul>
+<li>
+<a class="vari-del" (click)="deleteBoxStyle(i)"> <img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"> </a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="rel_pro">
+<p class="oth">Related Products</p>
+</div>
+<div class="pro_rel_sec">
+<div class="row">
+<div class="col-md-3">
+<div class="form-group">
+<label>Select Category</label><br>
+<select formControlName="relCategory" (change)="onChangeCategory($event.target.value, 'Category')">
+<option [selected]="true" disabled value="">None</option>
+<option *ngFor="let item of category;let i = index" value="{{item.id}}" >{{item.categoryName}}</option>
+</select>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Select Sub Category</label><br>
+<select formControlName="relProCategory" (change)="onChangeSubCategory($event.target.value)">
+<option [selected]="true" disabled value="">None</option>
+<option *ngFor="let item of subCategory;let i = index" value="{{item.id}}" >{{item.productCategoryName}}</option>
+</select>
+</div>
+</div>
+<div class="col-md-3" *ngIf="!productForm.controls.relsubCategory.disabled">
+<div class="form-group">
+<label>Select Sub Sub-Category</label><br>
+<select formControlName="relsubCategory" (change)="onChangeCategory($event.target.value, 'subSubCategory')">
+<option [selected]="true" disabled value="">None</option>
+<option *ngFor="let item of subSubCategory;let i = index" value="{{item.id}}" >{{item.productSubCategoryName}}</option>
+</select>
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Select Product</label><br>
+<select (change)="onChangeProducts($event.target.value)">
+<option [selected]="true" disabled value="">None</option>
+<option *ngFor="let item of productList;let i = index" value="{{item.id}}" >{{item.productName}}</option>
+</select>
+</div>
+</div>
+<div class="col-md-12" *ngIf="showAccept == 'true'">
+<button style="float: right;" class="save_btn">Save</button>
+</div>
+</div>
+</div>
+<div class="prod_rel">
+<div class="col-md-3 pro_col" *ngFor="let item of selectedProductList;let i = index">
+<div class="two_col">
+<img src="{{item.productImage}}" class="prod_img">
+</div>
+<div class="two_col1">
+<ul class="rel_ul_prod">
+<li>
+<p>{{item.productName}}</p>
+</li>
+<li>
+    <a (click)="deleteRelProduct(item.id)"> <img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"> </a>
+</li>
+<!-- <li *ngIf="showAccept == 'true'">
+    <a (click)="deleteRelatedProduct(i)"> <img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"> </a>
+</li> -->
+</ul>
+</div>
+</div>
+</div>
+</form>

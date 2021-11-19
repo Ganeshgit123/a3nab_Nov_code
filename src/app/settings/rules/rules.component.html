@@ -1,0 +1,222 @@
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<ul class="rule_sec">
+<li class="acive_rule">
+Only Show Active Rule &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox" checked (change) = "onchange($event)">
+<span class="slider"></span>
+</label>
+</li>
+<li class="rule_bb_li"><button class="rule_btn" data-toggle="modal" (click)="addNewRule()" data-target="#add_rule_btn">Add Rule</button></li>
+</ul>
+<br>
+<section class="notify_tab">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Rule Title</th>
+<th>Trigger Name</th>
+<th>Created On</th>
+<th>Expires on</th>
+<!-- <th>Category</th> -->
+<th class="text-center">Status</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor = "let rules of getrules">
+<td>{{rules.title}}</td>
+<td>
+    <span *ngIf="rules.triggerName == 3">Add Points for Orders</span>
+    <span *ngIf="rules.triggerName != 3">{{rules.triggerName}}</span>
+</td>
+<td>{{rules.startDate}}</td>
+<td>{{rules.endDate}}</td>
+<!-- <td>Notification Rule</td> -->
+<td class="text-center">
+<label class="switch">
+<input *ngIf="rules.status == 'active'" checked type="checkbox"  (change)="statchange($event.target.checked,rules.id)">
+<input *ngIf="rules.status == 'inactive'" unchecked type="checkbox"  (change)="statchange($event.target.checked,rules.id)">
+<span class="slider"></span>
+</label>
+</td>
+<td class="text-center">
+<button class="edit_btn" (click)="viewRules(rules)"><span class="view_ico"><i class="fa fa-eye" aria-hidden="true"></i></span></button>
+</td>
+<td class="text-center">
+<button class="edit_btn"><img src="assets/img/delete_icon.svg" (click)="del_rules(rules.id);" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+
+<section class="add_driv_sec">
+<div class="modal right fade" id="add_rule_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+<div class="col-md-5">
+<!-- <ul class="right_side_icon">
+<li><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/edit_icon.svg'"></li>
+<li><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></li>
+</ul> -->
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="addRules" (ngSubmit)="onSubmit()">
+<div class="edit_cont_sec">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Rule Title</label>
+<input type="text" name="" class="form-control" formControlName="title" placeholder="New Customer Signup Notification">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Select Trigger</label><br>
+<select formControlName="triggerName" >
+<option>Select Trigger</option>
+<option value="New points added to customer">New points added to customer</option>
+<!-- <option value="points expired for customer">points expired for customer</option> -->
+<!-- <option value="new referral accepted and points added to customer">new referral accepted and points added to customer</option> -->
+<option value="3">Add Points for Orders</option>
+</select>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Start Date</label>
+<input type="text" formControlName="startDate" bsDatepicker  placeholder="Start Date" [(bsValue)]="bsValue" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>End Date</label>
+<input type="text" formControlName="endDate" bsDatepicker  placeholder="End Date" [(bsValue)]="bsValue1" [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}" readonly   [outsideClick] = "true"  class="form-control datepicker">
+</div>
+</div>
+</div>
+<div class="part_sec">
+<div formArrayName="options">
+<div class="row" *ngFor="let comp of addRules['controls'].options['controls']; let i=index;"> 
+<div [formGroupName]="i">
+<div class="col-md-12">
+<div class="separe">
+<div class="form-group">
+<label>Select Action</label><br>
+<select formControlName="type" class="form-control select2" type="text" style="width: 100%;">
+<option value="">Select Action</option>
+<option value="WALLET">WALLET</option>
+<option value="POINTS">POINTS</option>
+<option value="NOTIFICATION">NOTIFICATION</option>
+</select>
+</div>
+
+<div *ngIf="comp.value.type === 'WALLET'">
+<div class="form-group">
+<label>Wallet Amount</label>
+<input type="text" formControlName="walletAmount" class="form-control" placeholder="0 SAR">
+</div>
+</div>
+
+<div *ngIf="comp.value.type === 'POINTS'">
+<div class="form-group">
+<label>Points</label>
+<input type="text" formControlName="points" class="form-control" placeholder="0 Points">
+</div>
+</div>
+
+<div *ngIf="comp.value.type === 'NOTIFICATION'">
+<div class="form-group">
+<label>Notification Title</label>
+<input type="text"  formControlName="notifyTitle" class="form-control" placeholder="Title" >
+</div>
+<div class="form-group">
+<label>Notification Message</label>
+<textarea class="form-control" formControlName="notifyMessage" placeholder="Message"></textarea>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-7"></div>
+<div class="col-md-5">
+<ul>
+<li class="ent_tag" *ngIf="isEdit == false">
+<p (click)="addaction()"><span style="cursor: pointer;">Add rule</span></p>
+</li>
+</ul>
+</div>
+</div>
+
+</div>
+<!-- <div class="part_sec">
+<div class="row">
+<div class="col-md-8">
+<div class="form-group">
+<label>Select Action</label><br>
+<select>
+<option>Send Push Notification</option>
+</select>
+</div>
+</div>
+<div class="col-md-4">
+<ul>
+<li class="ent_tag">
+<img src="assets/img/plus.svg" onmouseover="this.src='assets/img/plus_hover_icon.svg'" onmouseout="this.src='assets/img/plus.svg'"><span>Enter Tag</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Message Body</label><br>
+<textarea class="form-control">Welcome to our user family. Your customer ID is **Customer_ID**</textarea>
+</div>
+</div>
+</div>
+</div> -->
+<p class="text-center" *ngIf="isEdit == false"><button class="add_car_btn">Save</button></p>
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>

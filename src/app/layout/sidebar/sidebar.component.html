@@ -1,0 +1,191 @@
+<div class="sidebar">
+<div class="logo">
+<a ui-sref="index" class="simple-text">
+<img src="assets/img/logo-max.png" alt="logo" class="responsive-img">
+</a>
+</div>
+<div class="logo logo-mini">
+<a ui-sref="index" class="simple-text">
+<img src="assets/img/logo.png" alt="logo" class="responsive-img">
+</a>
+</div>
+<div class="sidebar-wrapper">
+<ul class="nav">
+<li class="">
+<a ui-sref="dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/dashboard">
+<i class="material-icons notranslate">home</i>
+<p>Dashboard</p>
+</a>
+</li>
+<li>
+<a routerLinkActive="active" id="orders" [routerLinkActiveOptions]="{exact: true}" routerLink="/orders">
+<i class="material-icons notranslate">calendar_today</i>
+<p>Orders</p>
+</a>
+</li>
+<!-- <li>
+<a data-toggle="collapse" href="#ordermenu" class="collapsed" aria-expanded="false">
+<i class="material-icons notranslate">calendar_today</i>
+<p>Orders
+<b class="caret"></b>
+</p>
+</a>
+<div class="collapse" id="ordermenu" aria-expanded="false" style="height: 0px;">
+<ul class="nav">
+<li>
+<a ui-sref="orders" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/orders">
+<i class="material-icons notranslate">calendar_today</i>
+<p>Orders</p>
+</a>
+</li> -->
+<!-- <li ui-sref-class="active">
+<a ui-sref="orders" ui-sref-class="active"  routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/order-details">
+<i class="material-icons notranslate">calendar_today</i>
+<p>Orders Details</p>
+</a>
+</li> -->
+<!-- </ul>
+</div>
+</li> -->
+<li>
+<a data-toggle="collapse" href="#usermenu" class="collapsed" aria-expanded="false">
+<i class="material-icons notranslate">navigation</i>
+<p>Drivers
+<b class="caret"></b>
+</p>
+</a>
+<div class="collapse" id="usermenu" aria-expanded="false" style="height: 0px;">
+<ul class="nav">
+<li>
+<a ui-sref="drivers" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/drivers">
+<i class="material-icons notranslate">navigation</i>
+<p>Drivers</p>
+</a>
+</li>
+<li>
+<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/assignment">
+<i class="material-icons notranslate">content_paste</i>
+<p>Assignment</p>
+</a>
+</li>
+<li>
+<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/makeassignment">
+<i class="material-icons notranslate">post_add</i>
+<p>New Assignment</p>
+</a>
+</li>
+<li>
+<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/cars">
+<i class="material-icons notranslate">local_shipping</i>
+<p>Cars</p>
+</a>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<a data-toggle="collapse" href="#storemenu" class="collapsed" aria-expanded="false">
+<i class="material-icons notranslate">shopping_cart</i>
+<p>Stores
+<b class="caret"></b>
+</p>
+</a>
+<div class="collapse" id="storemenu" aria-expanded="false" style="height: 0px;">
+<ul class="nav">
+<li>
+<a ui-sref="add_store" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/store">
+<i class="material-icons notranslate">shopping_cart</i>
+<p>Stores</p>
+</a>
+</li>
+<li>
+<a ui-sref="products" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/products">
+<i class="material-icons notranslate">control_camera</i>
+<p>Products</p>
+</a>
+</li>
+<li>
+<a ui-sref="product_stats" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/product-stats">
+<i class="material-icons notranslate">layers</i>
+<p>Products Stats</p>
+</a>
+</li>
+</ul>
+</div>
+</li>
+<li class="" ui-sref-class="active">
+<a ui-sref="customer" ui-sref-class="active" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/customer">
+<i class="material-icons notranslate">people</i>
+<p>Customer</p>
+</a>
+</li>
+<li ui-sref-class="active">
+<a data-toggle="collapse" href="#supportmenu" class="collapsed" aria-expanded="false">
+<i class="material-icons notranslate">contact_support</i>
+<p>Support
+<b class="caret"></b>
+</p>
+</a>
+<div class="collapse" id="supportmenu" aria-expanded="false" style="height: 0px;">
+<ul class="nav">
+<li ui-sref-class="active">
+<a ui-sref="support" ui-sref-class="active" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/support">
+<i class="material-icons notranslate">contact_support</i>
+<p>Support</p>
+</a>
+</li>
+<li ui-sref-class="active">
+<a ui-sref="feedback" ui-sref-class="active" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/feedback">
+<i class="material-icons notranslate">message</i>
+<p>Feedback</p>
+</a>
+</li>
+<li ui-sref-class="active">
+<a ui-sref="requests" ui-sref-class="active" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/requests">
+<i class="material-icons notranslate">language</i>
+<p>Requests</p>
+</a>
+</li>
+</ul>
+</div>
+</li>
+<li class="" ui-sref-class="active">
+<a ui-sref="dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/offers">
+<i class="material-icons notranslate">local_offer</i>
+<p>Offers</p>
+</a>
+</li>
+<li class="" ui-sref-class="active">
+<a ui-sref="dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/export">
+<i class="material-icons notranslate">share</i>
+<p>Export</p>
+</a>
+</li>
+<li>
+<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/settings">
+<i class="material-icons notranslate">settings</i>
+<p>Settings</p>
+</a>
+</li>
+<li ui-sref-class="active">
+<a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/change_password">
+<i class="material-icons notranslate">lock</i>
+<p>Change Admin Password</p>
+</a>
+</li>
+<li>
+<a ui-sref="logout" (click)="logout()" href="#">
+<i class="material-icons notranslate">logout</i>
+<p>Logout</p>
+</a>
+</li>
+
+</ul>
+<div class="ps-scrollbar-x-rail" >
+<div class="ps-scrollbar-x" tabindex="0" ></div>
+</div>
+<div class="ps-scrollbar-y-rail">
+<div class="ps-scrollbar-y" tabindex="0"></div>
+</div>
+</div>
+</div>

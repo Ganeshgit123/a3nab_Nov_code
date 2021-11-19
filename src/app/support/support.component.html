@@ -1,0 +1,276 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-md-12">
+      <div class="search-bar">
+      <form>
+      <label for="searchQuery">
+      <span><img src="assets/img/search_icon.svg" width="18px"></span>
+      </label>
+      <input type="search" id="searchQuery" name="searchQuery" placeholder="search" (input)="searchSupport($event.target.value)"/>
+      </form>
+      </div>
+      </div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<ul>
+<li>
+<div class="form-group">
+<select (change)="onFilterChange($event.target.value, 'Category')">
+<option value="ALL">Select Category</option>
+<option *ngFor="let item of catList" value="{{item.categoryName}}">{{item.categoryName}}</option>
+</select>
+</div>
+</li>
+<li>
+<div class="form-group">
+<select (change)="onFilterChange($event.target.value, 'Status')">
+<option value="NONE">All</option>
+<option value="RESOLVED">Resolved</option>
+<option value="PROGRESS">Pending</option>
+<option value="ESCALATE">Escalted</option>   
+</select>
+</div>
+</li>
+</ul>
+</div>
+<div class="col-md-6 right_tick">
+<ul>
+<li *ngIf = "showAccept == 'true'">
+<button type="button" class="add_tick_btn" data-toggle="modal" (click)="addNewTicket()" data-target="#add_driv_btn">Add Ticket</button>
+</li>
+<li *ngIf = "showAccept == 'true'">
+   <button type="button" class="add_tick_btn" data-toggle="modal" (click)="addTicketCategory()" data-target="#add_tick_btn">Add Ticket Category</button>
+</li>
+<li *ngIf = "showExport == 'true'">
+<button class="float_cash_btn"  (click) = "exportList($event);">Export XLS</button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="custom_head">
+<div class="container-fluid">
+<div class="card">
+<div class="card-content">
+<div class="row">
+<div class="col-md-12">
+<div class="above_table_sec">
+<ul>
+<li><span class="light_color">Total Queries</span> : {{supportTotal}}</li>
+<li><span class="light_color">Pending Queries</span> : {{supportPending}}</li>
+<li><span class="light_color">Resolved Queries</span> : {{resolved}}</li>
+<li><span class="light_color">Escalated Queries</span> : {{supportEscalate}}</li>
+</ul>
+</div>
+<div class="suppor_li_table">
+<div class="material-datatables">
+<div class="table-responsive">
+<table datatable="ng" class="table table-bordered table-striped table_datatable" id="customerTable">
+<thead>
+<tr>
+<th>Date & Time</th>
+<th>User</th>
+<th>Support ID</th>
+<th>Customer ID</th>
+<th>Order ID</th>
+<th>Store ID</th>
+<th>Driver ID</th>
+<th>Category</th>
+<th class="text-center">Status</th>
+<!-- <th class="text-center">Action</th> -->
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let item of supportList;let i = index" >
+<td>{{item.createdDate}} - {{item.time}}</td>
+<td>{{item.appUser}}</td>
+<td><span class="red_color">{{item.supportID}}</span></td>
+<td><span class="red_color"><a routerLink="/customer/{{ item.userId }}">{{item.customerID}}</a></span></td>
+<td><span class="red_color"><a routerLink="/order-details/{{ item.orderId }}">{{item.orderIDs}}</a></span></td>
+<td>
+   <span *ngFor="let st of item.store;let i = index" class="red_color"><a routerLink="/view-store/{{ st.storeId }}">{{st.storeID}}</a></span><br>
+   <!-- <span class="red_color">#Store2_ID</span> -->
+</td>
+<td><span class="red_color">{{item.drId}}</span></td>
+<td>{{item.category}}</td>
+<td class="text-center" *ngIf="showAccept == 'true'">
+   <select class="reject_btn" *ngIf="item.status == 'ESCALATE'" (change)="onChangeFilter(item.id,$event.target.value)">
+      <option>{{item.status}}</option>
+      <option>PROGRESS</option>
+      <option>RESOLVED</option>
+   </select>
+   <select class="accep_btn" *ngIf="item.status == 'RESOLVED'" (change)="onChangeFilter(item.id,$event.target.value)">
+      <option>{{item.status}}</option>
+      <option>PROGRESS</option>
+      <option>ESCALATE</option>
+   </select>
+   <select class="pend_btn" *ngIf="item.status == 'PROGRESS'" (change)="onChangeFilter(item.id,$event.target.value)">
+      <option>{{item.status}}</option>
+      <option>ESCALATE</option>
+      <option>RESOLVED</option>
+   </select>
+</td>
+<td class="text-center" *ngIf="showAccept !== 'true'">
+   <select class="reject_btn" *ngIf="item.status == 'ESCALATE'">
+      <option>{{item.status}}</option>
+   </select>
+   <select class="accep_btn" *ngIf="item.status == 'RESOLVED'">
+      <option>{{item.status}}</option>
+   </select>
+   <select class="pend_btn" *ngIf="item.status == 'PROGRESS'">
+      <option>{{item.status}}</option>
+   </select>
+</td>
+<!-- <td class="text-center"><span class="whatsapp_btn">Whatsapp</span></td> -->
+<td>{{item.notes}}</td>
+</tr>
+</tbody>
+</table>
+<p class="text-center"><ngb-pagination  [collectionSize]="pages" (pageChange)="nextPage($event)" [(page)]="page" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="add_driv_sec">
+<div class="modal right fade" id="add_driv_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="modal-body">
+<form [formGroup]="supportForm" (ngSubmit)="onSubmit()" class="tick_form">
+   <div class="row">
+      <div class="col-md-6">
+      <div class="form-group">
+         <label>Type OrderID digits no. only</label><br>
+     <input type="text" (input)="searchSuggestion($event.target.value)" class="form-control">
+     <!-- <button (click)=""></button> -->
+      </div>
+      </div>
+   </div>
+
+   <div class="row">
+      <div class="col-md-12">
+         <div class="form-group">
+         <label>Select User</label><br>
+         <select formControlName="appUser">
+            <option value="Customer">Customer</option>
+            <option value="Driver">Driver</option>
+            <option value="Store Manager">Store Manager</option>
+         </select>
+         </div>
+         </div>
+      </div>
+   
+   <div class="row">
+      <div class="col-md-12">
+         <div class="form-group">
+         <label>Select Category</label><br>
+        <select formControlName="category">
+           <option *ngFor="let item of catList" value="{{item.categoryName}}">{{item.categoryName}}</option>
+        </select>
+         </div>
+         </div>
+      </div>
+
+<!-- <div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Customer Id</label>
+<input type="text" formControlName="userId" class="form-control">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Store Id</label>
+<input type="text" formControlName="store_id" class="form-control">
+</div>
+</div>
+</div> -->
+<!-- <div class="row">
+<div class="col-md-6"> 
+<div class="form-group">
+<label>Driver Id</label>
+<input type="text" formControlName="driver_id"  class="form-control">
+</div>
+</div>
+</div> -->
+<div class="row">
+   <div class="col-md-12"> 
+   <div class="form-group">
+   <label>Notes</label>
+   <input type="text" formControlName="notes"  class="form-control">
+   </div>
+   </div>
+   </div>
+<div class="add_tick_sec">
+<p class="text-center">
+<button class="add_car_btn">Add Ticket</button>
+</p>
+</div>
+</form>
+</div>
+</div>
+<!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+</div>
+</section>
+
+<div class="modal right fade" id="add_tick_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+   <div class="modal-dialog" role="document">
+   <div class="modal-content">
+   <div class="modal-header">
+   <div class="row">
+   <div class="col-md-12">
+   <ul>
+   <li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+   </ul>
+   </div>
+   </div>
+   </div>
+   <div class="modal-body">
+   <form [formGroup]="addcatName" (ngSubmit)="onSubmit1()" class="tick_form">
+      <div class="row">
+         <div class="col-md-12">
+            <div class="form-group">
+               <label>Category Name</label>
+               <input type="text" formControlName ="categoryName" class="form-control">
+               </div>
+         </div>
+      </div>
+   
+   <div class="add_tick_sec">
+   <p class="text-center">
+   <button class="add_car_btn">Add Category</button>
+   </p>
+   </div>
+   </form>
+   </div>
+   </div>
+   <!-- modal-content -->
+   </div>
+   <!-- modal-dialog -->
+   </div>

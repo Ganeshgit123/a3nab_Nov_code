@@ -1,0 +1,450 @@
+<div class="main-panel">
+<app-navbar></app-navbar>
+
+<div class="content">
+<!-- uiView:  -->
+<div ui-view="" class="ng-scope">
+<section class="custom_head">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-11">
+        <div class="search-bar">
+        <form>
+            <label for="searchQuery">
+            <span><img src="assets/img/search_icon.svg" width="18px"></span>
+            </label>
+            <input type="search"  [(ngModel)]="searchOffer" id="searchQuery" name="searchQuery" placeholder="search"/>
+        </form>
+        </div>
+        </div>
+        </div>
+<div class="row">
+<div class="col-md-4">
+<ul>
+<li style="padding-left: 10px;">
+Show only active offers &nbsp;&nbsp; 
+<label class="switch">
+<input type="checkbox" [(ngModel)]="statustog" (change) = "onchange($event)">
+<span class="slider"></span>
+</label>
+</li>
+</ul>
+</div>
+<div class="col-md-8 right_cont">
+<ul>
+<li *ngIf = "showAccept == 'true'">
+<button type="button" class="add_tick_btn" data-toggle="modal" data-target="#notification_btn">Push Notification</button>
+</li>
+<li *ngIf = "showAccept == 'true'">
+<button type="button" class="add_tick_btn" data-toggle="modal" data-target="#add_offer_btn" (click) = "add_off_click();" >Add Offer</button>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+    
+<section class="driver_sec">
+<div class="row">
+<div class="col-md-3 off_tab" *ngFor = "let offers of list_offers | filter:searchOffer">
+<div class="card">
+<div class="prof_sec">
+<img src="{{offers.image}}">
+<ul class="off_sec">
+
+<li class="off_tit">Coupon code : <span class="red_color">{{offers.couponCode}}</span></li>
+<li class="rig_sec">
+<label class="switch" *ngIf = "showAccept == 'true'">
+    <input  *ngIf="offers.status == 'active'"  checked type="checkbox" (change)="statclick($event.target.checked,'status', offers.id)"/>
+    <input  *ngIf="offers.status == 'inactive'" unchecked type="checkbox" (change)="statclick($event.target.checked,'status', offers.id)" />
+<span class="slider"></span>
+</label>
+<label class="switch" *ngIf = "showAccept !== 'true'">
+    <input  *ngIf="offers.status == 'active'"  checked type="checkbox" />
+    <input  *ngIf="offers.status == 'inactive'" unchecked type="checkbox" />
+<span class="slider"></span>
+</label>
+</li>
+</ul>
+
+<ul>
+    <li class="off_tit">
+    Offer Title : {{offers.title}}
+    </li>
+</ul>
+
+<!-- <ul>
+<li class="off_tit">
+    Offer Description : {{offers.description}}
+</li>
+</ul> -->
+
+<ul>
+<li>Starts On : {{offers.startDate}}</li>
+<li class="rig_sec"><span class="light_color">Discount :</span> {{offers.discount}} %</li>
+</ul>
+<ul>
+    <li>Ends On : {{offers.endDate}}</li>
+    <li class="rig_sec"><span class="light_color">Use Count :</span>{{offers.couponUsageCount}} / {{offers.count}}</li>
+</ul>
+
+<ul>
+    <li><span class="light_color">Upto Amount :</span> {{offers.uptoAmount}} SAR</li>
+</ul>
+<div class="driv_btn_sec" *ngIf = "showAccept == 'true'">
+<div class="row">
+<div class="col-md-12">
+<div class="map_div_sec">
+<div class="map_div_dd">
+<p class="text-center edit_bttn" checked (click)="editoffers(offers)">Edit</p>
+</div>
+<div class="map_div_dd1">
+<p class="text-center del_btn" (click)="statclick(offers.status,'delete',offers.id)">Delete</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="add_offer_sec">
+<div class="modal right fade" id="add_offer_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+
+<form [formGroup]="addOffers" (ngSubmit)="onSubmit()">
+<div class="modal-header">
+<div class="row">
+<div class="col-md-12">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+
+<li class="stat_btn text-center" style="padding-left: 10px;">
+Status &nbsp;&nbsp;
+<label class="switch">
+<input type="checkbox" formControlName="status">
+<p *ngIf="!addOffers.controls.status.valid && submitted" class="error-val-pro">Please select Offer status</p>
+<span class="slider"></span>
+</label>
+</li>
+</ul>
+</div>
+<!-- <ul class="right_side_icon">
+<li><img src="assets/img/edit_icon.svg" onmouseover="this.src='assets/img/edit_hover_icon.svg'" onmouseout="this.src='assets/img/
+_icon.svg'"></li>
+<li><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></li>
+</ul> -->
+</div>
+</div>
+
+<div class="modal-body">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+<div class="driv_pp">
+<div class="image-upload text-center">
+<label for="file-input">
+<!-- Subcategory Image -->
+<img class="upload-img" *ngIf="!imagePreview"  src="assets/img/offers.png"/> 
+<img class="upload-img" *ngIf="imagePreview" src="{{imagePreview}}"/>   
+</label>
+<input formControlName="image" id="file-input" type="file" (change)="uploadImageFile($event)" />
+<p *ngIf="!addOffers.controls.image.valid && submitted" class="error-val-pro">Please select image</p>
+
+</div>
+<!-- <img src="assets/img/driver1.png"> -->
+</div>
+
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+    <!-- <p class="red_color of_id">#Offer_ID</p> -->
+    <!-- <div class="form-group">
+    <div class="trusty_user">
+
+        <label>Make for Trusty User</label>
+        <label class="switch">
+        <input type="checkbox" ng-checked=trust formControlName="trustUser">
+<p *ngIf="!addOffers.controls.trustUser.valid && submitted" class="error-val-pro">Please select Trusty User Status</p>
+        <span class="slider"></span>
+        </label>
+        </div>
+        </div> -->
+<div class="form-group">
+    <label class="start">Starts On</label><br>
+    <input type="text"  bsDatepicker  placeholder="StartDate" [(bsValue)]="bsValue"  formControlName="startDate" [bsConfig]="{dateInputFormat: 'YYYY-MM-DD'}" readonly  [outsideClick] = "true" class="form-control datepicker"/>
+<!-- <angular2-date-picker class="form-control" id="datetimepicker" [(ngModel)]="date" [settings]="settings"  formControlName="startDate"></angular2-date-picker> -->
+    <p *ngIf="!addOffers.controls.startDate.valid && submitted" class="error-val-pro">Please select Start Date</p>
+    
+    <!-- <timepicker formControlName="StartTime"></timepicker> -->
+    
+</div>
+
+<!-- <div class="form-group">
+<label for="input">Start time</label>
+    <input
+      type="time"
+      id="input"
+      class="form-control"
+      value="13:00"
+      formControlName="StartTime"
+      mdbInput
+    />
+</div>  -->
+
+
+
+<div class="form-group">
+    <label class="end">Ends On</label><br>
+    <input type="text"  bsDatepicker  placeholder="EndDate" [(bsValue)]="bsValue1"  formControlName="endDate" [bsConfig]="{dateInputFormat: 'YYYY-MM-DD'}" readonly  [outsideClick] = "true" class="form-control datepicker"/>    
+<!-- <angular2-date-picker class="form-control" id="datetimepicker" [(ngModel)]="date1" [settings]="settings"  formControlName="endDate"></angular2-date-picker> -->
+    <p *ngIf="!addOffers.controls.endDate.valid && submitted" class="error-val-pro">Please select End Date</p>
+
+    <!-- <timepicker formControlName="EndTime"></timepicker> -->
+    
+</div>
+
+<!-- <div class="form-group">
+    <label for="input">End time</label>
+    <input
+      type="time"
+      id="input"
+      class="form-control"
+      value="13:00"
+      formControlName="EndTime"
+      mdbInput
+    />
+</div> -->
+<div class="form-group">
+<label>Offer Title</label>
+<input type="text" name="" formControlName="title" class="form-control" placeholder="Offer Title">
+<p *ngIf="!addOffers.controls.title.valid && submitted" class="error-val-pro">Please Enter Offer Title</p>
+
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Offer Description</label>
+<textarea class="form-control" formControlName="description" placeholder="Offer Description" ></textarea>
+<p *ngIf="!addOffers.controls.description.valid && submitted" class="error-val-pro">Please Enter Offer Description</p>
+</div>
+</div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+    <div class="form-group">
+    <label>Offer types</label>
+    <select class="form-control" formControlName="off_types" (change)="onChangeOfferTypes($event.target.value)">
+        <option value="1" >Discount</option>
+        <option value="0" >Free Delivery</option>
+    </select>
+    <p *ngIf="!addOffers.controls.description.valid && submitted" class="error-val-pro">Please select offer type</p>
+    </div>
+    </div>
+    </div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Coupon Code</label>
+<input type="text" name="" class="form-control" placeholder="Coupon Code" formControlName="couponCode" >
+<p *ngIf="!addOffers.controls.couponCode.valid && submitted" class="error-val-pro">Please Enter Coupon code</p>
+</div>
+</div>
+<div class="col-md-6" *ngIf="off_type == false">
+<div class="form-group">
+<label>Discount</label>
+<input type="text" name="" class="form-control" placeholder="Discount using %" formControlName="discount" >
+<div *ngIf="off_type">
+<p *ngIf="!addOffers.controls.discount.valid && submitted" class="error-val-pro">Please Enter Discount</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Min. Order Value</label>
+<input type="text" name="" class="form-control" placeholder="SAR 00.00" formControlName="minimumValue" >
+<div *ngIf="off_type">
+<p *ngIf="!addOffers.controls.minimumValue.valid && submitted" class="error-val-pro">Please Enter Minimum Value</p>
+</div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Max User Count / User</label>
+<input type="text" name="" class="form-control" placeholder="Use Numbers only" formControlName="count" > 
+<div *ngIf="off_type">
+<p *ngIf="!addOffers.controls.count.valid && submitted" class="error-val-pro">Please Enter Max User Count</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="row" *ngIf="off_type == false">
+    <div class="col-md-6" >
+        <div class="form-group">
+            <label>Upto Amount Discount</label>
+            <input type="text" name="" class="form-control" placeholder="Use Numbers only" formControlName="uptoAmount" > 
+            <div *ngIf="off_type">
+            <p *ngIf="!addOffers.controls.uptoAmount.valid && submitted" class="error-val-pro">Please Enter Upto Max amount</p>
+            </div>
+            </div>
+    </div>
+</div>
+
+<!-- <div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label style="font-size: 16px;"><span  class="red_color">Active On</span></label>
+</div>
+</div>
+</div>
+
+<div class="active_on_sec">
+    <div class="row">
+        <div class="col-md-6">
+    <div class="form-group">
+<label>Select Category</label>
+<select formControlName="offCategoryId" (change)="cateclick(addOffers.value.offCategoryId)">
+<option value="">Select category</option>
+<option *ngFor = "let allcateg of allcategory; let i = index" value="{{allcateg.id}}">{{allcateg.categoryName}}</option>
+</select>
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="form-group">
+<label>Select Product</label>
+<select formControlName="offProductId">
+<option value="">Select Product</option>
+<option *ngFor = "let prodcate of productcategory; let i = index" value="{{prodcate.id}}">{{prodcate.productName}}</option>
+</select>
+</div>
+</div>
+</div>
+<br>
+<p class="text-center"><button class="prod_add_btn" >Add</button></p>
+<br><br>       
+</div> -->
+<p class="text-center"><button class="prod_add_btn" >Submit</button></p>
+<!-- <div class="catea_sec">
+(click)="onSubmit()"
+<ul>
+<li class="fir_cat">Category A</li>
+<li>Product c</li>
+<li class="last_cat"><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></li>
+</ul>
+</div> -->
+
+<!-- <div class="catea_sec">
+<ul>
+<li class="fir_cat">Category A</li>
+<li>Product c</li>
+<li class="last_cat"><img src="assets/img/delete_icon.svg" onmouseover="this.src='assets/img/delete_hover_icon.svg'" onmouseout="this.src='assets/img/delete_icon.svg'"></li>
+</ul>
+</div> -->
+
+</div>
+
+</div>
+</form>
+</div><!-- modal-content -->
+</div><!-- modal-dialog -->
+</div>
+</section>
+
+
+<section class="push_notify_sec">
+<div class="modal right fade" id="notification_btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+
+<div class="modal-header">
+<div class="row">
+<div class="col-md-7">
+<ul>
+<li><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></li>
+
+</ul>
+</div>
+<div class="col-md-5"></div>
+</div>
+</div>
+
+<div class="modal-body">
+
+<form  [formGroup]="pushNotify" (ngSubmit)="onPushsubmit()">
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Notification Title</label>
+<input type="text" class="form-control" placeholder="Trusty User" formControlName="title">
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Notification Content</label>
+<textarea class="form-control" rows="5" formControlName="content">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</textarea>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<label>Select Gender</label><br>
+<select  formControlName="gender">
+<option value="male">Male</option>
+<option value="female">Female</option>
+<option value="all">All</option>
+</select>
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<label>Select Age Range</label><br>
+<select formControlName="age">
+<option value="0-12">0 - 12</option>
+<option value="13-18">13 - 18</option>
+<option value="19-56">19 - 56</option>
+<option value="all">All</option>
+</select>
+</div>
+</div>
+</div>
+
+<!-- <div class="row">
+<div class="col-md-12">
+<div class="form-group">
+<label>Select Location</label><br>
+<select class="locat_sec">
+<option>None</option>
+</select>
+</div>
+</div>
+</div> -->
+
+<br>
+<p class="text-center" *ngIf = "showAccept == 'true'"><button class="add_car_btn">Send Push Notification</button></p>
+
+</form>
+</div>
+
+</div>
+
+</div><!-- modal-content -->
+</div><!-- modal-dialog -->
+</section>
